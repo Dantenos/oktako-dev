@@ -39,6 +39,8 @@ h1{margin:26px 0 0;font-family:"Archivo",system-ui,sans-serif;font-weight:800;fo
 footer{border-top:1px solid var(--trait);padding:20px 16px 28px;text-align:center}
 .legal{margin:0;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.7rem;line-height:1.8;color:var(--encre-douce)}
 .legal a{color:var(--laiton)}
+/* Sur un écran étroit, le pied se coupe entre ses segments, jamais dans le SIRET ni après un point médian. */
+.legal span,.legal a{white-space:nowrap}
 :focus-visible{outline:2.5px solid var(--laiton);outline-offset:3px}
 @media (forced-colors:active){.rdv{border:1px solid CanvasText}}
 </style>
@@ -52,7 +54,7 @@ footer{border-top:1px solid var(--trait);padding:20px 16px 28px;text-align:cente
   <a class="rdv" href="mailto:contact@oktako.fr">Prendre rendez-vous</a>
 </main>
 <footer>
-  <p class="legal"><span data-profil="nom">Edouard LANTENOIS EI</span> · SIRET <span data-profil="siret">130 811 144 00018</span> · <a href="mentions-legales.html">Mentions légales</a></p>
+  <p class="legal"><span data-profil="nom">Edouard LANTENOIS EI</span> ·&nbsp;SIRET&nbsp;<span data-profil="siret">130 811 144 00018</span> ·&nbsp;<a href="mentions-legales.html">Mentions légales</a></p>
 </footer>
 </body>
 </html>
