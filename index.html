@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Edouard Lantenois — Développeur · Lille</title>
+<meta name="description" content="Je conçois des sites, des outils sur mesure et des automatisations par l'IA pour les indépendants et les petites structures.">
+<style>
+/* Page de dev.oktako.fr, servie en index.html (outils/publier/manifeste-dev.json). Texte relu par l'utilisateur le
+   11/10 : rien ne s'y ajoute. Polices servies par le site lui-même (OFL, licences dans polices/), aucun script. */
+@font-face{font-family:"Archivo";font-style:normal;font-weight:700;font-display:swap;src:url(polices/archivo-bold.woff2) format("woff2")}
+@font-face{font-family:"Archivo";font-style:normal;font-weight:800;font-display:swap;src:url(polices/archivo-extrabold.woff2) format("woff2")}
+@font-face{font-family:"Newsreader";font-style:normal;font-weight:200 800;font-display:swap;src:url(polices/newsreader.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:100 800;font-display:swap;src:url(polices/jetbrains-mono.woff2) format("woff2")}
+/* Les jetons de studio.html, pour que les deux sites se reconnaissent. */
+:root{
+  --fond:#F5F1E8; --encre:#211D16; --encre-douce:#4C463B; --trait:#E2D9C6;
+  --laiton:#9A6B18; --laiton-fonce:#5E4522; --sur-laiton:#fff;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --fond:#161309; --encre:#F0EADC; --encre-douce:#C0B7A2; --trait:#302A1B;
+  --laiton:#E0B15A; --laiton-fonce:#C99B45; --sur-laiton:#1a1305;
+}}
+:root[data-theme="dark"]{
+  --fond:#161309; --encre:#F0EADC; --encre-douce:#C0B7A2; --trait:#302A1B;
+  --laiton:#E0B15A; --laiton-fonce:#C99B45; --sur-laiton:#1a1305;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;background:var(--fond);color:var(--encre);font-family:"Newsreader",Georgia,serif;font-size:17px;line-height:1.55;font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;width:100%;max-width:440px;margin:0 auto;padding:56px 16px 40px}
+.rond{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--encre);color:var(--fond);font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:2rem;letter-spacing:.02em;box-shadow:0 0 0 4px var(--fond),0 0 0 5px var(--laiton)}
+h1{margin:26px 0 0;font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:1.75rem;line-height:1.15;letter-spacing:-.02em}
+.metier{margin:8px 0 0;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.82rem;letter-spacing:.06em;color:var(--laiton)}
+.bio{margin:22px 0 0;max-width:32ch;font-size:1.1rem;color:var(--encre-douce)}
+.rdv{margin-top:32px;width:100%;min-height:52px;display:flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:12px;background:var(--laiton);color:var(--sur-laiton);font-family:"Archivo",system-ui,sans-serif;font-weight:700;font-size:1.05rem;text-decoration:none}
+.rdv:hover{background:var(--laiton-fonce)}
+footer{border-top:1px solid var(--trait);padding:20px 16px 28px;text-align:center}
+.legal{margin:0;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.7rem;line-height:1.8;color:var(--encre-douce)}
+.legal a{color:var(--laiton)}
+:focus-visible{outline:2.5px solid var(--laiton);outline-offset:3px}
+@media (forced-colors:active){.rdv{border:1px solid CanvasText}}
+</style>
+</head>
+<body>
+<main>
+  <div class="rond" aria-hidden="true">EL</div>
+  <h1>Edouard Lantenois</h1>
+  <p class="metier">Développeur · Lille</p>
+  <p class="bio">Je conçois des sites, des outils sur mesure et des automatisations par l'IA pour les indépendants et les petites structures.</p>
+  <a class="rdv" href="mailto:contact@oktako.fr">Prendre rendez-vous</a>
+</main>
+<footer>
+  <p class="legal"><span data-profil="nom">Edouard LANTENOIS EI</span> · SIRET <span data-profil="siret">130 811 144 00018</span> · <a href="mentions-legales.html">Mentions légales</a></p>
+</footer>
+</body>
+</html>
