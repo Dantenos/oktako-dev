@@ -1,0 +1,42 @@
+{
+  "_doc": "Écrit par tools/affiche.mjs. Capture de la pièce cuite servie par le site (atlas Blender existants, rendus par three.js), sans interface. Ne pas modifier à la main.",
+  "alt": "L’atelier MajorTakito la nuit : un établi de bois sous une lampe, un écran rétro qui affiche « Édouard Lantenois — MajorTakito », des classeurs, un petit terminal Rouille et un appareil photo, devant une fenêtre mouillée qui donne sur la ville.",
+  "attente": {
+    "fichier": "affiche/attente.webp",
+    "largeur": 1600,
+    "hauteur": 900,
+    "octets": 89698,
+    "niveau": "haute"
+  },
+  "og": {
+    "fichier": "affiche/og.jpg",
+    "largeur": 1200,
+    "hauteur": 630,
+    "octets": 128265,
+    "niveau": "haute"
+  },
+  "capture": {
+    "date": "2026-11-01",
+    "navigateur": "Chrome/154.0.8037.92",
+    "rendu": "SwiftShader (serveur sans GPU), qualité haute figée",
+    "page": "?qualite=haute&heure=2026-10-28T21:45:00Z"
+  },
+  "provenance": {
+    "modele/ambiances.json": "f9dcc7cbadfe14b61d6d68885b63d998c971a0925895011e5da66ea4088d7347",
+    "modele/atelier.bin": "25e88f3093a4ee7ab0963557eaf3ce7b588adb7f835243e1b8f9039714e6d890",
+    "modele/atelier.json": "8810d0c767ef33b417dc729b0a4ab8bd9401f22c26cd7a0a90b7df7563677fd8",
+    "modele/ciel.png": "b6897573c71e686cf8f66035323ffe270cacc4a3dd658e0976970b6c1fd6c976",
+    "modele/cuit-bureau.webp": "39bb8ec4c04cb36fc26e55e3b80367c5597c0a491317bfca7d2ff0d0a44c4a84",
+    "modele/cuit-etiquettes.webp": "8d5bb039cabafeb597365f249e337568ca6ccb06aaf7766b18ea2ff0f533b85d",
+    "modele/cuit-objectifs.webp": "2a3955505f03a47807505cc732e89f5c9befffe75e60705aee02c56cd0c47081",
+    "modele/cuit-objectifs2.webp": "82a5794f6ab0a9f5e7597bfacf9a0adfd98e59e11453299569b73525edafbeaf",
+    "modele/cuit-objets.webp": "45c16533ed6e54cd4635e5e70b214c68706c2900717f7ebfb716a1bf583c7d03",
+    "modele/cuit-piece.webp": "f1abf9d7a41582c530ac57b72e8b760dbb9887d9eee9a00e615d35b7e7aadb52",
+    "modele/cuit-rideaux.webp": "08229e7ab4a2b12e9d1ff08d1563217738b7af10e69e5e9f8a3d656810c34a0c",
+    "modele/cuit-secret.webp": "246aaa80421a4934b61b92b4b4c403395d18b748c2ec7911988e14947b7e91be",
+    "modele/cuit-surprise.webp": "d4eac3665ac3bb7d6c9b2a0739ff1bcd119721b6812c2eae45574002ad478441",
+    "modele/dehors.webp": "44d53d7e67b3939baee2245c6560f698738c27bc08de49657a23656acc8fc3d8",
+    "modele/ville.bin": "da6e250ca0be70cf6fcaa8893ef8d6ed976b78f41b6cef41d5db76f625d22b6b",
+    "modele/ville.json": "6f490e55e1199c3cc64dc64acb6819f28fa4191688f18ee1d71cb924d774b53b"
+  }
+}

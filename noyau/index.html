@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le noyau Rouille dans le navigateur — MajorTakito</title><meta name="robots" content="noindex">
+<!-- CSP propre à cette page : seule elle autorise la compilation WebAssembly ('wasm-unsafe-eval') et le petit worker
+     d'horloge que v86 crée depuis un blob (worker-src blob:) ; le portfolio n'hérite d'aucune des deux. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="../icones/favicon-32.png" type="image/png">
+<link rel="stylesheet" href="../css/charte.css"><link rel="stylesheet" href="../css/theme.css"><link rel="stylesheet" href="noyau.css"><link rel="stylesheet" href="doont-fps.css"><link rel="stylesheet" href="doont-mobile.css">
+<script type="application/json" id="qualification">{"ok":true,"raison":"","date":"2026-11-13"}</script>
+<script src="doont-paquets.js" defer></script>
+<script src="tako-gpu.js" defer></script>
+<script src="doont-clavier.js" defer></script>
+<script src="doont-fps.js" defer></script>
+<script src="doont-mobile.js" defer></script>
+<script src="noyau.js" defer></script>
+</head>
+<body>
+<header class="n-barre"><a href="../#jouer">← Retour au portfolio</a></header>
+<main class="n-page">
+  <h1>Le noyau Rouille, dans le navigateur</h1>
+  <p class="n-prose">Rouille est un noyau i686 de loisir écrit en Rust. Ici, il démarre dans <a href="https://github.com/copy/v86" rel="noopener">v86</a>, un émulateur de PC en WebAssembly : le même fichier ELF Multiboot que sous QEMU, chargé directement, sans GRUB.</p>
+  <ul class="n-prose">
+    <li>Rien ne se charge avant votre clic : environ 3,6 Mo à charger (moteur, carte graphique, BIOS, noyau ; taille non compressée).</li>
+    <li>DOONT_Rouille s'ouvre sur un menu Qualité : édition allégée, présélectionnée, 3,4 Mo de plus ; édition HD, à droite dans le menu, 30,3 Mo de plus ; le paquet HD ne se télécharge que si vous la choisissez. En jeu, H change d'édition.</li>
+    <li>Budget mémoire : <strong>32 Mio</strong> de mémoire émulée et <strong>8 Mio</strong> de mémoire vidéo, réservés au lancement et rendus à la fermeture. Le navigateur et le moteur consomment aussi leur propre mémoire, et la carte graphique environ 80 Mo de plus en HD.</li>
+    <li>DOONT : ZQSD en AZERTY, WASD en QWERTY ; touches redéfinissables et souris. Le bureau texte conserve sa disposition QWERTY. Sur téléphone, l'émulation s'arrête dès que la page passe en arrière-plan.</li>
+    <li>Sur téléphone et tablette, des touches tactiles s'affichent d'elles-mêmes : joystick à gauche (il naît sous le pouce), visée en glissant à droite, tir et actions en boutons ronds, crayon pour déplacer ou redimensionner les boutons. Sur ordinateur, le bouton « Touches tactiles » les montre ou les masque, et le choix est retenu.</li>
+    <li>Depuis le bureau : Démarrer → DOONT_Rouille. ZQSD / WASD pour se déplacer ; flèches pour avancer, reculer et tourner ; Ctrl pour tirer, E pour ouvrir, Espace pour sauter, C pour le sablier.</li>
+    <li>Le son est <strong>coupé par défaut</strong> : le bouton « Son » télécharge alors un pack d'environ 344 Ko (effets et ambiances générés avec ElevenLabs, licence au registre du site). Il ne touche pas au téléchargement initial.</li>
+    <li>Un jouet, pas une frontière de sécurité : rien de MajorTakito ne repose sur ce noyau.</li>
+  </ul>
+  <div class="n-commandes">
+    <button type="button" data-lancer disabled>Démarrer le noyau</button>
+    <button type="button" data-fermer hidden>Arrêter et libérer la mémoire</button>
+    <button type="button" data-son data-poids="344 Ko" aria-pressed="false" title="Sons ElevenLabs de DOONT (ralenti, ambiances des niveaux 1 et 2), coupés par défaut">Son : coupé (pack 344 Ko, chargé au premier clic)</button>
+  </div>
+  <p class="n-etat" data-etat role="status" aria-live="polite">Vérification…</p>
+  <div id="jeu">
+  <div class="n-ecran" data-ecran hidden><div class="n-texte"></div><canvas></canvas></div>
+  <div id="mobile-pad" hidden></div>
+  <button type="button" class="n-bascule-touches" data-bascule-touches aria-pressed="false" hidden>Touches tactiles</button>
+  </div>
+  <div class="n-touches" data-touches></div>
+  <details class="n-prose"><summary>Licences et sources</summary>
+    <ul>
+      <li>Noyau et bureau Rouille : code original, licence MIT.</li>
+      <li>Carte graphique de DOONT_Rouille (<code>doont.wasm</code>, <code>tako-gpu.js</code>) : code original, licence MIT.</li>
+      <li>Images de DOONT_Rouille (<code>gun.bin</code>, <code>foe.bin</code>) : créées par l'auteur avec Grok (xAI).</li>
+      <li>v86 (moteur <code>libv86.js</code>, <code>v86.wasm</code>) : BSD-2-Clause, <a href="v86/LICENSE">texte de la licence</a>. Release « latest » du dépôt copy/v86, commit cc37f35, empreintes dans <a href="v86/SHA256SUMS">SHA256SUMS</a>.</li>
+      <li>SeaBIOS et SeaVGABIOS 1.16.2 (<code>seabios.bin</code>, <code>vgabios.bin</code>) : LGPL-3.0, <a href="v86/COPYING.LESSER">texte de la licence</a>. Source correspondante servie ici : <a href="v86/seabios-rel-1.16.2.tar.gz">seabios-rel-1.16.2.tar.gz</a>, avec la <a href="v86/seabios.config">configuration</a> et le <a href="v86/fetch-and-build-seabios.sh">script de construction</a> de v86.</li>
+    </ul>
+  </details>
+</main>
+</body></html>

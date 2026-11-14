@@ -1,0 +1,2536 @@
+{
+ "version": 1,
+ "source": "tools/blender/atelier.py",
+ "blender": "5.2.2 LTS",
+ "echantillons": 256,
+ "taille_atlas": {
+  "piece": 2048,
+  "bureau": 2048,
+  "objets": 4096,
+  "etiquettes": 1024,
+  "rideaux": 1024,
+  "objectifs": 1024,
+  "objectifs2": 1024,
+  "secret": 512,
+  "surprise": 512
+ },
+ "camera": {
+  "position": [
+   -0.019999999552965164,
+   0.3400000035762787,
+   1.2200000286102295
+  ],
+  "cible": [
+   -0.019999999552965164,
+   0.23499999940395355,
+   -0.5
+  ],
+  "fov": 39.0
+ },
+ "atlas": {
+  "piece": {
+   "ordinateur": "cuit-piece.webp",
+   "telephone": "telephone/cuit-piece.webp",
+   "octets": {
+    "ordinateur": 74958,
+    "telephone": 32072
+   }
+  },
+  "rideaux": {
+   "ordinateur": "cuit-rideaux.webp",
+   "telephone": "telephone/cuit-rideaux.webp",
+   "octets": {
+    "ordinateur": 10678,
+    "telephone": 4160
+   }
+  },
+  "bureau": {
+   "ordinateur": "cuit-bureau.webp",
+   "telephone": "telephone/cuit-bureau.webp",
+   "octets": {
+    "ordinateur": 55560,
+    "telephone": 21912
+   }
+  },
+  "objets": {
+   "ordinateur": "cuit-objets.webp",
+   "telephone": "telephone/cuit-objets.webp",
+   "octets": {
+    "ordinateur": 620904,
+    "telephone": 280370
+   }
+  },
+  "etiquettes": {
+   "ordinateur": "cuit-etiquettes.webp",
+   "telephone": "telephone/cuit-etiquettes.webp",
+   "octets": {
+    "ordinateur": 34046,
+    "telephone": 14158
+   }
+  },
+  "objectifs2": {
+   "ordinateur": "cuit-objectifs2.webp",
+   "telephone": "telephone/cuit-objectifs2.webp",
+   "octets": {
+    "ordinateur": 27902,
+    "telephone": 11374
+   }
+  },
+  "secret": {
+   "ordinateur": "cuit-secret.webp",
+   "telephone": "telephone/cuit-secret.webp",
+   "octets": {
+    "ordinateur": 8268,
+    "telephone": 3278
+   }
+  },
+  "objectifs": {
+   "ordinateur": "cuit-objectifs.webp",
+   "telephone": "telephone/cuit-objectifs.webp",
+   "octets": {
+    "ordinateur": 21744,
+    "telephone": 8926
+   }
+  },
+  "surprise": {
+   "ordinateur": "cuit-surprise.webp",
+   "telephone": "telephone/cuit-surprise.webp",
+   "octets": {
+    "ordinateur": 8134,
+    "telephone": 3692
+   }
+  }
+ },
+ "maillages": [
+  {
+   "nom": "piece-statique-0",
+   "atlas": "piece",
+   "objet": null,
+   "min": [
+    -1.3799999952316284,
+    -0.7999999523162842,
+    -1.0
+   ],
+   "echelle": [
+    2.759999990463257,
+    2.619999885559082,
+    3.0
+   ],
+   "positions": {
+    "decalage": 0,
+    "type": "u16",
+    "nombre": 54558
+   },
+   "uv": {
+    "decalage": 109116,
+    "type": "u16",
+    "nombre": 36372
+   },
+   "indices": {
+    "decalage": 181860,
+    "type": "u16",
+    "nombre": 68064
+   },
+   "sommets": 18186,
+   "triangles": 22688
+  },
+  {
+   "nom": "piece-cadre:liege-1",
+   "atlas": "piece",
+   "objet": "cadre:liege",
+   "min": [
+    -1.2450000047683716,
+    0.3800000250339508,
+    -0.7950000166893005
+   ],
+   "echelle": [
+    0.32999998331069946,
+    0.4400000274181366,
+    0.001999974250793457
+   ],
+   "positions": {
+    "decalage": 317988,
+    "type": "u16",
+    "nombre": 72
+   },
+   "uv": {
+    "decalage": 318132,
+    "type": "u16",
+    "nombre": 48
+   },
+   "indices": {
+    "decalage": 318228,
+    "type": "u16",
+    "nombre": 36
+   },
+   "sommets": 24,
+   "triangles": 12
+  },
+  {
+   "nom": "piece-cadre:libre-2",
+   "atlas": "piece",
+   "objet": "cadre:libre",
+   "min": [
+    0.9150000214576721,
+    0.3800000250339508,
+    -0.7950000166893005
+   ],
+   "echelle": [
+    0.32999998331069946,
+    0.4400000274181366,
+    0.001999974250793457
+   ],
+   "positions": {
+    "decalage": 318300,
+    "type": "u16",
+    "nombre": 72
+   },
+   "uv": {
+    "decalage": 318444,
+    "type": "u16",
+    "nombre": 48
+   },
+   "indices": {
+    "decalage": 318540,
+    "type": "u16",
+    "nombre": 36
+   },
+   "sommets": 24,
+   "triangles": 12
+  },
+  {
+   "nom": "piece-cadre:en-ce-moment-3",
+   "atlas": "piece",
+   "objet": "cadre:en-ce-moment",
+   "min": [
+    -1.315000057220459,
+    0.6000000238418579,
+    -0.5799999833106995
+   ],
+   "echelle": [
+    0.002000093460083008,
+    0.24000000953674316,
+    0.3199999928474426
+   ],
+   "positions": {
+    "decalage": 318612,
+    "type": "u16",
+    "nombre": 72
+   },
+   "uv": {
+    "decalage": 318756,
+    "type": "u16",
+    "nombre": 48
+   },
+   "indices": {
+    "decalage": 318852,
+    "type": "u16",
+    "nombre": 36
+   },
+   "sommets": 24,
+   "triangles": 12
+  },
+  {
+   "nom": "piece-cadre:travail-4",
+   "atlas": "piece",
+   "objet": "cadre:travail",
+   "min": [
+    -1.315000057220459,
+    0.6000000238418579,
+    -0.14000000059604645
+   ],
+   "echelle": [
+    0.002000093460083008,
+    0.24000000953674316,
+    0.3199999928474426
+   ],
+   "positions": {
+    "decalage": 318924,
+    "type": "u16",
+    "nombre": 72
+   },
+   "uv": {
+    "decalage": 319068,
+    "type": "u16",
+    "nombre": 48
+   },
+   "indices": {
+    "decalage": 319164,
+    "type": "u16",
+    "nombre": 36
+   },
+   "sommets": 24,
+   "triangles": 12
+  },
+  {
+   "nom": "piece-cadre:doont-5",
+   "atlas": "piece",
+   "objet": "cadre:doont",
+   "min": [
+    1.312999963760376,
+    0.5,
+    0.06000000238418579
+   ],
+   "echelle": [
+    0.002000093460083008,
+    0.440000057220459,
+    0.3199999928474426
+   ],
+   "positions": {
+    "decalage": 319236,
+    "type": "u16",
+    "nombre": 72
+   },
+   "uv": {
+    "decalage": 319380,
+    "type": "u16",
+    "nombre": 48
+   },
+   "indices": {
+    "decalage": 319476,
+    "type": "u16",
+    "nombre": 36
+   },
+   "sommets": 24,
+   "triangles": 12
+  },
+  {
+   "nom": "rideaux-statique-6",
+   "atlas": "rideaux",
+   "objet": null,
+   "min": [
+    -0.8799999952316284,
+    -0.7200000286102295,
+    -0.7840979099273682
+   ],
+   "echelle": [
+    1.7599999904632568,
+    2.3400001525878906,
+    0.06416159868240356
+   ],
+   "positions": {
+    "decalage": 319548,
+    "type": "u16",
+    "nombre": 9750
+   },
+   "uv": {
+    "decalage": 339048,
+    "type": "u16",
+    "nombre": 6500
+   },
+   "indices": {
+    "decalage": 352048,
+    "type": "u16",
+    "nombre": 18432
+   },
+   "sommets": 3250,
+   "triangles": 6144
+  },
+  {
+   "nom": "bureau-statique-7",
+   "atlas": "bureau",
+   "objet": null,
+   "min": [
+    -1.0800000429153442,
+    -0.7599999904632568,
+    -0.699999988079071
+   ],
+   "echelle": [
+    2.1600000858306885,
+    0.7599999904632568,
+    0.9599999785423279
+   ],
+   "positions": {
+    "decalage": 388912,
+    "type": "u16",
+    "nombre": 5001
+   },
+   "uv": {
+    "decalage": 398916,
+    "type": "u16",
+    "nombre": 3334
+   },
+   "indices": {
+    "decalage": 405584,
+    "type": "u16",
+    "nombre": 6120
+   },
+   "sommets": 1667,
+   "triangles": 2040
+  },
+  {
+   "nom": "bureau-tiroir:objectifs2-8",
+   "atlas": "bureau",
+   "objet": "tiroir:objectifs2",
+   "min": [
+    0.5849999785423279,
+    -0.4099999964237213,
+    0.14999999105930328
+   ],
+   "echelle": [
+    0.38999998569488525,
+    0.18000000715255737,
+    0.03200000524520874
+   ],
+   "positions": {
+    "decalage": 417824,
+    "type": "u16",
+    "nombre": 948
+   },
+   "uv": {
+    "decalage": 419720,
+    "type": "u16",
+    "nombre": 632
+   },
+   "indices": {
+    "decalage": 420984,
+    "type": "u16",
+    "nombre": 1128
+   },
+   "sommets": 316,
+   "triangles": 376
+  },
+  {
+   "nom": "bureau-tiroir:secret-9",
+   "atlas": "bureau",
+   "objet": "tiroir:secret",
+   "min": [
+    0.5849999785423279,
+    -0.6100000143051147,
+    0.15000000596046448
+   ],
+   "echelle": [
+    0.38999998569488525,
+    0.18000003695487976,
+    0.03200000524520874
+   ],
+   "positions": {
+    "decalage": 423240,
+    "type": "u16",
+    "nombre": 1800
+   },
+   "uv": {
+    "decalage": 426840,
+    "type": "u16",
+    "nombre": 1200
+   },
+   "indices": {
+    "decalage": 429240,
+    "type": "u16",
+    "nombre": 2304
+   },
+   "sommets": 600,
+   "triangles": 768
+  },
+  {
+   "nom": "objets-ecran-10",
+   "atlas": "objets",
+   "objet": "ecran",
+   "min": [
+    -0.2544507086277008,
+    0.0,
+    -0.5105423331260681
+   ],
+   "echelle": [
+    0.41235485672950745,
+    0.3529999852180481,
+    0.41959959268569946
+   ],
+   "positions": {
+    "decalage": 433848,
+    "type": "u16",
+    "nombre": 13077
+   },
+   "uv": {
+    "decalage": 460004,
+    "type": "u16",
+    "nombre": 8718
+   },
+   "indices": {
+    "decalage": 477440,
+    "type": "u16",
+    "nombre": 16056
+   },
+   "sommets": 4359,
+   "triangles": 5352
+  },
+  {
+   "nom": "objets-statique-11",
+   "atlas": "objets",
+   "objet": null,
+   "min": [
+    -0.6000340580940247,
+    3.4372787922620773e-06,
+    -0.9194000363349915
+   ],
+   "echelle": [
+    1.3473341464996338,
+    0.4639482796192169,
+    1.1800000667572021
+   ],
+   "positions": {
+    "decalage": 509552,
+    "type": "u16",
+    "nombre": 48093
+   },
+   "uv": {
+    "decalage": 605740,
+    "type": "u16",
+    "nombre": 32062
+   },
+   "indices": {
+    "decalage": 669864,
+    "type": "u16",
+    "nombre": 55677
+   },
+   "sommets": 16031,
+   "triangles": 18559
+  },
+  {
+   "nom": "objets-terminal-12",
+   "atlas": "objets",
+   "objet": "terminal",
+   "min": [
+    -0.6397231817245483,
+    0.0,
+    -0.6669809222221375
+   ],
+   "echelle": [
+    0.33700132369995117,
+    0.26100000739097595,
+    0.5389412641525269
+   ],
+   "positions": {
+    "decalage": 781220,
+    "type": "u16",
+    "nombre": 20478
+   },
+   "uv": {
+    "decalage": 822176,
+    "type": "u16",
+    "nombre": 13652
+   },
+   "indices": {
+    "decalage": 849480,
+    "type": "u16",
+    "nombre": 23982
+   },
+   "sommets": 6826,
+   "triangles": 7994
+  },
+  {
+   "nom": "objets-decor:lampe-13",
+   "atlas": "objets",
+   "objet": "decor:lampe",
+   "min": [
+    -1.0653605461120605,
+    0.0008067046292126179,
+    -0.3799999952316284
+   ],
+   "echelle": [
+    0.4256085157394409,
+    0.3931932747364044,
+    0.3677298128604889
+   ],
+   "positions": {
+    "decalage": 897444,
+    "type": "u16",
+    "nombre": 8169
+   },
+   "uv": {
+    "decalage": 913784,
+    "type": "u16",
+    "nombre": 5446
+   },
+   "indices": {
+    "decalage": 924676,
+    "type": "u16",
+    "nombre": 11286
+   },
+   "sommets": 2723,
+   "triangles": 3762
+  },
+  {
+   "nom": "objets-carnet-14",
+   "atlas": "objets",
+   "objet": "carnet",
+   "min": [
+    -0.6563266515731812,
+    0.0007999999797903001,
+    -0.006728872656822205
+   ],
+   "echelle": [
+    0.35265329480171204,
+    0.03180000185966492,
+    0.30013418197631836
+   ],
+   "positions": {
+    "decalage": 947248,
+    "type": "u16",
+    "nombre": 5502
+   },
+   "uv": {
+    "decalage": 958252,
+    "type": "u16",
+    "nombre": 3668
+   },
+   "indices": {
+    "decalage": 965588,
+    "type": "u16",
+    "nombre": 6864
+   },
+   "sommets": 1834,
+   "triangles": 2288
+  },
+  {
+   "nom": "objets-decor:tasse-15",
+   "atlas": "objets",
+   "objet": "decor:tasse",
+   "min": [
+    0.26805755496025085,
+    0.0044999998062849045,
+    0.08305756002664566
+   ],
+   "echelle": [
+    0.10643017292022705,
+    0.09300000220537186,
+    0.08388488739728928
+   ],
+   "positions": {
+    "decalage": 979316,
+    "type": "u16",
+    "nombre": 3438
+   },
+   "uv": {
+    "decalage": 986192,
+    "type": "u16",
+    "nombre": 2292
+   },
+   "indices": {
+    "decalage": 990776,
+    "type": "u16",
+    "nombre": 4056
+   },
+   "sommets": 1146,
+   "triangles": 1352
+  },
+  {
+   "nom": "objets-decor:veilleuse-16",
+   "atlas": "objets",
+   "objet": "decor:veilleuse",
+   "min": [
+    0.3480171263217926,
+    0.0044999998062849045,
+    0.05701713636517525
+   ],
+   "echelle": [
+    0.03596574068069458,
+    0.07400000095367432,
+    0.03596573695540428
+   ],
+   "positions": {
+    "decalage": 998888,
+    "type": "u16",
+    "nombre": 6339
+   },
+   "uv": {
+    "decalage": 1011568,
+    "type": "u16",
+    "nombre": 4226
+   },
+   "indices": {
+    "decalage": 1020020,
+    "type": "u16",
+    "nombre": 7752
+   },
+   "sommets": 2113,
+   "triangles": 2584
+  },
+  {
+   "nom": "objets-appareil-17",
+   "atlas": "objets",
+   "objet": "appareil",
+   "min": [
+    0.47695401310920715,
+    0.1599999964237213,
+    -0.4750610888004303
+   ],
+   "echelle": [
+    0.1901656687259674,
+    0.10100001096725464,
+    0.11481073498725891
+   ],
+   "positions": {
+    "decalage": 1035524,
+    "type": "u16",
+    "nombre": 6735
+   },
+   "uv": {
+    "decalage": 1048996,
+    "type": "u16",
+    "nombre": 4490
+   },
+   "indices": {
+    "decalage": 1057976,
+    "type": "u16",
+    "nombre": 8544
+   },
+   "sommets": 2245,
+   "triangles": 2848
+  },
+  {
+   "nom": "objets-dossiers-18",
+   "atlas": "objets",
+   "objet": "dossiers",
+   "min": [
+    -0.9354404807090759,
+    0.0006607696413993835,
+    -0.27783966064453125
+   ],
+   "echelle": [
+    0.30198848247528076,
+    0.03383922949433327,
+    0.3794235587120056
+   ],
+   "positions": {
+    "decalage": 1075064,
+    "type": "u16",
+    "nombre": 10320
+   },
+   "uv": {
+    "decalage": 1095704,
+    "type": "u16",
+    "nombre": 6880
+   },
+   "indices": {
+    "decalage": 1109464,
+    "type": "u16",
+    "nombre": 13092
+   },
+   "sommets": 3440,
+   "triangles": 4364
+  },
+  {
+   "nom": "objets-lettre-19",
+   "atlas": "objets",
+   "objet": "lettre",
+   "min": [
+    0.5274273157119751,
+    0.0013999994844198227,
+    -0.04752185195684433
+   ],
+   "echelle": [
+    0.20086359977722168,
+    0.14547690749168396,
+    0.14449374377727509
+   ],
+   "positions": {
+    "decalage": 1135648,
+    "type": "u16",
+    "nombre": 1812
+   },
+   "uv": {
+    "decalage": 1139272,
+    "type": "u16",
+    "nombre": 1208
+   },
+   "indices": {
+    "decalage": 1141688,
+    "type": "u16",
+    "nombre": 2250
+   },
+   "sommets": 604,
+   "triangles": 750
+  },
+  {
+   "nom": "objets-lettre:rabat-20",
+   "atlas": "objets",
+   "objet": "lettre:rabat",
+   "min": [
+    0.5641090869903564,
+    0.05286656692624092,
+    -0.044631533324718475
+   ],
+   "echelle": [
+    0.15647751092910767,
+    0.0931708961725235,
+    0.0852811336517334
+   ],
+   "positions": {
+    "decalage": 1146188,
+    "type": "u16",
+    "nombre": 2352
+   },
+   "uv": {
+    "decalage": 1150892,
+    "type": "u16",
+    "nombre": 1568
+   },
+   "indices": {
+    "decalage": 1154028,
+    "type": "u16",
+    "nombre": 3180
+   },
+   "sommets": 784,
+   "triangles": 1060
+  },
+  {
+   "nom": "objets-decor:pile-21",
+   "atlas": "objets",
+   "objet": "decor:pile",
+   "min": [
+    0.8326734304428101,
+    0.0,
+    -0.22421953082084656
+   ],
+   "echelle": [
+    0.29465317726135254,
+    0.10399999469518661,
+    0.24843907356262207
+   ],
+   "positions": {
+    "decalage": 1160388,
+    "type": "u16",
+    "nombre": 1830
+   },
+   "uv": {
+    "decalage": 1164048,
+    "type": "u16",
+    "nombre": 1220
+   },
+   "indices": {
+    "decalage": 1166488,
+    "type": "u16",
+    "nombre": 1812
+   },
+   "sommets": 610,
+   "triangles": 604
+  },
+  {
+   "nom": "objets-decor:livre:factarena-22",
+   "atlas": "objets",
+   "objet": "decor:livre:factarena",
+   "min": [
+    0.18199999630451202,
+    0.16999998688697815,
+    -0.9150000214576721
+   ],
+   "echelle": [
+    0.046000003814697266,
+    0.25,
+    0.12000000476837158
+   ],
+   "positions": {
+    "decalage": 1170112,
+    "type": "u16",
+    "nombre": 456
+   },
+   "uv": {
+    "decalage": 1171024,
+    "type": "u16",
+    "nombre": 304
+   },
+   "indices": {
+    "decalage": 1171632,
+    "type": "u16",
+    "nombre": 456
+   },
+   "sommets": 152,
+   "triangles": 152
+  },
+  {
+   "nom": "objets-decor:livre:rouille-23",
+   "atlas": "objets",
+   "objet": "decor:livre:rouille",
+   "min": [
+    0.2329999953508377,
+    0.16999998688697815,
+    -0.9150000214576721
+   ],
+   "echelle": [
+    0.044000014662742615,
+    0.23500001430511475,
+    0.12000000476837158
+   ],
+   "positions": {
+    "decalage": 1172544,
+    "type": "u16",
+    "nombre": 432
+   },
+   "uv": {
+    "decalage": 1173408,
+    "type": "u16",
+    "nombre": 288
+   },
+   "indices": {
+    "decalage": 1173984,
+    "type": "u16",
+    "nombre": 456
+   },
+   "sommets": 144,
+   "triangles": 152
+  },
+  {
+   "nom": "objets-decor:livre:doont-24",
+   "atlas": "objets",
+   "objet": "decor:livre:doont",
+   "min": [
+    0.2800000011920929,
+    0.17000001668930054,
+    -0.9150000214576721
+   ],
+   "echelle": [
+    0.046000003814697266,
+    0.25999999046325684,
+    0.12000000476837158
+   ],
+   "positions": {
+    "decalage": 1174896,
+    "type": "u16",
+    "nombre": 432
+   },
+   "uv": {
+    "decalage": 1175760,
+    "type": "u16",
+    "nombre": 288
+   },
+   "indices": {
+    "decalage": 1176336,
+    "type": "u16",
+    "nombre": 456
+   },
+   "sommets": 144,
+   "triangles": 152
+  },
+  {
+   "nom": "objets-decor:livre:argonet-25",
+   "atlas": "objets",
+   "objet": "decor:livre:argonet",
+   "min": [
+    0.3309999704360962,
+    0.17000000178813934,
+    -0.9150000214576721
+   ],
+   "echelle": [
+    0.04400002956390381,
+    0.22499997913837433,
+    0.12000000476837158
+   ],
+   "positions": {
+    "decalage": 1177248,
+    "type": "u16",
+    "nombre": 456
+   },
+   "uv": {
+    "decalage": 1178160,
+    "type": "u16",
+    "nombre": 304
+   },
+   "indices": {
+    "decalage": 1178768,
+    "type": "u16",
+    "nombre": 456
+   },
+   "sommets": 152,
+   "triangles": 152
+  },
+  {
+   "nom": "objets-decor:livre:cle-et-cadre-26",
+   "atlas": "objets",
+   "objet": "decor:livre:cle-et-cadre",
+   "min": [
+    0.3779999911785126,
+    0.16999998688697815,
+    -0.9150000214576721
+   ],
+   "echelle": [
+    0.046000003814697266,
+    0.24500000476837158,
+    0.12000000476837158
+   ],
+   "positions": {
+    "decalage": 1179680,
+    "type": "u16",
+    "nombre": 456
+   },
+   "uv": {
+    "decalage": 1180592,
+    "type": "u16",
+    "nombre": 304
+   },
+   "indices": {
+    "decalage": 1181200,
+    "type": "u16",
+    "nombre": 456
+   },
+   "sommets": 152,
+   "triangles": 152
+  },
+  {
+   "nom": "objets-decor:livre:webserv-27",
+   "atlas": "objets",
+   "objet": "decor:livre:webserv",
+   "min": [
+    0.4309999942779541,
+    0.17000000178813934,
+    -0.9150000214576721
+   ],
+   "echelle": [
+    0.04000002145767212,
+    0.2199999839067459,
+    0.12000000476837158
+   ],
+   "positions": {
+    "decalage": 1182112,
+    "type": "u16",
+    "nombre": 456
+   },
+   "uv": {
+    "decalage": 1183024,
+    "type": "u16",
+    "nombre": 304
+   },
+   "indices": {
+    "decalage": 1183632,
+    "type": "u16",
+    "nombre": 456
+   },
+   "sommets": 152,
+   "triangles": 152
+  },
+  {
+   "nom": "objets-decor:livre:inception-28",
+   "atlas": "objets",
+   "objet": "decor:livre:inception",
+   "min": [
+    0.4749999940395355,
+    0.16999998688697815,
+    -0.9150000214576721
+   ],
+   "echelle": [
+    0.03999999165534973,
+    0.23000001907348633,
+    0.12000000476837158
+   ],
+   "positions": {
+    "decalage": 1184544,
+    "type": "u16",
+    "nombre": 432
+   },
+   "uv": {
+    "decalage": 1185408,
+    "type": "u16",
+    "nombre": 288
+   },
+   "indices": {
+    "decalage": 1185984,
+    "type": "u16",
+    "nombre": 456
+   },
+   "sommets": 144,
+   "triangles": 152
+  },
+  {
+   "nom": "objets-decor:ficus-29",
+   "atlas": "objets",
+   "objet": "decor:ficus",
+   "min": [
+    -1.2896000146865845,
+    -0.7599999904632568,
+    0.34967297315597534
+   ],
+   "echelle": [
+    0.4257330298423767,
+    1.1935036182403564,
+    0.5876428484916687
+   ],
+   "positions": {
+    "decalage": 1186896,
+    "type": "u16",
+    "nombre": 40248
+   },
+   "uv": {
+    "decalage": 1267392,
+    "type": "u16",
+    "nombre": 26832
+   },
+   "indices": {
+    "decalage": 1321056,
+    "type": "u16",
+    "nombre": 52140
+   },
+   "sommets": 13416,
+   "triangles": 17380
+  },
+  {
+   "nom": "objets-decor:pot-30",
+   "atlas": "objets",
+   "objet": "decor:pot",
+   "min": [
+    0.6819999814033508,
+    0.0,
+    -0.2929999828338623
+   ],
+   "echelle": [
+    0.06599998474121094,
+    0.16438902914524078,
+    0.06599998474121094
+   ],
+   "positions": {
+    "decalage": 1425336,
+    "type": "u16",
+    "nombre": 1371
+   },
+   "uv": {
+    "decalage": 1428080,
+    "type": "u16",
+    "nombre": 914
+   },
+   "indices": {
+    "decalage": 1429908,
+    "type": "u16",
+    "nombre": 1140
+   },
+   "sommets": 457,
+   "triangles": 380
+  },
+  {
+   "nom": "objets-decor:classeurs-31",
+   "atlas": "objets",
+   "objet": "decor:classeurs",
+   "min": [
+    -1.104743480682373,
+    0.0,
+    -0.6536338925361633
+   ],
+   "echelle": [
+    0.46033191680908203,
+    0.28999999165534973,
+    0.2672678232192993
+   ],
+   "positions": {
+    "decalage": 1432188,
+    "type": "u16",
+    "nombre": 6312
+   },
+   "uv": {
+    "decalage": 1444812,
+    "type": "u16",
+    "nombre": 4208
+   },
+   "indices": {
+    "decalage": 1453228,
+    "type": "u16",
+    "nombre": 8370
+   },
+   "sommets": 2104,
+   "triangles": 2790
+  },
+  {
+   "nom": "objets-decor:serveur-32",
+   "atlas": "objets",
+   "objet": "decor:serveur",
+   "min": [
+    0.10471069812774658,
+    0.0,
+    -0.7558419704437256
+   ],
+   "echelle": [
+    0.32237595319747925,
+    0.04800000041723251,
+    0.23915082216262817
+   ],
+   "positions": {
+    "decalage": 1469968,
+    "type": "u16",
+    "nombre": 2298
+   },
+   "uv": {
+    "decalage": 1474564,
+    "type": "u16",
+    "nombre": 1532
+   },
+   "indices": {
+    "decalage": 1477628,
+    "type": "u16",
+    "nombre": 2298
+   },
+   "sommets": 766,
+   "triangles": 766
+  },
+  {
+   "nom": "objets-competences-33",
+   "atlas": "objets",
+   "objet": "competences",
+   "min": [
+    -0.06488687545061111,
+    0.0017999950796365738,
+    0.11738429963588715
+   ],
+   "echelle": [
+    0.18977375328540802,
+    0.0012000100687146187,
+    0.1352313905954361
+   ],
+   "positions": {
+    "decalage": 1482224,
+    "type": "u16",
+    "nombre": 60
+   },
+   "uv": {
+    "decalage": 1482344,
+    "type": "u16",
+    "nombre": 40
+   },
+   "indices": {
+    "decalage": 1482424,
+    "type": "u16",
+    "nombre": 30
+   },
+   "sommets": 20,
+   "triangles": 10
+  },
+  {
+   "nom": "objets-decor:visite-34",
+   "atlas": "objets",
+   "objet": "decor:visite",
+   "min": [
+    0.1922905147075653,
+    0.0044999998062849045,
+    0.09120644629001617
+   ],
+   "echelle": [
+    0.047018975019454956,
+    0.0007999995723366737,
+    0.031587108969688416
+   ],
+   "positions": {
+    "decalage": 1482484,
+    "type": "u16",
+    "nombre": 72
+   },
+   "uv": {
+    "decalage": 1482628,
+    "type": "u16",
+    "nombre": 48
+   },
+   "indices": {
+    "decalage": 1482724,
+    "type": "u16",
+    "nombre": 36
+   },
+   "sommets": 24,
+   "triangles": 12
+  },
+  {
+   "nom": "objets-radio-35",
+   "atlas": "objets",
+   "objet": "radio",
+   "min": [
+    0.7340309023857117,
+    0.0009134486317634583,
+    -0.5548517107963562
+   ],
+   "echelle": [
+    0.25193822383880615,
+    0.1440865397453308,
+    0.27979400753974915
+   ],
+   "positions": {
+    "decalage": 1482796,
+    "type": "u16",
+    "nombre": 4569
+   },
+   "uv": {
+    "decalage": 1491936,
+    "type": "u16",
+    "nombre": 3046
+   },
+   "indices": {
+    "decalage": 1498028,
+    "type": "u16",
+    "nombre": 5520
+   },
+   "sommets": 1523,
+   "triangles": 1840
+  },
+  {
+   "nom": "objets-decor:casier-36",
+   "atlas": "objets",
+   "objet": "decor:casier",
+   "min": [
+    0.2799999713897705,
+    0.0,
+    -0.5799999833106995
+   ],
+   "echelle": [
+    0.40000003576278687,
+    0.1599999964237213,
+    0.23999997973442078
+   ],
+   "positions": {
+    "decalage": 1509068,
+    "type": "u16",
+    "nombre": 1224
+   },
+   "uv": {
+    "decalage": 1511516,
+    "type": "u16",
+    "nombre": 816
+   },
+   "indices": {
+    "decalage": 1513148,
+    "type": "u16",
+    "nombre": 1242
+   },
+   "sommets": 408,
+   "triangles": 414
+  },
+  {
+   "nom": "etiquettes-ecran-37",
+   "atlas": "etiquettes",
+   "objet": "ecran",
+   "min": [
+    -0.22676198184490204,
+    0.03099999949336052,
+    -0.09870676696300507
+   ],
+   "echelle": [
+    0.1074947714805603,
+    0.02199999988079071,
+    0.0010606944561004639
+   ],
+   "positions": {
+    "decalage": 1515632,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1515656,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1515672,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-terminal-38",
+   "atlas": "etiquettes",
+   "objet": "terminal",
+   "min": [
+    -0.5250945687294006,
+    0.05900000035762787,
+    -0.22447355091571808
+   ],
+   "echelle": [
+    0.07146534323692322,
+    0.02199999988079071,
+    0.01717427372932434
+   ],
+   "positions": {
+    "decalage": 1515684,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1515708,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1515724,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-dossiers-39",
+   "atlas": "etiquettes",
+   "objet": "dossiers",
+   "min": [
+    -0.8926236033439636,
+    0.007699998095631599,
+    -0.06149379536509514
+   ],
+   "echelle": [
+    0.23483127355575562,
+    0.027000004425644875,
+    0.16083797812461853
+   ],
+   "positions": {
+    "decalage": 1515736,
+    "type": "u16",
+    "nombre": 60
+   },
+   "uv": {
+    "decalage": 1515856,
+    "type": "u16",
+    "nombre": 40
+   },
+   "indices": {
+    "decalage": 1515936,
+    "type": "u16",
+    "nombre": 30
+   },
+   "sommets": 20,
+   "triangles": 10
+  },
+  {
+   "nom": "etiquettes-lettre-40",
+   "atlas": "etiquettes",
+   "objet": "lettre",
+   "min": [
+    0.5547221302986145,
+    0.017608586698770523,
+    -0.0184013694524765
+   ],
+   "echelle": [
+    0.14618265628814697,
+    0.04037299007177353,
+    0.08642124384641647
+   ],
+   "positions": {
+    "decalage": 1515996,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516020,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516036,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-decor:livre:factarena-41",
+   "atlas": "etiquettes",
+   "objet": "decor:livre:factarena",
+   "min": [
+    0.18700000643730164,
+    0.2224999964237213,
+    -0.7943999767303467
+   ],
+   "echelle": [
+    0.03599998354911804,
+    0.17000001668930054,
+    9.999999974752427e-07
+   ],
+   "positions": {
+    "decalage": 1516048,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516072,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516088,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-decor:livre:rouille-42",
+   "atlas": "etiquettes",
+   "objet": "decor:livre:rouille",
+   "min": [
+    0.23799999058246613,
+    0.21424999833106995,
+    -0.7943999767303467
+   ],
+   "echelle": [
+    0.03399999439716339,
+    0.17000001668930054,
+    9.999999974752427e-07
+   ],
+   "positions": {
+    "decalage": 1516100,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516124,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516140,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-decor:livre:doont-43",
+   "atlas": "etiquettes",
+   "objet": "decor:livre:doont",
+   "min": [
+    0.2849999964237213,
+    0.2279999852180481,
+    -0.7943999767303467
+   ],
+   "echelle": [
+    0.03600001335144043,
+    0.17000001668930054,
+    9.999999974752427e-07
+   ],
+   "positions": {
+    "decalage": 1516152,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516176,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516192,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-decor:livre:argonet-44",
+   "atlas": "etiquettes",
+   "objet": "decor:livre:argonet",
+   "min": [
+    0.335999995470047,
+    0.20874997973442078,
+    -0.7943999767303467
+   ],
+   "echelle": [
+    0.0339999794960022,
+    0.17000001668930054,
+    9.999999974752427e-07
+   ],
+   "positions": {
+    "decalage": 1516204,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516228,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516244,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-decor:livre:cle-et-cadre-45",
+   "atlas": "etiquettes",
+   "objet": "decor:livre:cle-et-cadre",
+   "min": [
+    0.382999986410141,
+    0.21974998712539673,
+    -0.7943999767303467
+   ],
+   "echelle": [
+    0.03600001335144043,
+    0.17000001668930054,
+    9.999999974752427e-07
+   ],
+   "positions": {
+    "decalage": 1516256,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516280,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516296,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-decor:livre:webserv-46",
+   "atlas": "etiquettes",
+   "objet": "decor:livre:webserv",
+   "min": [
+    0.4360000193119049,
+    0.20600000023841858,
+    -0.7943999767303467
+   ],
+   "echelle": [
+    0.029999971389770508,
+    0.17000001668930054,
+    9.999999974752427e-07
+   ],
+   "positions": {
+    "decalage": 1516308,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516332,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516348,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-decor:livre:inception-47",
+   "atlas": "etiquettes",
+   "objet": "decor:livre:inception",
+   "min": [
+    0.48000001907348633,
+    0.21149998903274536,
+    -0.7943999767303467
+   ],
+   "echelle": [
+    0.029999971389770508,
+    0.17000001668930054,
+    9.999999974752427e-07
+   ],
+   "positions": {
+    "decalage": 1516360,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516384,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516400,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-statique-48",
+   "atlas": "etiquettes",
+   "objet": null,
+   "min": [
+    -0.36134159564971924,
+    0.011199998669326305,
+    -0.09940903633832932
+   ],
+   "echelle": [
+    0.505806565284729,
+    0.3254829943180084,
+    0.05950206518173218
+   ],
+   "positions": {
+    "decalage": 1516412,
+    "type": "u16",
+    "nombre": 36
+   },
+   "uv": {
+    "decalage": 1516484,
+    "type": "u16",
+    "nombre": 24
+   },
+   "indices": {
+    "decalage": 1516532,
+    "type": "u16",
+    "nombre": 18
+   },
+   "sommets": 12,
+   "triangles": 6
+  },
+  {
+   "nom": "etiquettes-decor:classeurs-49",
+   "atlas": "etiquettes",
+   "objet": "decor:classeurs",
+   "min": [
+    -1.032310962677002,
+    0.10500000417232513,
+    -0.399475634098053
+   ],
+   "echelle": [
+    0.37902677059173584,
+    0.15999998152256012,
+    0.012439638376235962
+   ],
+   "positions": {
+    "decalage": 1516568,
+    "type": "u16",
+    "nombre": 60
+   },
+   "uv": {
+    "decalage": 1516688,
+    "type": "u16",
+    "nombre": 40
+   },
+   "indices": {
+    "decalage": 1516768,
+    "type": "u16",
+    "nombre": 30
+   },
+   "sommets": 20,
+   "triangles": 10
+  },
+  {
+   "nom": "etiquettes-decor:serveur-50",
+   "atlas": "etiquettes",
+   "objet": "decor:serveur",
+   "min": [
+    0.1786971241235733,
+    0.019999999552965164,
+    -0.5246577262878418
+   ],
+   "echelle": [
+    0.0596146285533905,
+    0.019999999552965164,
+    0.006789445877075195
+   ],
+   "positions": {
+    "decalage": 1516828,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516852,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516868,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-competences-51",
+   "atlas": "etiquettes",
+   "objet": "competences",
+   "min": [
+    -0.06326184421777725,
+    0.0031999952625483274,
+    0.11900933086872101
+   ],
+   "echelle": [
+    0.1865236908197403,
+    9.999999974752427e-07,
+    0.13198135793209076
+   ],
+   "positions": {
+    "decalage": 1516880,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516904,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516920,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-decor:visite-52",
+   "atlas": "etiquettes",
+   "objet": "decor:visite",
+   "min": [
+    0.19306623935699463,
+    0.005399998743087053,
+    0.0919821709394455
+   ],
+   "echelle": [
+    0.045467525720596313,
+    9.999999974752427e-07,
+    0.030035659670829773
+   ],
+   "positions": {
+    "decalage": 1516932,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1516956,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1516972,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-tiroir:objectifs2-53",
+   "atlas": "etiquettes",
+   "objet": "tiroir:objectifs2",
+   "min": [
+    0.7299999594688416,
+    -0.34299999475479126,
+    0.1703999936580658
+   ],
+   "echelle": [
+    0.10000002384185791,
+    0.022000014781951904,
+    9.999999974752427e-07
+   ],
+   "positions": {
+    "decalage": 1516984,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1517008,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1517024,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "etiquettes-tiroir:objectifs-54",
+   "atlas": "etiquettes",
+   "objet": "tiroir:objectifs",
+   "min": [
+    0.3375000059604645,
+    0.03999999910593033,
+    -0.33160001039505005
+   ],
+   "echelle": [
+    0.07499998807907104,
+    0.01600000262260437,
+    9.999999974752427e-07
+   ],
+   "positions": {
+    "decalage": 1517036,
+    "type": "u16",
+    "nombre": 12
+   },
+   "uv": {
+    "decalage": 1517060,
+    "type": "u16",
+    "nombre": 8
+   },
+   "indices": {
+    "decalage": 1517076,
+    "type": "u16",
+    "nombre": 6
+   },
+   "sommets": 4,
+   "triangles": 2
+  },
+  {
+   "nom": "objectifs2-tiroir:objectifs2-55",
+   "atlas": "objectifs2",
+   "objet": "tiroir:objectifs2",
+   "min": [
+    0.5854999423027039,
+    -0.4000000059604645,
+    -0.31050002574920654
+   ],
+   "echelle": [
+    0.3890000581741333,
+    0.13120001554489136,
+    0.46000003814697266
+   ],
+   "positions": {
+    "decalage": 1517088,
+    "type": "u16",
+    "nombre": 43458
+   },
+   "uv": {
+    "decalage": 1604004,
+    "type": "u16",
+    "nombre": 28972
+   },
+   "indices": {
+    "decalage": 1661948,
+    "type": "u16",
+    "nombre": 39696
+   },
+   "sommets": 14486,
+   "triangles": 13232
+  },
+  {
+   "nom": "secret-tiroir:secret-56",
+   "atlas": "secret",
+   "objet": "tiroir:secret",
+   "min": [
+    0.5854999423027039,
+    -0.6000000238418579,
+    -0.31050002574920654
+   ],
+   "echelle": [
+    0.3890000581741333,
+    0.13120001554489136,
+    0.46000003814697266
+   ],
+   "positions": {
+    "decalage": 1741340,
+    "type": "u16",
+    "nombre": 8352
+   },
+   "uv": {
+    "decalage": 1758044,
+    "type": "u16",
+    "nombre": 5568
+   },
+   "indices": {
+    "decalage": 1769180,
+    "type": "u16",
+    "nombre": 10464
+   },
+   "sommets": 2784,
+   "triangles": 3488
+  },
+  {
+   "nom": "objectifs-tiroir:objectifs-57",
+   "atlas": "objectifs",
+   "objet": "tiroir:objectifs",
+   "min": [
+    0.28999999165534973,
+    0.008999999612569809,
+    -0.5600000023841858
+   ],
+   "echelle": [
+    0.37999996542930603,
+    0.0729999989271164,
+    0.2395000159740448
+   ],
+   "positions": {
+    "decalage": 1790108,
+    "type": "u16",
+    "nombre": 44376
+   },
+   "uv": {
+    "decalage": 1878860,
+    "type": "u16",
+    "nombre": 29584
+   },
+   "indices": {
+    "decalage": 1938028,
+    "type": "u16",
+    "nombre": 40824
+   },
+   "sommets": 14792,
+   "triangles": 13608
+  },
+  {
+   "nom": "surprise-tiroir:surprise-58",
+   "atlas": "surprise",
+   "objet": "tiroir:surprise",
+   "min": [
+    0.28999999165534973,
+    0.09550000727176666,
+    -0.5600000023841858
+   ],
+   "echelle": [
+    0.37999996542930603,
+    0.046999990940093994,
+    0.2395000159740448
+   ],
+   "positions": {
+    "decalage": 2019676,
+    "type": "u16",
+    "nombre": 1203
+   },
+   "uv": {
+    "decalage": 2022084,
+    "type": "u16",
+    "nombre": 802
+   },
+   "indices": {
+    "decalage": 2023688,
+    "type": "u16",
+    "nombre": 1272
+   },
+   "sommets": 401,
+   "triangles": 424
+  },
+  {
+   "nom": "surprise-cadre:surprise-0-59",
+   "atlas": "surprise",
+   "objet": "cadre:surprise-0",
+   "min": [
+    0.36766892671585083,
+    0.10200000554323196,
+    -0.47276484966278076
+   ],
+   "echelle": [
+    0.10066211223602295,
+    0.001399993896484375,
+    0.11752969026565552
+   ],
+   "positions": {
+    "decalage": 2026232,
+    "type": "u16",
+    "nombre": 72
+   },
+   "uv": {
+    "decalage": 2026376,
+    "type": "u16",
+    "nombre": 48
+   },
+   "indices": {
+    "decalage": 2026472,
+    "type": "u16",
+    "nombre": 36
+   },
+   "sommets": 24,
+   "triangles": 12
+  },
+  {
+   "nom": "surprise-cadre:surprise-1-60",
+   "atlas": "surprise",
+   "objet": "cadre:surprise-1",
+   "min": [
+    0.49120813608169556,
+    0.10200000554323196,
+    -0.473142147064209
+   ],
+   "echelle": [
+    0.10158371925354004,
+    0.001399993896484375,
+    0.11828428506851196
+   ],
+   "positions": {
+    "decalage": 2026544,
+    "type": "u16",
+    "nombre": 72
+   },
+   "uv": {
+    "decalage": 2026688,
+    "type": "u16",
+    "nombre": 48
+   },
+   "indices": {
+    "decalage": 2026784,
+    "type": "u16",
+    "nombre": 36
+   },
+   "sommets": 24,
+   "triangles": 12
+  }
+ ],
+ "vivants": {
+  "dalle_ecran": {
+   "centre": [
+    -0.04814500734210014,
+    0.2019999921321869,
+    -0.11200916767120361
+   ],
+   "droite": [
+    0.9999513030052185,
+    0.0,
+    -0.009866980835795403
+   ],
+   "haut": [
+    4.312994406063808e-10,
+    1.0,
+    4.370926021124433e-08
+   ],
+   "normale": [
+    0.009866980835795403,
+    -4.371138828673793e-08,
+    0.9999513030052185
+   ],
+   "largeur": 0.31,
+   "hauteur": 0.2325,
+   "bombe": 0.012
+  },
+  "dalle_terminal": {
+   "centre": [
+    -0.4407920241355896,
+    0.17500001192092896,
+    -0.23846033215522766
+   ],
+   "droite": [
+    0.9723174571990967,
+    0.0,
+    -0.23366370797157288
+   ],
+   "haut": [
+    1.0213764944921877e-08,
+    1.0,
+    4.2501344665879515e-08
+   ],
+   "normale": [
+    0.23366370797157288,
+    -4.371138828673793e-08,
+    0.9723174571990967
+   ],
+   "largeur": 0.17550000000000002,
+   "hauteur": 0.13162500000000002,
+   "bombe": 0.0054
+  }
+ },
+ "vitre": {
+  "centre": [
+   0.0,
+   0.7850000262260437,
+   -0.949999988079071
+  ],
+  "largeur": 1.48,
+  "hauteur": 1.23
+ },
+ "dehors": {
+  "ordinateur": "dehors.webp",
+  "telephone": "telephone/dehors.webp",
+  "distance": 12.0,
+  "largeur": 21.609697063148158,
+  "hauteur": 13.506060664467599,
+  "centre": [
+   -0.019999999552965164,
+   1.2969425916671753,
+   -10.741783142089844
+  ],
+  "normale": [
+   -0.0,
+   -0.07974521815776825,
+   0.9968152642250061
+  ]
+ },
+ "lampe": [
+  -0.7473777532577515,
+  0.33342093229293823,
+  -0.12059826403856277
+ ],
+ "tasse": [
+  0.3100000023841858,
+  0.0044999998062849045,
+  0.125
+ ],
+ "charniere_lettre": {
+  "point": [
+   0.6424266695976257,
+   0.14655546844005585,
+   -0.002151506021618843
+  ],
+  "axe": [
+   0.8791630268096924,
+   0.0,
+   0.4765211045742035
+  ]
+ },
+ "cadres": {
+  "liege": {
+   "centre": [
+    -1.0800000429153442,
+    0.6000000238418579,
+    -0.7928000092506409
+   ],
+   "droite": [
+    1.0,
+    0.0,
+    -0.0
+   ],
+   "haut": [
+    0.0,
+    1.0,
+    -0.0
+   ],
+   "normale": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "largeur": 0.33,
+   "hauteur": 0.44
+  },
+  "libre": {
+   "centre": [
+    1.0800000429153442,
+    0.6000000238418579,
+    -0.7928000092506409
+   ],
+   "droite": [
+    1.0,
+    0.0,
+    -0.0
+   ],
+   "haut": [
+    0.0,
+    1.0,
+    -0.0
+   ],
+   "normale": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "largeur": 0.33,
+   "hauteur": 0.44
+  },
+  "en-ce-moment": {
+   "centre": [
+    -1.3128000497817993,
+    0.7200000286102295,
+    -0.41999998688697815
+   ],
+   "droite": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "haut": [
+    0.0,
+    1.0,
+    -0.0
+   ],
+   "normale": [
+    1.0,
+    0.0,
+    -0.0
+   ],
+   "largeur": 0.32,
+   "hauteur": 0.24
+  },
+  "travail": {
+   "centre": [
+    -1.3128000497817993,
+    0.7200000286102295,
+    0.019999999552965164
+   ],
+   "droite": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "haut": [
+    0.0,
+    1.0,
+    -0.0
+   ],
+   "normale": [
+    1.0,
+    0.0,
+    -0.0
+   ],
+   "largeur": 0.32,
+   "hauteur": 0.24
+  },
+  "doont": {
+   "centre": [
+    1.3128000497817993,
+    0.7200000286102295,
+    0.2199999988079071
+   ],
+   "droite": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "haut": [
+    0.0,
+    1.0,
+    -0.0
+   ],
+   "normale": [
+    -1.0,
+    0.0,
+    -0.0
+   ],
+   "largeur": 0.32,
+   "hauteur": 0.44
+  },
+  "surprise-0": {
+   "centre": [
+    0.4179999828338623,
+    0.10339999943971634,
+    -0.414000004529953
+   ],
+   "droite": [
+    0.9981347918510437,
+    0.0,
+    0.061048541218042374
+   ],
+   "haut": [
+    0.061048541218042374,
+    0.0,
+    -0.9981347918510437
+   ],
+   "normale": [
+    0.0,
+    1.0,
+    -0.0
+   ],
+   "largeur": 0.094,
+   "hauteur": 0.112
+  },
+  "surprise-1": {
+   "centre": [
+    0.5419999957084656,
+    0.10339999943971634,
+    -0.414000004529953
+   ],
+   "droite": [
+    0.9975640773773193,
+    0.0,
+    -0.06975647062063217
+   ],
+   "haut": [
+    -0.06975647062063217,
+    0.0,
+    -0.9975640773773193
+   ],
+   "normale": [
+    0.0,
+    1.0,
+    -0.0
+   ],
+   "largeur": 0.094,
+   "hauteur": 0.112
+  }
+ },
+ "tiroirs": {
+  "objectifs": {
+   "course": 0.205,
+   "axe": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "objectifs": [
+    {
+     "centre": [
+      0.3649999797344208,
+      0.057840000838041306,
+      -0.5009999871253967
+     ],
+     "rayon": 0.024800000000000003
+    },
+    {
+     "centre": [
+      0.47999998927116394,
+      0.06300000101327896,
+      -0.5009999871253967
+     ],
+     "rayon": 0.027200000000000002
+    },
+    {
+     "centre": [
+      0.5949999690055847,
+      0.06815999746322632,
+      -0.5009999871253967
+     ],
+     "rayon": 0.023200000000000002
+    },
+    {
+     "centre": [
+      0.3649999797344208,
+      0.057840000838041306,
+      -0.40299999713897705
+     ],
+     "rayon": 0.024
+    },
+    {
+     "centre": [
+      0.47999998927116394,
+      0.06300000101327896,
+      -0.40299999713897705
+     ],
+     "rayon": 0.0256
+    },
+    {
+     "centre": [
+      0.5949999690055847,
+      0.06815999746322632,
+      -0.40299999713897705
+     ],
+     "rayon": 0.024
+    }
+   ],
+   "plateau": {
+    "centre": [
+     0.47999998927116394,
+     0.015300000086426735,
+     -0.4520000219345093
+    ],
+    "largeur": 0.4,
+    "profondeur": 0.24,
+    "dessus": 0.06815999746322632
+   },
+   "facade": [
+    0.3149999976158142,
+    0.045499999076128006,
+    -0.33000001311302185
+   ]
+  },
+  "objectifs2": {
+   "course": 0.35,
+   "axe": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "objectifs": [
+    {
+     "centre": [
+      0.6649999618530273,
+      -0.3511599898338318,
+      -0.017499998211860657
+     ],
+     "rayon": 0.024800000000000003
+    },
+    {
+     "centre": [
+      0.7799999713897705,
+      -0.34599998593330383,
+      -0.017499998211860657
+     ],
+     "rayon": 0.027200000000000002
+    },
+    {
+     "centre": [
+      0.8949999809265137,
+      -0.34084001183509827,
+      -0.017499998211860657
+     ],
+     "rayon": 0.023200000000000002
+    },
+    {
+     "centre": [
+      0.6649999618530273,
+      -0.3511599898338318,
+      0.08649999648332596
+     ],
+     "rayon": 0.024
+    },
+    {
+     "centre": [
+      0.7799999713897705,
+      -0.34599998593330383,
+      0.08649999648332596
+     ],
+     "rayon": 0.0256
+    },
+    {
+     "centre": [
+      0.8949999809265137,
+      -0.34084001183509827,
+      0.08649999648332596
+     ],
+     "rayon": 0.024
+    }
+   ],
+   "plateau": {
+    "centre": [
+     0.7799999713897705,
+     -0.3937000036239624,
+     0.03450000286102295
+    ],
+    "largeur": 0.37,
+    "profondeur": 0.226,
+    "dessus": -0.34084001183509827
+   },
+   "facade": [
+    0.8999999761581421,
+    -0.2800000011920929,
+    0.171999990940094
+   ]
+  },
+  "secret": {
+   "course": 0.3,
+   "axe": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "cle": [
+    0.7799999713897705,
+    -0.5885000228881836,
+    0.04999999701976776
+   ],
+   "facade": [
+    0.8999999761581421,
+    -0.47999998927116394,
+    0.171999990940094
+   ],
+   "fisheye": [
+    0.85999995470047,
+    -0.5906999707221985,
+    0.04999999701976776
+   ]
+  },
+  "surprise": {
+   "course": 0.17,
+   "axe": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "cle": [
+    0.47999998927116394,
+    0.1014999970793724,
+    -0.414000004529953
+   ],
+   "facade": [
+    0.6449999809265137,
+    0.11900000274181366,
+    -0.33000001311302185
+   ]
+  }
+ },
+ "caisson": {
+  "bord": [
+   0.7799999713897705,
+   0.0,
+   0.25999999046325684
+  ],
+  "centre": [
+   0.7799999713897705,
+   -0.41999998688697815,
+   0.1599999964237213
+  ]
+ },
+ "boite_piece": {
+  "xMin": -1.22,
+  "xMax": 1.22,
+  "yMin": -0.46,
+  "zMin": -0.7000000000000001
+ },
+ "octets_geometrie": 2026856
+}

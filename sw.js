@@ -1,0 +1,59 @@
+// Service worker MajorTakito (généré par tools/build.mjs : VERSION et FICHIERS sont injectés).
+// Pourquoi une liste fermée : on ne met en cache que les fichiers publics du site, même origine ; aucune réponse
+// d'un autre site, aucune requête autre que GET.
+// Une version installée prend la main tout de suite (skipWaiting) : en attente, elle laissait l'ancien cache servir les fichiers tant
+// qu'un onglet restait ouvert, recharger n'y changeait rien (31/10 : un visiteur revenu voyait encore l'ancienne scène). C'est la page
+// qui choisit le moment de recharger (app.js) : jamais pendant qu'on écrit ; les notes, dans IndexedDB, ne sont pas touchées par le cache.
+const VERSION = '1e46c4bbc991';
+const CACHE = 'majortakito-' + VERSION;
+const FICHIERS = ["./","affiche/affiche.json","affiche/attente.webp","assets/rouille-bureau-qemu.png","cadres/ciel-crepuscule.webp","cadres/ciel-doree.webp","cadres/ciel-jour.webp","cadres/ciel-nuit.webp","cadres/doont.webp","console/argonaute-accueil.webp","console/doont.png","console/encre-et-sang-accueil.webp","console/octosnake-accueil.webp","console/rouille-bureau.png","css/charte.css","css/cv.css","css/site.css","css/theme.css","cv.html","doont.html","exemple-sobre/index.html","icones/apple-touch-icon.png","icones/favicon-32.png","icones/icone-192.png","icones/icone-512.png","icones/icone-masquable-512.png","js/ambiance.js","js/amorce.js","js/app.js","js/ciel.js","js/console-donnees.js","js/console.js","js/courriel.js","js/cv.js","js/demineur.js","js/fermer.js","js/film-cafe-fin.js","js/film-cafe.js","js/grand-angle.js","js/notes.js","js/pack-sons.js","js/pieuvre-bulle.js","js/pieuvre-psst.js","js/pieuvre-recherche.js","js/plongee.js","js/scene-contenu.js","js/scene-contenu.json","js/scene/cadres.js","js/scene/cafe.js","js/scene/console-poche.js","js/scene/couleurs.js","js/scene/fiche.js","js/scene/fisheye.js","js/scene/meteo.js","js/scene/modele.js","js/scene/mousse.js","js/scene/objectifs.js","js/scene/objets.js","js/scene/pensebete.js","js/scene/pieuvre-cerveau.js","js/scene/pieuvre-saut.js","js/scene/pieuvre.js","js/scene/scene.js","js/scene/sucre.js","js/scene/textures.js","js/scene/verre.js","js/scene/ville.js","js/son.js","js/tasse.js","js/tiroir.js","manifest.webmanifest","mentions-legales.html","modules.json","objectifs/doont.webp","objectifs/rouille.webp","parcours.html","stock/index.html","stock/produit-stock.png","stock/stock.css","stock/stock.js","vendor/three/LICENSE","vendor/three/VERSION.txt","vendor/three/addons/geometries/RoundedBoxGeometry.js","vendor/three/addons/lights/RectAreaLightTexturesLib.js","vendor/three/addons/lights/RectAreaLightUniformsLib.js","vendor/three/addons/loaders/GLTFLoader.js","vendor/three/addons/objects/Reflector.js","vendor/three/addons/postprocessing/EffectComposer.js","vendor/three/addons/postprocessing/MaskPass.js","vendor/three/addons/postprocessing/OutputPass.js","vendor/three/addons/postprocessing/Pass.js","vendor/three/addons/postprocessing/RenderPass.js","vendor/three/addons/postprocessing/ShaderPass.js","vendor/three/addons/postprocessing/UnrealBloomPass.js","vendor/three/addons/shaders/CopyShader.js","vendor/three/addons/shaders/LuminosityHighPassShader.js","vendor/three/addons/shaders/OutputShader.js","vendor/three/addons/utils/BufferGeometryUtils.js","vendor/three/three.module.min.js"];
+const PORTEE = new URL('./', self.location).href;
+const URLS = new Set(FICHIERS.map((f) => new URL(f, PORTEE).href));
+// La pièce cuite (modele/) : liste fermée elle aussi, mais rangée au premier chargement, dans le cache de la version.
+const A_LA_DEMANDE = new Set(["modele/ambiances.json","modele/ambiances/crepuscule/cuit-bureau.webp","modele/ambiances/crepuscule/cuit-etiquettes.webp","modele/ambiances/crepuscule/cuit-objectifs.webp","modele/ambiances/crepuscule/cuit-objectifs2.webp","modele/ambiances/crepuscule/cuit-objets.webp","modele/ambiances/crepuscule/cuit-piece.webp","modele/ambiances/crepuscule/cuit-rideaux.webp","modele/ambiances/crepuscule/cuit-secret.webp","modele/ambiances/crepuscule/cuit-surprise.webp","modele/ambiances/crepuscule/dehors.webp","modele/ambiances/crepuscule/telephone/cuit-bureau.webp","modele/ambiances/crepuscule/telephone/cuit-etiquettes.webp","modele/ambiances/crepuscule/telephone/cuit-objectifs.webp","modele/ambiances/crepuscule/telephone/cuit-objectifs2.webp","modele/ambiances/crepuscule/telephone/cuit-objets.webp","modele/ambiances/crepuscule/telephone/cuit-piece.webp","modele/ambiances/crepuscule/telephone/cuit-rideaux.webp","modele/ambiances/crepuscule/telephone/cuit-secret.webp","modele/ambiances/crepuscule/telephone/cuit-surprise.webp","modele/ambiances/crepuscule/telephone/dehors.webp","modele/ambiances/doree/cuit-bureau.webp","modele/ambiances/doree/cuit-etiquettes.webp","modele/ambiances/doree/cuit-objectifs.webp","modele/ambiances/doree/cuit-objectifs2.webp","modele/ambiances/doree/cuit-objets.webp","modele/ambiances/doree/cuit-piece.webp","modele/ambiances/doree/cuit-rideaux.webp","modele/ambiances/doree/cuit-secret.webp","modele/ambiances/doree/cuit-surprise.webp","modele/ambiances/doree/dehors.webp","modele/ambiances/doree/telephone/cuit-bureau.webp","modele/ambiances/doree/telephone/cuit-etiquettes.webp","modele/ambiances/doree/telephone/cuit-objectifs.webp","modele/ambiances/doree/telephone/cuit-objectifs2.webp","modele/ambiances/doree/telephone/cuit-objets.webp","modele/ambiances/doree/telephone/cuit-piece.webp","modele/ambiances/doree/telephone/cuit-rideaux.webp","modele/ambiances/doree/telephone/cuit-secret.webp","modele/ambiances/doree/telephone/cuit-surprise.webp","modele/ambiances/doree/telephone/dehors.webp","modele/ambiances/jour/cuit-bureau.webp","modele/ambiances/jour/cuit-etiquettes.webp","modele/ambiances/jour/cuit-objectifs.webp","modele/ambiances/jour/cuit-objectifs2.webp","modele/ambiances/jour/cuit-objets.webp","modele/ambiances/jour/cuit-piece.webp","modele/ambiances/jour/cuit-rideaux.webp","modele/ambiances/jour/cuit-secret.webp","modele/ambiances/jour/cuit-surprise.webp","modele/ambiances/jour/dehors.webp","modele/ambiances/jour/telephone/cuit-bureau.webp","modele/ambiances/jour/telephone/cuit-etiquettes.webp","modele/ambiances/jour/telephone/cuit-objectifs.webp","modele/ambiances/jour/telephone/cuit-objectifs2.webp","modele/ambiances/jour/telephone/cuit-objets.webp","modele/ambiances/jour/telephone/cuit-piece.webp","modele/ambiances/jour/telephone/cuit-rideaux.webp","modele/ambiances/jour/telephone/cuit-secret.webp","modele/ambiances/jour/telephone/cuit-surprise.webp","modele/ambiances/jour/telephone/dehors.webp","modele/atelier.bin","modele/atelier.json","modele/ciel.png","modele/cuit-bureau.webp","modele/cuit-etiquettes.webp","modele/cuit-objectifs.webp","modele/cuit-objectifs2.webp","modele/cuit-objets.webp","modele/cuit-piece.webp","modele/cuit-rideaux.webp","modele/cuit-secret.webp","modele/cuit-surprise.webp","modele/dehors.webp","modele/fisheye.glb","modele/pieuvre-actions.json","modele/pieuvre-index.json","modele/pieuvre.glb","modele/sondes/crepuscule-eclairement.png","modele/sondes/crepuscule-reflet.png","modele/sondes/doree-eclairement.png","modele/sondes/doree-reflet.png","modele/sondes/jour-eclairement.png","modele/sondes/jour-reflet.png","modele/sondes/nuit-eclairement.png","modele/sondes/nuit-reflet.png","modele/sondes/sondes.json","modele/telephone/cuit-bureau.webp","modele/telephone/cuit-etiquettes.webp","modele/telephone/cuit-objectifs.webp","modele/telephone/cuit-objectifs2.webp","modele/telephone/cuit-objets.webp","modele/telephone/cuit-piece.webp","modele/telephone/cuit-rideaux.webp","modele/telephone/cuit-secret.webp","modele/telephone/cuit-surprise.webp","modele/telephone/dehors.webp","modele/ville.bin","modele/ville.json"].map((f) => new URL(f, PORTEE).href));
+
+self.addEventListener('install', (e) => {
+  // Téléchargement coupé : addAll échoue sans rien écrire, mais le cache vide reste créé. On le supprime pour ne
+  // laisser que l'ancienne version (un même VERSION ne se réinstalle jamais : sw.js serait identique octet pour octet).
+  // Téléchargement complet seulement : sur une coupure, la version d'avant reste en place, entière.
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FICHIERS.map((f) => new Request(new URL(f, PORTEE), { cache: 'reload' }))))
+    .then(() => self.skipWaiting())
+    .catch(async (err) => { await caches.delete(CACHE); throw err; }));
+});
+self.addEventListener('activate', (e) => {
+  e.waitUntil((async () => {
+    for (const k of await caches.keys()) if (k.startsWith('majortakito-') && k !== CACHE) await caches.delete(k);
+    await self.clients.claim();
+  })());
+});
+self.addEventListener('message', (e) => { if (e.data === 'passer') self.skipWaiting(); else if (e.data === 'version') e.source?.postMessage({ version: VERSION }); });
+self.addEventListener('fetch', (e) => {
+  const r = e.request;
+  if (r.method !== 'GET') return;
+  const u = new URL(r.url);
+  if (u.origin !== self.location.origin) return; // jamais d'autre origine
+  // La page du noyau n'est jamais servie depuis le cache : hors ligne, elle échoue franchement au lieu d'afficher l'accueil.
+  if (u.pathname.includes('/noyau/')) return;
+  if (r.mode === 'navigate') {
+    // Réseau d'abord pour les pages (contenu frais), sinon la copie en cache : le site s'ouvre hors ligne.
+    // Les preuves de service ont leur propre page : un repli vers l'accueil ferait perdre le geste en cours.
+    const cible = new URL(u.pathname.endsWith('/') ? u.pathname + 'index.html' : u.pathname, u.origin).href;
+    const page = URLS.has(cible) ? cible : new URL('./', PORTEE).href;
+    e.respondWith(fetch(r).catch(() => caches.match(page, { cacheName: CACHE })));
+    return;
+  }
+  const cle = u.origin + u.pathname;
+  if (A_LA_DEMANDE.has(cle)) {
+    e.respondWith(caches.open(CACHE).then(async (c) => {
+      const rep = await c.match(cle);
+      if (rep) return rep;
+      // Revalidé : ces fichiers gardent leur nom d'une version à l'autre, le cache HTTP pourrait marier un ancien atelier.bin au nouvel atelier.json.
+      const frais = await fetch(r, { cache: 'no-cache' });
+      if (frais.ok) await c.put(cle, frais.clone());
+      return frais;
+    }));
+    return;
+  }
+  if (!URLS.has(cle)) return;
+  e.respondWith(caches.match(cle, { cacheName: CACHE }).then((rep) => rep || fetch(r)));
+});

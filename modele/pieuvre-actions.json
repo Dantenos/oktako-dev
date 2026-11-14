@@ -1,0 +1,357 @@
+{
+ "variante": "d",
+ "images_par_seconde": 24,
+ "bornes_regard_degres": {
+  "haut": 36,
+  "bas": 20,
+  "cote": 32
+ },
+ "actions": [
+  {
+   "nom": "repos_respire",
+   "images": 144,
+   "secondes": 6.0,
+   "boucle": true,
+   "categorie": "repos",
+   "fin": "boucle",
+   "resume": "Au repos : respire, regarde autour de lui, cligne, un bras joue.",
+   "accessoires": [],
+   "deplacement_m": null
+  },
+  {
+   "nom": "repos_clavier",
+   "images": 96,
+   "secondes": 4.0,
+   "boucle": true,
+   "categorie": "repos",
+   "fin": "boucle",
+   "resume": "Tape sur un mini-clavier, concentrée, avec une pause pour réfléchir.",
+   "accessoires": [
+    "clavier"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "repos_de",
+   "images": 132,
+   "secondes": 5.5,
+   "boucle": false,
+   "categorie": "repos",
+   "fin": "repos",
+   "resume": "Boit dans un dé à coudre : le prend, le porte à la bouche, savoure, le repose.",
+   "accessoires": [
+    "de"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "repos_carnet",
+   "images": 150,
+   "secondes": 6.25,
+   "boucle": false,
+   "categorie": "repos",
+   "fin": "repos",
+   "resume": "Feuillette un petit carnet : trois pages tournées par la pointe d'un bras, en lisant.",
+   "accessoires": [
+    "carnet"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "repos_etirer",
+   "images": 96,
+   "secondes": 4.0,
+   "boucle": false,
+   "categorie": "repos",
+   "fin": "repos",
+   "resume": "S'étire : s'écrase pour prendre l'élan, s'allonge bras en l'air en tremblant, retombe.",
+   "accessoires": [],
+   "deplacement_m": null
+  },
+  {
+   "nom": "repos_bailler",
+   "images": 96,
+   "secondes": 4.0,
+   "boucle": false,
+   "categorie": "repos",
+   "fin": "repos",
+   "resume": "Bâille : paupières lourdes, grande bouche cachée d'un bras, petit claquement, s'ébroue.",
+   "accessoires": [],
+   "deplacement_m": null
+  },
+  {
+   "nom": "accueil_coucou",
+   "images": 96,
+   "secondes": 4.0,
+   "boucle": false,
+   "categorie": "accueil",
+   "fin": "repos",
+   "resume": "L'accueil : occupée, elle lève les yeux, nous voit et fait coucou.",
+   "accessoires": [],
+   "deplacement_m": null
+  },
+  {
+   "nom": "casque_mettre",
+   "images": 64,
+   "secondes": 2.67,
+   "boucle": false,
+   "categorie": "reaction",
+   "fin": "garder",
+   "resume": "DOONT_Rouille démarre : elle sort un casque, le pose sur sa tête, prête à écouter.",
+   "accessoires": [
+    "casque"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "casque_ecoute",
+   "images": 96,
+   "secondes": 4.0,
+   "boucle": true,
+   "categorie": "reaction",
+   "fin": "boucle",
+   "resume": "Écoute DOONT_Rouille au casque : hoche la tête en mesure, deux bras battent le temps.",
+   "accessoires": [
+    "casque"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "casque_oter",
+   "images": 64,
+   "secondes": 2.67,
+   "boucle": false,
+   "categorie": "reaction",
+   "fin": "repos",
+   "resume": "Fin du jeu : elle ôte le casque (casque_mettre à rebours).",
+   "accessoires": [
+    "casque"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "reaction_applaudir",
+   "images": 72,
+   "secondes": 3.0,
+   "boucle": false,
+   "categorie": "reaction",
+   "fin": "repos",
+   "resume": "Le sucre : surprise, puis elle applaudit des deux bras en sautillant.",
+   "accessoires": [],
+   "deplacement_m": null
+  },
+  {
+   "nom": "reaction_postit",
+   "images": 168,
+   "secondes": 7.0,
+   "boucle": false,
+   "categorie": "reaction",
+   "fin": "repos",
+   "resume": "Le lien personnalisé : elle écrit un post-it (trois lignes), le lève et nous le montre.",
+   "accessoires": [
+    "crayon",
+    "postit",
+    "trait.0",
+    "trait.1",
+    "trait.2"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "nuit_endormir",
+   "images": 96,
+   "secondes": 4.0,
+   "boucle": false,
+   "categorie": "ambiance",
+   "fin": "garder",
+   "resume": "La nuit : bâillement, le bonnet tombe sur sa tête, deux hochements, elle s'endort.",
+   "accessoires": [
+    "bonnet"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "nuit_dormir",
+   "images": 144,
+   "secondes": 6.0,
+   "boucle": true,
+   "categorie": "ambiance",
+   "fin": "boucle",
+   "resume": "Dort sous son bonnet : grande respiration lente, les « z » montent.",
+   "accessoires": [
+    "bonnet",
+    "z.0",
+    "z.1",
+    "z.2"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "nuit_reveil",
+   "images": 72,
+   "secondes": 3.0,
+   "boucle": false,
+   "categorie": "ambiance",
+   "fin": "repos",
+   "resume": "Le réveil : les paupières battent, elle nous voit, le bonnet saute, petit étirement.",
+   "accessoires": [
+    "bonnet"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "pluie_ouvrir",
+   "images": 48,
+   "secondes": 2.0,
+   "boucle": false,
+   "categorie": "ambiance",
+   "fin": "garder",
+   "resume": "La pluie : une goutte, elle lève les yeux, ouvre un mini-parapluie au-dessus d'elle.",
+   "accessoires": [
+    "parapluie"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "pluie_abri",
+   "images": 96,
+   "secondes": 4.0,
+   "boucle": true,
+   "categorie": "ambiance",
+   "fin": "boucle",
+   "resume": "Sous son parapluie : se balance, regarde tomber la pluie, un petit frisson.",
+   "accessoires": [
+    "parapluie"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "pluie_fermer",
+   "images": 48,
+   "secondes": 2.0,
+   "boucle": false,
+   "categorie": "ambiance",
+   "fin": "repos",
+   "resume": "La pluie cesse : elle referme le parapluie (pluie_ouvrir à rebours).",
+   "accessoires": [
+    "parapluie"
+   ],
+   "deplacement_m": null
+  },
+  {
+   "nom": "guide_montrer",
+   "images": 84,
+   "secondes": 3.5,
+   "boucle": false,
+   "categorie": "guide",
+   "fin": "repos",
+   "resume": "Le guide montre un objet : se tourne, tend le bras tout droit, nous regarde, « là ! ».",
+   "accessoires": [],
+   "deplacement_m": null
+  }
+ ],
+ "onde": {
+  "bras": [
+   "bras_1.G",
+   "bras_2.G",
+   "bras_3.G",
+   "bras_4.G",
+   "bras_1.D",
+   "bras_2.D",
+   "bras_3.D",
+   "bras_4.D"
+  ],
+  "hauteur": [
+   0.0,
+   0.008,
+   0.016,
+   0.026,
+   0.038,
+   0.05,
+   0.065,
+   0.08
+  ],
+  "cote": [
+   0.008,
+   0.016,
+   0.026,
+   0.038,
+   0.05,
+   0.065,
+   0.08,
+   0.1
+  ],
+  "phase_bras": 2.399,
+  "phase_os": 0.9,
+  "decalage_cote": 1.7
+ },
+ "yeux_repos": {
+  "oeil.G": [
+   -0.7071067690849304,
+   0.0,
+   0.0,
+   0.7071067690849304
+  ],
+  "oeil.D": [
+   -0.7071067690849304,
+   0.0,
+   0.0,
+   0.7071067690849304
+  ]
+ },
+ "trait": {
+  "plafond_m": 0.002,
+  "echelle": 0.06786064619384705
+ },
+ "formes": [
+  "bouche_ouverte",
+  "bouche_o",
+  "bouche_baille",
+  "bouche_plate",
+  "bouche_moue",
+  "bouche_petite",
+  "pupille_petite",
+  "pupille_grande"
+ ],
+ "chapeaux": {
+  "os": "acc_beret",
+  "sommets": {
+   "beret": 510,
+   "cowboy": 385,
+   "chantier": 785,
+   "marin": 333
+  },
+  "centre": [
+   0.0,
+   0.06041799858212471,
+   0.009707147255539894
+  ],
+  "echelle": 0.06786064619384705,
+  "biais": {
+   "beret": [
+    0.06879977881908417,
+    0.01151313353329897,
+    0.16464555263519287,
+    0.9838830828666687
+   ],
+   "cowboy": [
+    0.04355959594249725,
+    0.0022828644141554832,
+    0.05228620022535324,
+    0.9976791143417358
+   ],
+   "chantier": [
+    0.043592799454927444,
+    -0.0015222958754748106,
+    -0.03486631438136101,
+    0.9984396696090698
+   ],
+   "marin": [
+    0.04348490759730339,
+    -0.0034223380498588085,
+    -0.07838445156812668,
+    0.9959685206413269
+   ]
+  }
+ }
+}

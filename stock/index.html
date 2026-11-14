@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="description" content="Gestion de stock pour les commerces : essayez une réception fictive et découvrez les limites du projet en bêta.">
+  <title>Le stock de votre commerce · MajorTakito</title>
+  <link rel="stylesheet" href="stock.css">
+  <script src="stock.js" defer></script>
+</head>
+<body>
+  <header><a href="../index.html#services">← Services · MajorTakito</a><span class="statut">Projet en bêta</span></header>
+  <main>
+    <p class="sur">Pour les commerces et les petites boutiques</p>
+    <h1>Une livraison reçue.<br>Un stock à jour.</h1>
+    <p class="chapo">Ce qui est en rayon aujourd'hui ne devrait pas se perdre entre un bon de livraison et un tableur. Voici un premier geste à essayer, avec des données entièrement fictives.</p>
+    <section aria-labelledby="essai-titre" class="essai">
+      <h2 id="essai-titre">Essayez une réception</h2>
+      <p>Il reste <strong>4 carnets à couverture kraft</strong>. Le bon fictif <strong>DEMO-006</strong> annonce <strong>6 carnets</strong> : vérifiez la quantité, puis confirmez.</p>
+      <dl class="chiffres"><div><dt>En stock</dt><dd><output id="quantite">4</output> <small>carnets</small></dd></div><div><dt>À réceptionner</dt><dd>6 <small>carnets</small></dd></div></dl>
+      <p class="actions"><button id="recevoir" type="button" hidden>Confirmer les 6 carnets reçus</button><button id="recommencer" type="button" class="secondaire" hidden>Recommencer</button></p>
+      <p id="resultat" role="status" aria-live="polite" aria-atomic="true">Avant confirmation : 4 carnets en stock, livraison en attente.</p>
+      <noscript><p>Pour manipuler cet exemple, activez JavaScript. Le résultat reste lisible : 4 + 6 = 10 carnets après confirmation ; une seconde confirmation du même bon est refusée.</p></noscript>
+      <p class="note">Simulation locale simplifiée, sans serveur ni envoi. Rien n'est enregistré : recharger la page remet les 4 carnets de départ. Ce petit exemple ne remplace pas le produit.</p>
+    </section>
+    <section aria-labelledby="resultat-titre">
+      <h2 id="resultat-titre">Le résultat attendu</h2>
+      <p>Le stock passe de 4 à 10. Essayez de confirmer une seconde fois : le même bon ne doit pas ajouter six carnets de plus. Vous pouvez recommencer autant de fois que vous le voulez.</p>
+    </section>
+    <section aria-labelledby="produit-titre">
+      <h2 id="produit-titre">D'où vient ce geste ?</h2>
+      <p>Le prototype dentaire existant sait réceptionner une facture vérifiée, suivre des produits et des lots, signaler des alertes et préparer une proposition de commande à valider. La capture ci-dessous montre sa vraie interface avec des carnets fictifs, ajoutés pour cette présentation.</p>
+      <figure><a href="produit-stock.png"><img src="produit-stock.png" width="1000" height="760" loading="lazy" alt="Capture du prototype : page Produits et lots, carnets kraft, 10 unités en stock réparties entre le lot initial de 4 et la réception de 6."></a><figcaption>Prototype dentaire, écran « Produits et lots », 3 novembre 2026. Données de démonstration inventées ; aucun commerce client représenté. Cliquer pour agrandir.</figcaption></figure>
+    </section>
+    <section aria-labelledby="limites-titre">
+      <h2 id="limites-titre">Une bêta, avec des limites explicites</h2>
+      <p>L'adaptation aux commerces est en préparation : elle n'a pas encore été éprouvée dans une boutique. La démonstration ci-dessus illustre un geste existant ; elle n'annonce pas un logiciel prêt à déployer.</p>
+      <ul><li>Aucune liaison de caisse, aucun encaissement.</li><li>Aucune commande envoyée automatiquement à un fournisseur.</li><li>Le prototype est local, sans authentification ni travail à plusieurs utilisateurs.</li><li>La lecture de factures dépend du format : les anomalies demandent une vérification humaine. Aucun gain de temps chiffré n'est établi.</li></ul>
+      <details><summary>Comment le geste a été vérifié</summary><p>Le moteur du prototype a des essais de réception avec numéro de lot, de refus d'une facture déjà intégrée et de sortie supérieure au stock disponible. Cette page rejoue seulement la réception et le refus du doublon, avec du JavaScript local. Les autres fonctions du prototype ne sont pas simulées ici.</p></details>
+    </section>
+    <section class="contact"><h2>Parlons de votre stock</h2><p>Quels produits suivez-vous ? Comment notez-vous les livraisons et les écarts aujourd'hui ? Nous vérifions ensemble si cette piste convient, avant un devis écrit.</p><a class="bouton" href="../index.html#contact">Échanger sur mon besoin</a></section>
+  </main>
+  <footer>MajorTakito · Exemple fictif · <a href="../index.html#services">Retour aux services et au devis</a></footer>
+</body>
+</html>

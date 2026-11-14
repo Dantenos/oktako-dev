@@ -1,0 +1,906 @@
+/* Mise en page du portfolio. Aucune couleur écrite ici : uniquement des jetons (theme.css → charte.css).
+   Les transparences passent par color-mix pour ne pas recopier d'hexadécimal. */
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html.mouvement-reduit { scroll-behavior: auto; }
+body {
+  margin: 0; background: var(--mt-fond); color: var(--mt-texte);
+  font: var(--tako-texte-lg)/1.6 var(--mt-police-prose);
+}
+a { color: var(--mt-lien); text-underline-offset: 0.18em; }
+:focus-visible { outline: 2px solid var(--mt-lien); outline-offset: 3px; }
+kbd { font: var(--tako-texte-xs) var(--mt-police-ui); border: 1px solid var(--mt-bord-doux); border-radius: var(--tako-rayon-petit); padding: 0 4px; margin-left: 6px; }
+.evitement { position: absolute; left: 8px; top: -60px; z-index: 50; padding: 8px 12px; background: var(--mt-surface); }
+.evitement:focus { top: 8px; }
+
+/* --- Barre --- */
+.barre {
+  position: fixed; inset: 0 0 auto 0; z-index: 30; display: flex; align-items: center; gap: var(--tako-espace-5);
+  padding: max(10px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 10px max(20px, env(safe-area-inset-left));
+  font: var(--tako-texte-sm)/1.3 var(--mt-police-ui);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--mt-scene-nuit) 82%, transparent), transparent);
+  color: var(--mt-scene-papier);
+}
+html.sans-js .barre, body.lecture .barre { position: sticky; background: var(--mt-fond); color: var(--mt-texte); border-bottom: 1px solid var(--mt-bord-doux); }
+.barre__marque { display: inline-flex; align-items: center; gap: 10px; min-height: var(--tako-cible); color: inherit; text-decoration: none; letter-spacing: .04em; }
+.barre__marque strong { letter-spacing: .14em; text-transform: uppercase; }
+/* Emplacement réservé au futur logo officiel (40×40, réserve de 8 px) : vide tant que le master n'existe pas. */
+.barre__logo { display: none; width: 40px; height: 40px; }
+.barre__nom { opacity: .8; }
+.barre__nav { margin-left: auto; }
+.barre__nav ul { display: flex; flex-wrap: wrap; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.barre__nav a {
+  display: inline-flex; align-items: center; min-height: var(--tako-cible-nav); padding: 0 12px;
+  color: inherit; text-decoration: none; text-transform: uppercase; letter-spacing: .12em; border-radius: var(--tako-rayon-pilule);
+  border: 1px solid transparent;
+}
+.barre__nav a:hover { background: color-mix(in srgb, var(--mt-scene-papier) 12%, transparent); }
+.barre__nav a[aria-current="true"] { border-color: currentColor; }
+.barre__reglages { display: flex; gap: 6px; }
+.reglage { white-space: nowrap; }
+@media (min-width: 761px) and (max-width: 1365px) { .barre__nom { display: none; } }
+/* Panneau ouvert : la page ne défile plus derrière (le panneau défile seul), ce qui évite que l'ancre ne la déplace. */
+html.panneau-ouvert { overflow: hidden; }
+.reglage {
+  min-height: var(--tako-cible); padding: 0 12px; border-radius: var(--tako-rayon-pilule); cursor: pointer;
+  font: var(--tako-texte-xs)/1 var(--mt-police-ui); letter-spacing: .06em; color: inherit;
+  background: color-mix(in srgb, var(--mt-scene-nuit) 55%, transparent); border: 1px solid color-mix(in srgb, currentColor 55%, transparent);
+}
+.reglage[aria-pressed="true"]::before { content: "● "; color: var(--mt-scene-ambre); }
+.reglage[aria-pressed="false"]::before { content: "○ "; }
+html.sans-js .barre__reglages { display: none; }
+/* La météo et le texte du ciel : un petit panneau qui s'ouvre au-dessus du choix du ciel. Le choix automatique (horloge et
+   fuseau du visiteur) reste le défaut. */
+.ciel__panneau {
+  position: absolute; left: 0; bottom: calc(100% + 8px); z-index: 30; width: min(340px, calc(100vw - 24px)); padding: 10px 12px;
+  border-radius: 10px; text-align: left; text-shadow: none; color: var(--mt-scene-papier);
+  font: var(--tako-texte-xs)/1.45 var(--mt-police-ui); letter-spacing: .02em;
+  background: color-mix(in srgb, var(--mt-scene-nuit) 90%, transparent); border: 1px solid color-mix(in srgb, var(--mt-scene-papier) 18%, transparent);
+  box-shadow: 0 24px 60px -24px var(--mt-scene-nuit); backdrop-filter: blur(6px);
+}
+.ciel__ligne { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 6px; }
+.ciel__ligne button, .ciel__reelle {
+  min-height: 32px; padding: 0 9px; border-radius: var(--tako-rayon-pilule); cursor: pointer; font: inherit; color: inherit;
+  background: none; border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+.ciel__ligne button:hover, .ciel__reelle:hover { border-color: currentColor; }
+.ciel__ligne button[aria-pressed="true"], .ciel__reelle[aria-pressed="true"] { border-color: var(--mt-scene-ambre); color: var(--mt-scene-ambre); }
+.ciel__etat { margin: 4px 0 6px; opacity: .85; }
+.ciel__note { margin: 6px 0 0; opacity: .66; }
+.ciel__note a { color: inherit; }
+@media (max-width: 760px) { .ciel__ligne button, .ciel__reelle { min-height: 44px; } }
+
+/* --- Pièce --- */
+.piece { position: relative; height: 100vh; height: 100svh; min-height: 520px; overflow: hidden; background: var(--mt-scene-nuit); color: var(--mt-scene-papier); isolation: isolate; }
+.piece__scene { position: absolute; inset: 0; width: 100vw; }
+/* Le doigt qui glisse à la verticale fait défiler la page (jamais tourner la caméra) ; à l'horizontale, il regarde. */
+.piece__scene canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+.piece__alt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+html.scene-prete .piece__repli { opacity: 0; transition: opacity .9s ease; }
+/* Repli sans JS ni WebGL : un tableau CSS de la même pièce, pour que l'accueil ne soit jamais vide. */
+.piece__repli { position: absolute; inset: 0; background: radial-gradient(ellipse 45% 40% at 22% 78%, color-mix(in srgb, var(--mt-scene-lampe) 45%, transparent), transparent 70%), linear-gradient(to bottom, var(--mt-scene-nuit), var(--mt-scene-mur)); }
+.repli__fenetre { position: absolute; left: 18%; right: 18%; top: 12%; height: 52%; border: 14px solid color-mix(in srgb, var(--mt-scene-papier) 70%, var(--mt-scene-nuit)); border-radius: 2px;
+  background: repeating-linear-gradient(100deg, transparent 0 22px, color-mix(in srgb, var(--mt-scene-papier) 8%, transparent) 22px 23px), radial-gradient(circle at 70% 85%, color-mix(in srgb, var(--mt-scene-ville) 55%, transparent), transparent 35%), linear-gradient(to bottom, var(--mt-scene-nuit), var(--mt-scene-ciel-bas)); }
+.repli__fenetre::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent calc(50% - 6px), color-mix(in srgb, var(--mt-scene-papier) 70%, var(--mt-scene-nuit)) calc(50% - 6px) calc(50% + 6px), transparent calc(50% + 6px)); }
+.repli__bureau { position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(to bottom, var(--mt-scene-bois-clair), var(--mt-scene-bois) 30%, var(--mt-scene-nuit)); }
+.repli__lampe { position: absolute; left: 20%; bottom: 28%; width: 70px; height: 46px; background: var(--mt-scene-mur); border-radius: 50% 50% 8px 8px; box-shadow: 0 30px 80px 30px color-mix(in srgb, var(--mt-scene-lampe) 45%, transparent); }
+
+.intro {
+  position: absolute; z-index: 10; left: max(28px, env(safe-area-inset-left)); bottom: 48px; width: min(440px, calc(100% - 56px));
+  padding: 26px 28px 22px; border-radius: 10px;
+  background: color-mix(in srgb, var(--tako-surface) 93%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1);
+  border: 1px solid color-mix(in srgb, var(--mt-scene-papier) 16%, transparent); color: var(--tako-texte);
+  box-shadow: 0 30px 60px -30px var(--mt-scene-nuit);
+  transition: opacity .45s ease, transform .45s ease;
+}
+html.sans-js .intro, html.sans-scene .intro { background: var(--tako-surface); }
+.intro__sur { margin: 0 0 10px; font: var(--tako-texte-xs)/1.4 var(--mt-police-ui); letter-spacing: .18em; text-transform: uppercase; color: var(--tako-attente); }
+.intro h1 { margin: 0; font: 400 clamp(30px, 3.4vw, 42px)/1.05 var(--mt-police-prose); letter-spacing: -.01em; }
+.intro__metier { margin: 8px 0 0; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--tako-texte-secondaire); }
+.intro__accroche { margin: 14px 0 0; font-size: var(--tako-texte-lg); color: var(--tako-texte); }
+.intro__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.intro__actions .tako-bouton { font: var(--tako-texte-sm)/1 var(--mt-police-ui); letter-spacing: .05em; }
+.intro__contact { margin: 14px 0 0; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); }
+html.sans-js #explorer, html.sans-scene #explorer { display: none; }
+body.exploration .intro { opacity: 0; transform: translateY(16px); pointer-events: none; visibility: hidden; transition: opacity .45s ease, transform .45s ease, visibility 0s .45s; }
+.piece__retour-intro { position: absolute; z-index: 10; left: max(28px, env(safe-area-inset-left)); bottom: 28px; font: var(--tako-texte-sm)/1 var(--mt-police-ui); background: color-mix(in srgb, var(--tako-surface) 80%, transparent); }
+/* Recentrer : discret, juste à droite de « Présentation » ; la vue tournée revient au bureau. */
+.piece__recentrer { position: absolute; z-index: 10; left: calc(max(28px, env(safe-area-inset-left)) + 150px); bottom: 28px; font: var(--tako-texte-sm)/1 var(--mt-police-ui); background: color-mix(in srgb, var(--tako-surface) 80%, transparent); }
+/* Montrer : relance la vague d'entrée, sur demande seulement. */
+.piece__montrer { position: absolute; z-index: 10; left: calc(max(28px, env(safe-area-inset-left)) + 262px); bottom: 28px; font: var(--tako-texte-sm)/1 var(--mt-police-ui); background: color-mix(in srgb, var(--tako-surface) 80%, transparent); }
+.piece__aide { position: absolute; z-index: 9; left: 50%; bottom: 30px; transform: translateX(-50%); margin: 0; padding: 8px 14px; border-radius: var(--tako-rayon-pilule);
+  font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); letter-spacing: .06em; color: var(--mt-scene-papier); background: color-mix(in srgb, var(--mt-scene-nuit) 70%, transparent); white-space: nowrap; }
+
+/* Points d'intérêt : de vrais boutons placés sur les objets 3D. Ils portent le nom accessible et le focus clavier. */
+.points { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
+html.sans-js .points, html.sans-scene .points { display: none; }
+.point {
+  position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0; border: 0; background: none; cursor: pointer;
+  pointer-events: auto; color: var(--mt-scene-papier); transition: opacity .3s ease;
+}
+.point[data-cache="true"] { opacity: 0; pointer-events: none; }
+/* Une braise plutôt qu'une pastille de jeu : petite, chaude, qui respire ; elle s'affirme au survol et au focus. */
+.point__rond { position: absolute; inset: 19px; border-radius: 50%; background: color-mix(in srgb, var(--mt-scene-lampe) 70%, var(--mt-scene-papier)); opacity: .78; box-shadow: 0 0 0 2px color-mix(in srgb, var(--mt-scene-nuit) 30%, transparent), 0 0 12px 3px color-mix(in srgb, var(--mt-scene-lampe) 38%, transparent); transition: opacity .25s ease, transform .25s ease; }
+.point:hover .point__rond, .point:focus-visible .point__rond, .point[data-actif="true"] .point__rond { opacity: 1; transform: scale(1.2); }
+.point__rond::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--mt-scene-lampe) 40%, transparent); animation: pouls 3.6s ease-out infinite; }
+@keyframes pouls { from { transform: scale(.6); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+html.mouvement-reduit .point__rond::after { animation: none; opacity: .5; }
+.point__etiquette {
+  position: absolute; left: 50%; bottom: 46px; transform: translate(calc(-50% + var(--decalage, 0px)), 6px); display: grid; gap: 2px; padding: 8px 12px; border-radius: 8px; white-space: nowrap;
+  font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); letter-spacing: .05em; text-align: center;
+  background: color-mix(in srgb, var(--tako-surface) 88%, transparent); color: var(--tako-texte); border: 1px solid color-mix(in srgb, var(--mt-scene-papier) 22%, transparent);
+  opacity: 0; transition: opacity .2s ease, transform .2s ease; pointer-events: none;
+}
+.point__etiquette strong { font: 400 var(--tako-texte-lg)/1.2 var(--mt-police-prose); letter-spacing: 0; }
+.point__etiquette span { color: var(--tako-texte-secondaire); }
+.point:hover .point__etiquette, .point:focus-visible .point__etiquette, .point[data-actif="true"] .point__etiquette, body.etiquettes .point .point__etiquette { opacity: 1; transform: translate(calc(-50% + var(--decalage, 0px)), 0); }
+.point:focus-visible { outline: none; }
+/* Le focus d'un point : l'anneau de la lampe, posé entre deux fins liserés sombres qui le tiennent à 3:1 sur tout fond, ciel de jour compris. */
+/* Tout dans le même calque : un contour du rond passerait sous ce pseudo-élément, le liseré sombre le recouvrirait. Le contour transparent reste pour les couleurs forcées. */
+.point:focus-visible .point__rond { outline: 2px solid transparent; outline-offset: 10px; }
+.point__rond::before { content: ""; position: absolute; inset: -12px; border-radius: 50%; opacity: 0; box-shadow: 0 0 0 3px var(--mt-focus-lisere), inset 0 0 0 2px var(--mt-focus-scene), inset 0 0 0 4px var(--mt-focus-lisere); pointer-events: none; }
+.point:focus-visible .point__rond::before { opacity: 1; }
+body.panneau-ouvert .points { opacity: 0; pointer-events: none; }
+body.panneau-ouvert .point { pointer-events: none; }
+
+/* --- Panneau de contenu (feuille latérale ; en bas sur téléphone) --- */
+.panneau {
+  /* Sous la barre : le menu permanent reste cliquable quand une rubrique est ouverte. */
+  position: fixed; z-index: 40; top: 68px; right: 0; bottom: 0; width: min(600px, max(46vw, 452px)); display: flex; flex-direction: column; border-top-left-radius: 12px;
+  background: color-mix(in srgb, var(--tako-surface) 94%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  border-left: 1px solid color-mix(in srgb, var(--mt-scene-papier) 14%, transparent); color: var(--tako-texte);
+  box-shadow: -40px 0 80px -40px var(--mt-scene-nuit);
+  animation: panneau-entree .5s cubic-bezier(.2,.7,.2,1);
+}
+@keyframes panneau-entree { from { transform: translateX(40px); opacity: 0; } }
+html.mouvement-reduit .panneau, .panneau.panneau--pose { animation: none; }
+.panneau[hidden] { display: none; }
+.panneau__tete { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 24px 14px 28px; border-bottom: 1px solid var(--mt-bord-doux); }
+.panneau__objet { margin: 0; font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); letter-spacing: .16em; text-transform: uppercase; color: var(--tako-attente); }
+.panneau__fermer { font: var(--tako-texte-sm)/1 var(--mt-police-ui); }
+.panneau__corps { flex: 1; overflow: auto; overscroll-behavior: contain; padding: 8px 28px max(40px, env(safe-area-inset-bottom)); }
+.panneau__corps .rubrique { padding: 0; max-width: none; border: 0; }
+.panneau__corps .rubrique__sur { display: none; }
+.panneau__corps h2 { outline: none; }
+
+/* --- Présentation classique --- */
+main { display: block; padding: 0 max(20px, env(safe-area-inset-left)) 40px; }
+main:focus { outline: none; }
+.presentation__tete, .rubrique { max-width: 860px; margin: 0 auto; }
+.presentation__tete { padding: 64px 0 8px; }
+.presentation__chapo { margin: 0; font-size: var(--tako-texte-xl); line-height: 1.5; max-width: 60ch; }
+.rubrique { padding: 48px 0; border-top: 1px solid var(--mt-bord-doux); }
+.presentation__tete + .rubrique { border-top: 0; }
+.rubrique__sur { margin: 0 0 6px; font: var(--tako-texte-xs)/1.4 var(--mt-police-ui); letter-spacing: .18em; text-transform: uppercase; color: var(--tako-attente); }
+.rubrique h2 { margin: 0 0 18px; font: 400 var(--tako-texte-chiffre)/1.15 var(--mt-police-prose); letter-spacing: -.01em; color: var(--mt-accent); }
+.rubrique h3 { margin: 32px 0 12px; font: 700 var(--tako-texte-sm)/1.4 var(--mt-police-ui); letter-spacing: .14em; text-transform: uppercase; color: var(--mt-texte-doux); }
+.prose p { margin: 0 0 14px; max-width: 66ch; }
+.frise { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--mt-bord-doux); }
+.frise li { position: relative; display: grid; gap: 2px; padding: 0 0 18px 20px; }
+.frise li::before { content: ""; position: absolute; left: -5px; top: 8px; width: 9px; height: 9px; border-radius: 50%; background: var(--mt-fond); border: 2px solid var(--tako-attente); }
+.frise__date { font: var(--tako-texte-sm)/1.4 var(--mt-police-ui); color: var(--mt-texte-discret); }
+.frise__titre { font-weight: 700; }
+.frise__detail { color: var(--mt-texte-doux); }
+.pratique { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 0; }
+.pratique div { min-width: 0; padding: 12px 14px; border: 1px solid var(--mt-bord-doux); border-radius: var(--tako-rayon-carte); }
+.pratique dt { font: 700 var(--tako-texte-xs)/1.4 var(--mt-police-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--mt-texte-discret); }
+.pratique dd { margin: 4px 0 0; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); }
+.note { margin-top: 18px; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.fiches { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px; }
+.panneau .fiches { grid-template-columns: 1fr; }
+.fiche { scroll-margin-top: 90px; transition: box-shadow .4s ease, border-color .4s ease; }
+.fiche[data-ciblee="true"] { border-color: var(--tako-attente); box-shadow: 0 0 0 1px var(--tako-attente); }
+.fiche header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.fiche h3 { margin: 0; font: 400 var(--tako-texte-xl)/1.25 var(--mt-police-prose); letter-spacing: 0; text-transform: none; color: var(--mt-texte); }
+.fiche p, .fiche ul { margin: 10px 0 0; }
+.fiche ul { padding-left: 18px; }
+.fiche li { margin: 4px 0; }
+.fiche__sous, .fiche__technos, .fiche__source { font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.fiche__source { color: var(--mt-texte-discret); font-size: var(--tako-texte-xs); }
+.statut { font-family: var(--mt-police-ui); white-space: nowrap; }
+/* Le statut ne repose jamais sur la seule couleur : le mot est écrit, le trait change aussi. */
+.statut--service { color: var(--tako-succes); }
+.statut--prototype { color: var(--tako-attente); border-style: dashed; }
+.statut--demo { color: var(--tako-lien); border-style: dotted; }
+.carnet { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.carnet__entree { padding: 16px 18px; border-left: 3px solid var(--tako-attente); background: var(--tako-surface-discrete); border-radius: 0 var(--tako-rayon-carte) var(--tako-rayon-carte) 0; }
+.carnet__entree h3 { margin: 2px 0 6px; font: 400 var(--tako-texte-xl)/1.3 var(--mt-police-prose); letter-spacing: 0; text-transform: none; color: var(--mt-texte); }
+.carnet__entree p { margin: 0; }
+.carnet__date, .carnet__lien { font: var(--tako-texte-xs)/1.5 var(--mt-police-ui); color: var(--mt-texte-discret); }
+.carnet__lien { margin-top: 8px !important; }
+.capture { margin: 20px 0 0; }
+.capture img { display: block; max-width: 100%; height: auto; border-radius: var(--tako-rayon-carte); border: 1px solid var(--mt-bord-doux); image-rendering: pixelated; }
+.capture figcaption { margin-top: 8px; font: var(--tako-texte-xs)/1.5 var(--mt-police-ui); color: var(--mt-texte-discret); }
+.pied__adresses { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 10px 0; padding: 0; list-style: none; }
+.contact__adresses { display: grid; gap: 10px; margin: 0 0 14px; padding: 0; list-style: none; }
+.courriel { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px; max-width: 100%; }
+.courriel .tako-bouton { font: var(--tako-texte-md)/1.2 var(--mt-police-ui); overflow-wrap: anywhere; }
+.courriel__copier[hidden] { display: none; }
+.contact__principal { display: flex; flex-wrap: wrap; gap: 10px; }
+.contact__principal .tako-bouton { font: var(--tako-texte-md)/1 var(--mt-police-ui); }
+.contact__liens { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 18px 0 0; padding: 0; list-style: none; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); }
+.contact__liens a { display: inline-flex; align-items: center; min-height: var(--tako-cible); }
+.pied { padding: 28px 20px calc(40px + env(safe-area-inset-bottom)); border-top: 1px solid var(--mt-bord-doux); text-align: center; font: var(--tako-texte-xs)/1.8 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.pied p { margin: 0; }
+.pied a { display: inline-block; min-height: 24px; }
+.annonce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.onglets { display: none; }
+
+/* --- Téléphone : composition dédiée, onglets permanents, panneau en feuille basse --- */
+@media (max-width: 760px) {
+  .barre { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); gap: 8px; }
+  .barre__nav, .barre__nom { display: none; }
+  .barre__reglages { margin-left: auto; }
+  /* Trois réglages + la marque sur 390 px : réglages resserrés, sans lettrage espacé. */
+  .barre__reglages { gap: 4px; }
+  .reglage { padding: 0 9px; letter-spacing: 0; }
+  .barre__marque strong { letter-spacing: .06em; }
+  .piece { height: calc(100svh - 64px - env(safe-area-inset-bottom)); min-height: 560px; }
+  .intro { left: 10px; right: 10px; bottom: 10px; width: auto; padding: 14px 16px 12px; }
+  .intro__sur { margin-bottom: 6px; letter-spacing: .12em; }
+  .intro h1 { font-size: 28px; }
+  .intro__metier { font-size: var(--tako-texte-xs); }
+  .intro__accroche { font-size: var(--tako-texte-base); line-height: 1.45; margin-top: 8px; }
+  .intro__actions { margin-top: 12px; gap: 8px; }
+  .intro__actions .tako-bouton { flex: 1 1 auto; padding-inline: 10px; font-size: var(--tako-texte-xs); }
+  .intro__contact { margin-top: 10px; font-size: var(--tako-texte-xs); }
+  .piece__aide { display: none; }
+  .piece__retour-intro { left: 12px; bottom: 12px; }
+  .piece__recentrer { left: 140px; bottom: 12px; }
+  .piece__montrer { left: 262px; bottom: 12px; }
+  .point__etiquette { bottom: 40px; padding: 5px 9px; }
+  .point__etiquette strong { font-size: var(--tako-texte-md); }
+  .point__etiquette span { display: none; }
+  .onglets { display: block; position: fixed; z-index: 45; left: 0; right: 0; bottom: 0; padding: 0 6px env(safe-area-inset-bottom); background: var(--tako-surface); border-top: 1px solid var(--mt-bord-doux); }
+  .onglets ul { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+  .onglets a { display: flex; align-items: center; justify-content: center; min-height: 64px; color: var(--tako-texte); text-decoration: none; font: var(--tako-texte-xs)/1.2 var(--mt-police-ui); letter-spacing: .04em; text-align: center; }
+  .onglets a[aria-current="true"] { color: var(--tako-attente); box-shadow: inset 0 2px 0 var(--tako-attente); }
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .panneau { top: auto; left: 0; width: auto; height: min(64svh, calc(100svh - 64px - env(safe-area-inset-bottom) - 120px)); bottom: calc(64px + env(safe-area-inset-bottom)); border-left: 0; border-top: 1px solid var(--mt-bord-doux); border-radius: 16px 16px 0 0; animation-name: panneau-monte; }
+  @keyframes panneau-monte { from { transform: translateY(40px); opacity: 0; } }
+  .panneau__tete { padding: 10px 14px 10px 18px; }
+  .panneau__corps { padding: 4px 18px 28px; }
+  .rubrique h2 { font-size: var(--tako-texte-titre); }
+  .presentation__tete { padding-top: 40px; }
+}
+
+.sommaire-rubriques ul { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 18px 0 0; padding: 0; list-style: none; font: var(--tako-texte-sm)/1.3 var(--mt-police-ui); }
+.sommaire-rubriques a { display: inline-flex; align-items: center; min-height: var(--tako-cible); }
+.rubrique { scroll-margin-top: 70px; }
+/* --- R04 : sommaire des créations, fiches feuilletables, pied de panneau --- */
+.sommaire { list-style: none; margin: 0 0 28px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.sommaire__lien { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: var(--tako-cible); padding: 6px 12px; border: 1px solid var(--mt-bord-doux); border-radius: var(--tako-rayon-pilule); color: var(--mt-texte); text-decoration: none; font: var(--tako-texte-sm)/1.3 var(--mt-police-ui); }
+.sommaire__lien:hover { background: var(--mt-survol); }
+.sommaire__sous, .sommaire__resume, .sommaire__ouvrir { display: none; }
+/* Dans le panneau sans fiche : le sommaire devient une liste de cartes lisibles, les fiches détaillées attendent. */
+.panneau__corps:not([data-fiche]) .fiches { display: none; }
+.panneau__corps:not([data-fiche]) .sommaire { display: grid; gap: 12px; }
+.panneau__corps:not([data-fiche]) .sommaire__lien { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 12px; padding: 16px 18px; border-radius: var(--tako-rayon-carte); background: var(--tako-surface-discrete); }
+.panneau__corps:not([data-fiche]) .sommaire__titre { font: 400 var(--tako-texte-xl)/1.25 var(--mt-police-prose); }
+.panneau__corps:not([data-fiche]) .sommaire__sous { display: block; grid-column: 1 / -1; color: var(--mt-texte-doux); }
+.panneau__corps:not([data-fiche]) .sommaire__resume { display: block; grid-column: 1 / -1; font: var(--tako-texte-base)/1.55 var(--mt-police-prose); }
+.panneau__corps:not([data-fiche]) .sommaire__ouvrir { display: block; grid-column: 1 / -1; color: var(--mt-lien); letter-spacing: .04em; }
+.panneau__corps:not([data-fiche]) .sommaire__lien:hover .sommaire__ouvrir { text-decoration: underline; }
+.panneau__corps[data-destination="creations"][data-fiche] .sommaire,
+.panneau__corps[data-destination="creations"][data-fiche] .creations__intro,
+.panneau__corps[data-destination="creations"][data-fiche] .fiche:not([data-ciblee]) { display: none; }
+.panneau__corps[data-fiche] .fiche[data-ciblee] { border-color: var(--mt-bord-doux); box-shadow: none; }
+.fiche__suite { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--mt-bord-doux); font: var(--tako-texte-sm)/1.3 var(--mt-police-ui); }
+.fiche__suite a { display: inline-flex; align-items: center; min-height: var(--tako-cible); }
+.carnet__entree { scroll-margin-top: 90px; }
+.carnet__entree[data-ciblee="true"] { border-left-color: var(--mt-accent); box-shadow: 0 0 0 1px var(--tako-attente); }
+.carnet__lien a, .fiche__source a { display: inline-block; min-height: 24px; }
+.panneau__pied { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--mt-bord-doux); }
+.panneau__pied .tako-bouton { font: var(--tako-texte-sm)/1.2 var(--mt-police-ui); }
+.barre__ecrire { display: inline-flex; align-items: center; min-height: var(--tako-cible); padding: 0 14px; border-radius: var(--tako-rayon-pilule); color: inherit; text-decoration: none; letter-spacing: .08em; text-transform: uppercase; border: 1px solid color-mix(in srgb, currentColor 55%, transparent); background: color-mix(in srgb, var(--mt-scene-vermillon) 22%, transparent); }
+.barre__ecrire:hover { background: color-mix(in srgb, var(--mt-scene-vermillon) 40%, transparent); }
+html.sans-js .barre__ecrire, body.lecture .barre__ecrire { background: none; }
+
+/* --- Démineur : marine et crème de la charte, vermillon pour les drapeaux --- */
+.demineur { margin: 0 0 18px; }
+.demineur__mention { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 14px; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.demineur__commandes { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.demineur__commandes .tako-bouton { font: var(--tako-texte-sm)/1 var(--mt-police-ui); }
+.demineur__niveau { display: inline-flex; align-items: center; gap: 8px; font: var(--tako-texte-sm)/1 var(--mt-police-ui); }
+.demineur__niveau select { min-height: var(--tako-cible); padding: 0 10px; font: inherit; color: var(--mt-texte); background: var(--mt-surface); border: 1px solid var(--mt-bord); border-radius: var(--tako-rayon-petit); }
+.demineur__mode[aria-pressed="true"] { background: var(--mt-scene-vermillon); border-color: var(--mt-scene-vermillon); color: var(--mt-scene-papier); }
+.demineur__icone-drapeau { display: inline-block; width: 12px; height: 14px; margin-right: 8px; vertical-align: -2px; background: linear-gradient(currentColor, currentColor) 1px 0 / 2px 100% no-repeat; position: relative; }
+.demineur__icone-drapeau::after { content: ""; position: absolute; left: 3px; top: 0; width: 9px; height: 8px; background: currentColor; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.demineur__etat { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 12px 0 10px; min-height: 2.6em; font: var(--tako-texte-sm)/1.4 var(--mt-police-ui); }
+.demineur__compteur { font-weight: 700; color: var(--mt-accent); }
+.demineur__jeu[data-etat="gagne"] .demineur__message { color: var(--tako-succes); font-weight: 700; }
+.demineur__jeu[data-etat="perdu"] .demineur__message { color: var(--tako-danger-texte); font-weight: 700; }
+.demineur__grille { --cote: 44px; display: grid; gap: 3px; width: max-content; max-width: 100%; padding: 10px; border-radius: 10px;
+  background: var(--mt-marque-marine); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mt-marque-creme) 20%, transparent), 0 18px 40px -24px var(--mt-scene-nuit); }
+.demineur__ligne { display: grid; grid-template-columns: repeat(var(--colonnes), minmax(0, var(--cote))); gap: 3px; }
+.demineur__ligne > span { display: block; min-width: 0; }
+.demineur__case { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; border: 0; border-radius: 5px; cursor: pointer;
+  font: 700 var(--tako-texte-lg)/1 var(--mt-police-ui); color: var(--mt-marque-marine);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--mt-marque-creme) 92%, var(--mt-scene-kraft)), color-mix(in srgb, var(--mt-scene-kraft) 80%, var(--mt-marque-creme)));
+  box-shadow: inset 0 -3px 0 color-mix(in srgb, var(--mt-scene-kraft) 60%, var(--mt-marque-marine)), inset 0 1px 0 var(--mt-marque-creme); }
+.demineur__case:hover[data-etat="cachee"] { filter: brightness(1.06); }
+.demineur__case:focus-visible { outline: 3px solid var(--mt-scene-ambre); outline-offset: 1px; position: relative; z-index: 1; }
+.demineur__case[data-etat="ouverte"], .demineur__case[data-etat="mine"] { cursor: default; background: color-mix(in srgb, var(--mt-marque-marine) 70%, var(--mt-marque-creme) 8%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mt-marque-creme) 10%, transparent); color: var(--mt-marque-creme); }
+.demineur__case[data-n="1"] { color: var(--tako-pieuvre-iris-clair); }
+.demineur__case[data-n="2"] { color: var(--tako-pieuvre-lagon-clair); }
+.demineur__case[data-n="3"] { color: var(--tako-pieuvre-vermillon-clair); }
+.demineur__case[data-n="4"], .demineur__case[data-n="5"], .demineur__case[data-n="6"], .demineur__case[data-n="7"], .demineur__case[data-n="8"] { color: var(--mt-scene-ambre); }
+.demineur__case[data-etat="drapeau"]::before, .demineur__case[data-etat="erreur"]::before { content: ""; width: 42%; height: 52%; background: linear-gradient(var(--mt-marque-marine), var(--mt-marque-marine)) 0 0 / 12% 100% no-repeat, var(--mt-scene-vermillon); clip-path: polygon(0 0, 12% 0, 100% 30%, 12% 60%, 12% 100%, 0 100%); }
+.demineur__case[data-etat="erreur"] { opacity: .55; }
+.demineur__case[data-etat="mine"]::before { content: ""; width: 44%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 35%, var(--mt-marque-creme) 0 12%, var(--mt-scene-encre) 14%); box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-scene-encre) 40%, transparent); }
+.demineur__case[data-explosion="true"] { background: var(--mt-scene-vermillon); }
+.regles { margin: 0 0 24px; font: var(--tako-texte-sm)/1.55 var(--mt-police-ui); }
+.regles summary { display: inline-flex; align-items: center; min-height: var(--tako-cible); cursor: pointer; color: var(--mt-lien); }
+.regles ul { margin: 6px 0 0; padding-left: 18px; }
+@media (max-width: 760px) {
+  /* Sur téléphone, l'onglet Contact (toujours visible en bas) et le pied de chaque panneau portent le contact. */
+  .barre__ecrire { display: none; }
+  .demineur__grille { --cote: 40px; padding: 6px; gap: 2px; }
+  .demineur__ligne { gap: 2px; }
+  .demineur__niveau span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
+@media (forced-colors: active) { .demineur__case { border: 1px solid ButtonText; } .demineur__case[data-etat="drapeau"]::before, .demineur__case[data-etat="mine"]::before { forced-color-adjust: none; background: CanvasText; } }
+
+@media (max-width: 400px) { .reglage { font-size: 11px; padding: 0 7px; } }
+@media (forced-colors: active) { .point__rond { forced-color-adjust: none; background: CanvasText; } .intro, .panneau { border: 1px solid CanvasText; } }
+/* Très petits écrans (320 px) : on gagne les derniers pixels sur la marque et les réglages. */
+@media (max-width: 340px) { .barre__marque strong { font-size: 11px; letter-spacing: 0; } .reglage { padding: 0 5px; } .barre__reglages { gap: 3px; } }
+
+/* Tiroir mobile : poignée visible (glisser vers le bas pour fermer) ; le geste suit le doigt sans transition. */
+.panneau__poignee { display: none; }
+@media (max-width: 760px) {
+  .panneau__tete { position: relative; touch-action: none; padding-top: 18px; }
+  .panneau__poignee { display: block; position: absolute; top: 6px; left: 50%; width: 44px; height: 4px; margin-left: -22px; border-radius: 2px; background: var(--mt-bord-doux); }
+  .panneau { transition: transform .2s ease; }
+  .panneau--glisse, html.mouvement-reduit .panneau { transition: none; }
+}
+
+/* Bloc-notes : deux colonnes sur grand écran, empilé sur téléphone ; toutes les commandes font au moins 44 px. */
+.notes__mention { color: var(--tako-texte-doux, inherit); }
+.notes__app { display: grid; gap: 12px; margin: 12px 0 24px; }
+.notes__etat { margin: 0; min-height: 1.4em; font: var(--tako-texte-sm)/1.4 var(--mt-police-ui); }
+.notes__app[data-statut="memoire"] .notes__etat, .notes__app[data-statut="plein"] .notes__etat { padding: 10px 12px; border-radius: var(--tako-rayon-carte); background: var(--tako-surface-danger); }
+.notes__colonnes { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 14px; }
+.notes__gauche { display: grid; gap: 8px; align-content: start; }
+.notes__liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: 18rem; overflow: auto; }
+.notes__item { width: 100%; min-height: 44px; display: grid; gap: 2px; text-align: left; padding: 8px 10px; border: 1px solid transparent; border-radius: var(--tako-rayon-petit); background: var(--tako-surface-discrete); color: inherit; font: var(--tako-texte-sm)/1.3 var(--mt-police-ui); cursor: pointer; overflow-wrap: anywhere; }
+.notes__item small { opacity: .75; }
+.notes__item[aria-current="true"] { border-color: currentColor; }
+.notes__edition { display: grid; gap: 6px; min-width: 0; }
+.notes__etiquette { font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); letter-spacing: .08em; text-transform: uppercase; }
+.notes__texte { width: 100%; box-sizing: border-box; min-height: 12rem; resize: vertical; padding: 10px 12px; border-radius: var(--tako-rayon-petit); border: 1px solid var(--mt-bord-doux); background: var(--tako-surface-saisie); color: inherit; font: 1rem/1.5 var(--mt-police-ui); }
+.notes__compte { margin: 0; font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); opacity: .8; }
+.notes__outils, .notes__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.notes__app .tako-bouton { min-height: 44px; }
+.notes__import { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+.notes__import:focus-within { outline: 2px solid currentColor; outline-offset: 2px; }
+.notes__fichier { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip-path: inset(50%); }
+.notes__confirmation { display: grid; gap: 8px; padding: 12px 14px; border-radius: var(--tako-rayon-carte); background: var(--tako-surface-avis); outline: none; }
+.notes__confirmation p { margin: 0; }
+.notes__apercu { margin: 0; max-height: 9rem; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font: var(--tako-texte-xs)/1.4 var(--mt-police-ui); }
+@media (max-width: 760px) { .notes__colonnes { grid-template-columns: 1fr; } .notes__liste { max-height: 10rem; } }
+
+/* Avis de mise à jour : bandeau discret au-dessus de la barre d'onglets. */
+.maj { position: fixed; z-index: 60; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom)); width: min(36rem, calc(100vw - 24px)); box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 12px 14px; border-radius: var(--tako-rayon-carte); background: var(--tako-surface-avis); color: var(--tako-texte, #f6ecd6); box-shadow: 0 8px 30px rgb(0 0 0 / .35); }
+.maj[hidden] { display: none; }
+.maj p { margin: 0; flex: 1 1 14rem; font: var(--tako-texte-sm)/1.4 var(--mt-police-ui); }
+.maj .tako-bouton { min-height: 44px; }
+@media (max-width: 760px) { .maj { bottom: calc(76px + env(safe-area-inset-bottom)); } }
+.panneau .notes__colonnes { grid-template-columns: 1fr; }
+.panneau .notes__liste { max-height: 10rem; }
+.notes__app .tako-bouton { font: var(--tako-texte-sm)/1.2 var(--mt-police-ui); }
+
+/* La pièce reste visible pendant le trajet ; seule l'arrivée révèle le canevas natif. */
+body.plongee-active { overflow: hidden; }
+.plongee { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
+.plongee__cadre { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; pointer-events: none; background: #030608; overflow: hidden; }
+.plongee__cadre--visible { opacity: 1; pointer-events: auto; }
+/* Le verre du tube par-dessus le bureau Rouille : balayage léger, bombé suggéré par l'ombre des bords et
+   un reflet de la pièce. Aucun effet ne déforme l'image : la souris doit tomber au pixel près. */
+.plongee__verre { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .6s ease-out;
+  background:
+    linear-gradient(168deg, rgb(255 244 226 / .07) 0%, rgb(255 244 226 / .025) 22%, transparent 38%),
+    radial-gradient(ellipse 120% 95% at 50% 50%, transparent 62%, rgb(3 6 8 / .38) 100%),
+    repeating-linear-gradient(to bottom, rgb(0 0 0 / .07) 0 1px, transparent 1px 3px);
+  box-shadow: inset 0 0 28px 6px rgb(3 6 8 / .55), inset 0 0 2px 1px rgb(0 0 0 / .8), 0 0 60px 8px rgb(120 210 200 / .10); }
+.plongee__verre--visible { opacity: 1; }
+.plongee__plein { position: absolute; z-index: 2; top: max(14px,env(safe-area-inset-top)); right: max(14px,env(safe-area-inset-right)); pointer-events: auto; background: #10242ee8; color: #f2e5d1; border: 1px solid #9da9a0; box-shadow: 0 4px 24px #0006; font: 12px/1.4 var(--mt-police-ui); }
+@media (prefers-reduced-motion: reduce) { .plongee__verre { transition: none; } }
+.plongee__retour { position: absolute; z-index: 2; top: max(14px,env(safe-area-inset-top)); left: max(14px,env(safe-area-inset-left)); pointer-events: auto; background: #10242ee8; color: #f2e5d1; border: 1px solid #9da9a0; box-shadow: 0 4px 24px #0006; font: 12px/1.4 var(--mt-police-ui); }
+.plongee__etat { position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90vw; border: 1px solid #ab8e58; padding: 16px 22px; border-radius: 10px; background: #10242eee; color: #f2e5d1; font: 14px/1.6 var(--mt-police-ui); text-align: center; }
+.plongee__aide { position: absolute; bottom: 0; left: 0; right: 0; margin: 0; padding: 6px; background: #030608bd; color: #d4d7d0; font: 10px/1.4 var(--mt-police-ui); text-align: center; }
+.plongee__aide a { color: inherit; pointer-events: auto; }
+body.plongee-active .points, body.plongee-active .piece__aide, body.plongee-active .piece__retour-intro, body.plongee-active .piece__recentrer, body.plongee-active .piece__montrer { visibility: hidden; }
+.point { touch-action: none; }
+html.sans-js [data-entrer-rouille] { display: none; }
+@media(max-width:760px) { .plongee__retour { min-height:44px; } .plongee__aide { font-size:9px; } }
+
+/* Compteur ?ips : lisible sur la nuit comme sur le bureau Rouille, jamais sur le chemin du pointeur. */
+.ips { position: fixed; z-index: 200; right: max(10px,env(safe-area-inset-right)); bottom: max(10px,env(safe-area-inset-bottom)); margin: 0; padding: 4px 8px; border-radius: 6px; background: #030608d9; color: #c9f2e8; font: 11px/1.3 ui-monospace, "DejaVu Sans Mono", monospace; pointer-events: none; font-variant-numeric: tabular-nums; }
+
+/* --- Interface sobre (27/10) : la pièce d'abord, plein écran ; l'interface ne vient qu'à la demande ---
+   Avant l'entrée : la marque, le nom et une invitation posés sur la scène, sans carte qui la masque.
+   Après : un menu discret en haut, les réglages en petit en bas, des panneaux légers qui laissent voir la pièce.
+   Sans scène (sans JavaScript, sans WebGL), les règles plus haut gardent la présentation classique. */
+html:not(.sans-js):not(.sans-scene) .piece::after {
+  content: ""; position: absolute; inset: 0; z-index: 9; pointer-events: none;
+  background: radial-gradient(ellipse 62% 58% at 0% 100%, color-mix(in srgb, var(--mt-scene-nuit) 86%, transparent), transparent 72%);
+  transition: opacity .6s ease;
+}
+html:not(.sans-js):not(.sans-scene) body.exploration .piece::after { opacity: 0; }
+/* contraste-accueil : sur la scène, l'accueil garde la palette sombre quel que soit le thème du visiteur (en thème clair, le bleu et le vert foncés
+   des pages de lecture tombaient sur le bois). Un voile sous tout le panneau tient 4,5:1 sur les quatre ambiances (tests/contraste-accueil.mjs). */
+html:not(.sans-js):not(.sans-scene) .intro {
+  --tako-lien: var(--mt-scene-lampe); --mt-lien: var(--mt-scene-lampe); --tako-texte: var(--mt-scene-papier); --tako-texte-secondaire: var(--mt-scene-papier);
+  --tako-attente: var(--mt-scene-lampe); --tako-survol: color-mix(in srgb, var(--mt-scene-lampe) 22%, transparent);
+  left: max(clamp(14px, 2vw, 28px), env(safe-area-inset-left)); bottom: max(5vh, 28px); width: min(456px, calc(100% - 28px)); box-sizing: border-box;
+  padding: 18px 22px 16px; border: 1px solid color-mix(in srgb, var(--mt-scene-papier) 14%, transparent); border-radius: 10px; box-shadow: none;
+  background: color-mix(in srgb, var(--mt-scene-nuit) 82%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  color: var(--mt-scene-papier);
+}
+html:not(.sans-js):not(.sans-scene) .intro__sur { color: var(--mt-scene-lampe); }
+html:not(.sans-js):not(.sans-scene) .intro h1 { font-size: clamp(32px, 3.4vw, 48px); }
+html:not(.sans-js):not(.sans-scene) .intro__metier { color: var(--mt-scene-papier); }
+html:not(.sans-js):not(.sans-scene) .intro__accroche { max-width: 46ch; font-size: var(--tako-texte-base); color: var(--mt-scene-papier); }
+html:not(.sans-js):not(.sans-scene) .intro__actions { align-items: center; gap: 18px; }
+html:not(.sans-js):not(.sans-scene) #explorer {
+  padding-inline: 24px; border-radius: var(--tako-rayon-pilule); letter-spacing: .14em; text-transform: uppercase; text-shadow: none;
+  background: var(--mt-scene-lampe); color: var(--mt-scene-nuit); border-color: transparent;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--mt-scene-lampe) 50%, transparent), 0 10px 40px -8px color-mix(in srgb, var(--mt-scene-lampe) 55%, transparent);
+}
+html:not(.sans-js):not(.sans-scene) #voir-presentation { background: none; border-color: transparent; color: var(--mt-scene-papier); text-decoration: underline; text-underline-offset: .3em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+html:not(.sans-js):not(.sans-scene) .intro__contact { display: none; }
+
+/* Menu : rien avant l'entrée (sauf au clavier), puis quelques mots en capitales fines. */
+html.scene-prete body:not(.exploration) :is(.barre__nav, .barre__ecrire, .barre__reglages) { opacity: 0; pointer-events: none; }
+html.scene-prete body:not(.exploration) :is(.barre__nav, .barre__ecrire, .barre__reglages):focus-within { opacity: 1; pointer-events: auto; }
+html:not(.sans-js):not(.sans-scene) :is(.barre__nav, .barre__ecrire, .barre__reglages) { transition: opacity .6s ease .15s; }
+@media (min-width: 761px) {
+  html:not(.sans-js):not(.sans-scene) .barre { background: none; padding-top: max(16px, env(safe-area-inset-top)); text-shadow: 0 1px 12px var(--mt-scene-nuit); }
+  html:not(.sans-js):not(.sans-scene) .barre__marque { font-size: var(--tako-texte-xs); }
+  html:not(.sans-js):not(.sans-scene) .barre__nom { display: none; }
+  html:not(.sans-js):not(.sans-scene) .barre__nav a { min-height: 36px; padding: 0 10px; border: 0; font-size: var(--tako-texte-xs); letter-spacing: .18em; opacity: .74; }
+  html:not(.sans-js):not(.sans-scene) .barre__nav a:hover, html:not(.sans-js):not(.sans-scene) .barre__nav a[aria-current="true"] { opacity: 1; background: none; text-decoration: underline; text-underline-offset: .5em; }
+  html:not(.sans-js):not(.sans-scene) .barre__ecrire { font-size: var(--tako-texte-xs); letter-spacing: .18em; text-transform: uppercase; opacity: .74; padding: 0 10px; background: none; border: 0; box-shadow: none; color: inherit; }
+  html:not(.sans-js):not(.sans-scene) .barre__ecrire:hover { opacity: 1; }
+  html:not(.sans-js):not(.sans-scene) .barre__reglages { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: 14px; gap: 0; }
+  html:not(.sans-js):not(.sans-scene) .reglage { min-height: 32px; padding: 0 9px; background: none; border: 0; font-size: 11px; opacity: .58; text-shadow: 0 1px 8px var(--mt-scene-nuit); }
+  html:not(.sans-js):not(.sans-scene) .reglage:hover, html:not(.sans-js):not(.sans-scene) .reglage:focus-visible { opacity: 1; }
+  /* Le décor clair passait derrière le menu : le fond commun garde ses textes lisibles dans les quatre ambiances. */
+  html:not(.sans-js):not(.sans-scene) .barre__nav { background: color-mix(in srgb, var(--mt-scene-nuit) 88%, transparent); border-radius: 6px; }
+  html:not(.sans-js):not(.sans-scene) .piece__retour-intro { bottom: 14px; left: max(16px, env(safe-area-inset-left)); min-height: 32px; padding: 0 9px; background: none; border: 0; font-size: 11px; letter-spacing: .1em; opacity: .58; color: var(--mt-scene-papier); }
+  html:not(.sans-js):not(.sans-scene) .piece__retour-intro:hover { opacity: 1; }
+  html:not(.sans-js):not(.sans-scene) .piece__recentrer { bottom: 14px; left: calc(max(16px, env(safe-area-inset-left)) + 118px); min-height: 32px; padding: 0 9px; background: none; border: 0; font-size: 11px; letter-spacing: .1em; opacity: .58; color: var(--mt-scene-papier); }
+  html:not(.sans-js):not(.sans-scene) .piece__recentrer:hover, html:not(.sans-js):not(.sans-scene) .piece__recentrer:focus-visible { opacity: 1; }
+  html:not(.sans-js):not(.sans-scene) .piece__montrer { bottom: 14px; left: calc(max(16px, env(safe-area-inset-left)) + 206px); min-height: 32px; padding: 0 9px; background: none; border: 0; font-size: 11px; letter-spacing: .1em; color: var(--mt-scene-papier); text-shadow: 0 1px 6px var(--mt-scene-nuit); }
+  /* L'aide s'efface d'elle-même : une fois lue, la pièce reprend tout l'écran. */
+  html:not(.sans-js):not(.sans-scene) .piece__aide { bottom: 18px; padding: 0; background: none; opacity: .7; text-shadow: 0 1px 10px var(--mt-scene-nuit); animation: aide-s-efface 1s ease 7s forwards; }
+  @keyframes aide-s-efface { to { opacity: 0; } }
+  html.mouvement-reduit .piece__aide { animation: none; }
+  /* Panneau léger : une feuille étroite, translucide, posée sur le côté ; la pièce reste visible et recadrée. */
+  html:not(.sans-js):not(.sans-scene) .panneau {
+    top: 64px; right: 16px; bottom: 16px; width: min(460px, max(36vw, 380px)); border-radius: 14px;
+    background: color-mix(in srgb, var(--tako-surface) 84%, transparent); border: 1px solid color-mix(in srgb, var(--mt-scene-papier) 16%, transparent);
+    box-shadow: 0 30px 80px -30px var(--mt-scene-nuit);
+  }
+}
+/* Dans Rouille, seuls ses deux boutons (retour, plein écran) restent : le menu et les réglages s'effacent. */
+body.plongee-active :is(.barre, .barre__reglages, .piece__retour-intro, .piece__recentrer, .piece__montrer, .piece__remonter, .piece__aide) { opacity: 0; pointer-events: none; transition: opacity .4s ease; }
+
+/* --- Contenus du 28/10 : deux portes, disponibilité, preuve principale, services, liens croisés ---
+   Les deux publics (recruteur, client) ont chacun leur porte dès l'accueil ; l'atelier 3D reste à un geste. */
+.bouton--plein { background: var(--tako-lien); border-color: var(--tako-lien); color: var(--tako-fond); font-weight: 700; }
+.bouton--plein:hover { background: color-mix(in srgb, var(--tako-lien) 85%, var(--tako-texte)); }
+.intro__dispo { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; font: 700 var(--tako-texte-sm)/1.4 var(--mt-police-ui); color: var(--tako-succes); }
+.intro__voyant { flex: none; width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 25%, transparent); }
+.intro__portes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.porte { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: var(--tako-cible); padding: 10px 14px; border: 1px solid var(--tako-lien); border-radius: 10px; color: var(--tako-texte); text-decoration: none; }
+.porte strong { font: 700 var(--tako-texte-base)/1.2 var(--mt-police-ui); color: var(--tako-lien); }
+.porte span { font: var(--tako-texte-xs)/1.35 var(--mt-police-ui); color: var(--tako-texte-secondaire); }
+.porte:hover { background: var(--tako-survol); }
+html:not(.sans-js):not(.sans-scene) .porte { border-color: transparent; background: var(--mt-scene-lampe); color: var(--mt-scene-nuit); text-shadow: none; box-shadow: 0 10px 40px -10px color-mix(in srgb, var(--mt-scene-lampe) 55%, transparent); }
+html:not(.sans-js):not(.sans-scene) .porte strong, html:not(.sans-js):not(.sans-scene) .porte span { color: var(--mt-scene-nuit); }
+html:not(.sans-js):not(.sans-scene) .porte:hover { background: color-mix(in srgb, var(--mt-scene-lampe) 88%, var(--mt-scene-papier)); }
+/* L'atelier devient le troisième geste : un contour clair, plus la lampe pleine des deux portes. */
+html:not(.sans-js):not(.sans-scene) #explorer { background: none; color: var(--mt-scene-papier); border-color: color-mix(in srgb, var(--mt-scene-papier) 55%, transparent); box-shadow: none; }
+/* « Voir le CV » est un chemin de recruteur : le même contour crème que l'atelier, jamais le bleu. */
+html:not(.sans-js):not(.sans-scene) #intro-cv { padding-inline: 20px; border-radius: var(--tako-rayon-pilule); background: none; color: var(--mt-scene-papier); border-color: color-mix(in srgb, var(--mt-scene-papier) 55%, transparent); text-shadow: none; }
+/* La disponibilité, ce qu'un recruteur cherche d'abord : en crème, son voyant allumé. */
+html:not(.sans-js):not(.sans-scene) .intro__dispo { color: var(--mt-scene-papier); }
+html:not(.sans-js):not(.sans-scene) .intro__voyant { background: #98bb6c; box-shadow: 0 0 0 3px color-mix(in srgb, #98bb6c 30%, transparent); }
+.presentation__dispo { margin: 8px 0 0; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.presentation__dispo a { display: inline-block; min-height: 24px; }
+.dispo { display: grid; gap: 10px; margin: 0 0 24px; border-left: 3px solid var(--tako-succes); }
+.dispo__texte, .dispo__actions { margin: 0; }
+.dispo__actions, .une__actions, .services__devis { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.dispo__liens, .pied__liens { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0; padding: 0; list-style: none; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); }
+.dispo__liens a, .pied__liens a { display: inline-flex; align-items: center; min-height: var(--tako-cible); }
+.pied__liens { justify-content: center; margin-bottom: 8px; }
+.une { margin: 0 0 28px; border-left: 3px solid var(--tako-attente); }
+.une h3 { margin: 0 0 8px; font: 400 var(--tako-texte-titre)/1.15 var(--mt-police-prose); letter-spacing: 0; text-transform: none; color: var(--mt-texte); }
+.une__sur { margin: 0 0 6px; font: 700 var(--tako-texte-xs)/1.4 var(--mt-police-ui); letter-spacing: .18em; text-transform: uppercase; color: var(--tako-attente); }
+.une p { margin: 0 0 12px; max-width: 66ch; }
+.une__equipe { font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.equipe { margin: 14px 0; padding: 12px 14px; border: 1px dashed var(--mt-bord-doux); border-radius: var(--tako-rayon-carte); }
+.equipe h4 { margin: 0 0 6px; font: 700 var(--tako-texte-xs)/1.4 var(--mt-police-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--mt-texte-discret); }
+.equipe p { margin: 0 0 6px; }
+.equipe ul { margin: 0; padding-left: 18px; font: var(--tako-texte-sm)/1.55 var(--mt-police-ui); }
+.offres { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin: 0 0 28px; padding: 0; list-style: none; }
+.offre h3 { margin: 0 0 4px; font: 400 var(--tako-texte-xl)/1.25 var(--mt-police-prose); letter-spacing: 0; text-transform: none; color: var(--mt-texte); }
+.offre p { margin: 0 0 10px; }
+.offre__tarif { font: 700 var(--tako-texte-xs)/1.4 var(--mt-police-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--tako-attente); }
+.offre__preuve { font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.offre__preuve a { display: inline; }
+.etapes { margin: 0 0 22px; padding-left: 22px; }
+.etapes li { margin-bottom: 6px; }
+.services__devis .note { margin: 0; }
+.egaree h1 { margin: 0 0 18px; font: 400 var(--tako-texte-chiffre)/1.15 var(--mt-police-prose); color: var(--mt-accent); }
+.egaree__liens { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 0; padding: 0; list-style: none; }
+body.lecture main { padding: 0 20px; }
+.page-cv .cv { padding-top: 40px; }
+/* Six rubriques : les onglets du téléphone se partagent la largeur quel que soit leur nombre. */
+@media (max-width: 760px) {
+  .onglets ul { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 1fr; }
+  .onglets a { letter-spacing: 0; padding: 0 2px; }
+  .intro__portes { margin-top: 10px; gap: 8px; }
+  .porte { padding: 8px 10px; }
+  .porte span { display: none; }
+  .intro__dispo { margin-top: 6px; font-size: var(--tako-texte-xs); }
+}
+/* Affiche : la pièce cuite elle-même, capturée (tools/affiche.mjs), tient lieu d'image d'attente, de repli sans
+   WebGL et sans JavaScript. Le croquis CSS d'avant ne sert plus que si l'image manque. */
+.piece__repli { background: url("../affiche/attente.webp") 50% 50% / cover no-repeat, radial-gradient(ellipse 45% 40% at 22% 78%, color-mix(in srgb, var(--mt-scene-lampe) 45%, transparent), transparent 70%), linear-gradient(to bottom, var(--mt-scene-nuit), var(--mt-scene-mur)); }
+.piece__repli > div { display: none; }
+
+/* Plongée dans la tasse : un calque qui capte le pointeur (les ronds suivent la souris ou le doigt) et pose deux
+   vrais liens, transparents, exactement sur les phrases de mousse. En mouvement réduit, leur texte devient net. */
+body.tasse-active { overflow: hidden; }
+/* Écran bas (téléphone en paysage) : la pièce reprend la hauteur visible, la tasse entière y tient, centrée. */
+body.tasse-active .piece { min-height: 0; }
+body.tasse-active .points, body.tasse-active .piece__aide, body.tasse-active .piece__retour-intro, body.tasse-active .piece__recentrer, body.tasse-active .piece__montrer, body.tasse-active .barre, body.tasse-active .onglets { visibility: hidden; }
+.tasse { position: fixed; inset: 0; z-index: 100; touch-action: none; }
+.tasse__titre { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); margin: 0; }
+.tasse__retour { position: absolute; z-index: 2; top: max(14px, env(safe-area-inset-top)); left: max(14px, env(safe-area-inset-left)); background: #10242ee8; color: #f2e5d1; border: 1px solid #9da9a0; box-shadow: 0 4px 24px #0006; font: 12px/1.4 var(--mt-police-ui); }
+.tasse__proposition { position: absolute; display: flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 0 4%; text-align: center;
+  color: transparent; text-decoration: none; border-radius: 14px; font: 400 20px/1.25 var(--mt-police-prose); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.tasse__proposition:focus-visible { outline: 2px solid var(--mt-lien); outline-offset: 6px; }
+.tasse__proposition[hidden] { display: none; }
+.tasse--net .tasse__proposition { color: var(--mt-scene-papier); background: color-mix(in srgb, var(--mt-scene-ecran) 86%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--mt-scene-papier) 35%, transparent); text-decoration: underline; text-underline-offset: .25em; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+.tasse--net .tasse__proposition:hover { background: color-mix(in srgb, var(--mt-scene-ecran) 70%, var(--mt-scene-lampe)); }
+.tasse__aide { position: absolute; bottom: max(12px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); margin: 0; width: max-content; max-width: 90vw;
+  padding: 5px 12px; border-radius: 999px; background: #030608a8; color: #d4d7d0; font: 11px/1.4 var(--mt-police-ui); transition: opacity .4s ease; }
+.tasse:not([data-phase="arrivee"]) .tasse__aide { opacity: 0; }
+html.mouvement-reduit .tasse__aide { transition: none; }
+@media (max-width: 760px) { .tasse__retour { min-height: 44px; } .tasse__aide { display: none; } }
+/* Couleurs forcées : le texte des liens reprend la couleur système, la mousse peinte n'a plus à le porter seule. */
+@media (forced-colors: active) { .tasse__proposition { color: LinkText; background: Canvas; } }
+
+/* Le sucre (lot portfolio-sucre) : un vrai bouton posé sur le morceau, transparent. Sa bulle « Un sucre ? » paraît au
+   survol ou au focus ; sur un écran tactile (pas de survol), elle reste discrètement visible. */
+.tasse__sucre { position: absolute; z-index: 1; padding: 0; border: 0; border-radius: 10px; background: transparent; cursor: grab;
+  touch-action: none; -webkit-tap-highlight-color: transparent; }
+.tasse__sucre[hidden] { display: none; }
+.tasse__sucre--tenu { cursor: grabbing; }
+.tasse__sucre:focus-visible { outline: 2px solid var(--mt-lien); outline-offset: 4px; }
+.tasse__sucre-bulle { position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translate(-50%, 4px); padding: 4px 10px; border-radius: 999px;
+  background: #030608c8; color: #f2e5d1; font: 400 15px/1.3 var(--mt-police-prose); white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease; }
+.tasse__sucre:hover .tasse__sucre-bulle, .tasse__sucre:focus-visible .tasse__sucre-bulle { opacity: 1; transform: translate(-50%, 0); }
+.tasse__sucre--tenu .tasse__sucre-bulle { opacity: 0; }
+@media (hover: none) { .tasse[data-phase="arrivee"] .tasse__sucre-bulle { opacity: .85; transform: translate(-50%, 0); } }
+html.mouvement-reduit .tasse__sucre-bulle { transition: none; }
+/* « Merci ! » n'est pas un lien : en mouvement réduit, il se lit sans soulignement ni fond de bouton. */
+.tasse__merci { cursor: default; }
+.tasse--net .tasse__merci { text-decoration: none; background: transparent; box-shadow: none; }
+@media (forced-colors: active) { .tasse__sucre:focus-visible { outline-color: Highlight; } .tasse__merci { color: CanvasText; } }
+
+/* Ce que je sais faire : une liste courte et sobre, une ligne par savoir, la preuve en lien discret. */
+.savoirs { display: grid; gap: 0; margin: 8px 0 0; padding: 0; list-style: none; }
+.savoir { padding: 14px 0; border-top: 1px solid var(--mt-bord-doux); }
+.savoir:first-child { border-top: 0; }
+.rubrique .savoir__libelle { margin: 0; font: 400 var(--tako-texte-xl)/1.25 var(--mt-police-prose); letter-spacing: 0; text-transform: none; color: var(--mt-texte); }
+.savoir__phrase { margin: 4px 0 0; }
+.savoir__preuves { margin: 4px 0 0; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-discret); overflow-wrap: anywhere; }
+.savoir__preuves a { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+.savoir__preuves a:hover, .savoir__preuves a:focus-visible { color: var(--mt-lien); }
+
+/* Mon parcours : une frise verticale, la plus récente en haut. Le trait relie les jalons ; l'année, en petites
+   capitales d'interface, se lit avant le titre ; la preuve reste un lien discret, comme sous « Ce que je sais faire ». */
+.parcours__chapo { margin: 0 0 6px; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-discret); }
+.jalons { margin: 8px 0 0; padding: 0; list-style: none; border-left: 1px solid var(--mt-bord-doux); }
+.jalon { position: relative; padding: 0 0 20px 22px; }
+.jalon:last-child { padding-bottom: 4px; }
+.jalon::before { content: ""; position: absolute; left: -5px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--mt-fond); border: 2px solid var(--tako-attente); }
+.jalon:first-child::before { background: var(--tako-attente); }
+.jalon__annee { margin: 0; font: 700 var(--tako-texte-sm)/1.4 var(--mt-police-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--mt-texte-discret); }
+.rubrique .jalon__titre { margin: 2px 0 0; font: 400 var(--tako-texte-xl)/1.25 var(--mt-police-prose); letter-spacing: 0; text-transform: none; color: var(--mt-texte); }
+.jalon__phrase { margin: 4px 0 0; }
+.jalon__preuve { margin: 4px 0 0; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-discret); overflow-wrap: anywhere; }
+.jalon__preuve a { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+.jalon__preuve a:hover, .jalon__preuve a:focus-visible { color: var(--mt-lien); }
+@media (forced-colors: active) { .jalon::before { border-color: CanvasText; } .jalon:first-child::before { background: CanvasText; } }
+
+/* --- Les zones du bureau, les petits mots de la pièce (lot portfolio-bureau-range) --- */
+.zone { position: absolute; left: 0; top: 0; padding: 2px 8px; border-radius: 3px; background: color-mix(in srgb, var(--mt-scene-nuit) 62%, transparent); color: var(--mt-scene-papier); font: 500 var(--tako-texte-sm)/1.4 var(--mt-police-ui); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; pointer-events: none; transition: opacity .25s ease; }
+.zone[data-cache="true"] { opacity: 0; }
+body:not(.exploration) .zone, body.panneau-ouvert .zone { opacity: 0; }
+body.etiquettes .point[data-replie="true"] .point__etiquette { opacity: 0; }
+/* L'appel des tiroirs : le caisson est sous le plateau, hors de la vue d'entrée. Son étiquette reste affichée, sa flèche dit où aller. */
+body.exploration .point[data-objet="caisson"] .point__etiquette { opacity: 1; transform: translate(calc(-50% + var(--decalage, 0px)), 0); }
+.point[data-objet="caisson"] .point__etiquette { bottom: 30px; padding: 3px 9px; grid-template-columns: auto auto; align-items: baseline; gap: 6px; background: color-mix(in srgb, var(--mt-scene-nuit) 84%, transparent); color: var(--mt-scene-papier); border-color: color-mix(in srgb, var(--mt-scene-lampe) 55%, transparent); }
+.point[data-objet="caisson"] .point__etiquette strong { font: 500 var(--tako-texte-sm)/1.4 var(--mt-police-ui); letter-spacing: .06em; }
+.point[data-objet="caisson"] .point__etiquette strong::after { content: " ↓"; color: var(--mt-scene-lampe); }
+.point[data-objet="caisson"] .point__etiquette span { display: none; }
+.point[data-objet="caisson"] .point__rond { opacity: 1; }
+body.tiroir-actif .piece__remonter, body.tasse-active .piece__remonter { display: none; }
+body.vue-caisson .point[data-objet="fisheye"][data-cache="false"] .point__etiquette { opacity: 1; transform: translate(calc(-50% + var(--decalage, 0px)), 0); }
+body.vue-caisson .piece__aide, body.vue-caisson .piece__recentrer, body.vue-caisson .piece__montrer, body.vue-caisson .ciel-choix { display: none; }
+/* Le tiroir surprise : un point à peine là (42 %, décision de l'utilisateur), sans halo, sans étiquette permanente au doigt. */
+.point[data-objet="tiroir:surprise"] .point__rond { opacity: .42; }
+.point[data-objet="tiroir:surprise"] .point__rond::after { display: none; }
+.point[data-objet="tiroir:surprise"]:hover .point__rond, .point[data-objet="tiroir:surprise"]:focus-visible .point__rond { opacity: 1; }
+body.etiquettes .point[data-objet="tiroir:surprise"]:not(:focus-visible) .point__etiquette { opacity: 0; }
+/* Un point couvert par l'accueil est éteint jusqu'au bout, étiquette comprise, même au survol ou au clavier. */
+.point[data-couvert="true"] { visibility: hidden; }
+/* La carte de visite du plateau : invisible sur l'image, elle s'éclaire au survol ; écrite au bas de l'image quand l'écran est trop étroit pour la montrer. */
+.tasse__carte { position: absolute; z-index: 1; box-sizing: border-box; border-radius: 3px; color: transparent; font: var(--tako-texte-sm)/1 var(--mt-police-ui); overflow: hidden; }
+.tasse__carte[hidden] { display: none; }
+.tasse__carte:hover { box-shadow: 0 0 0 2px var(--mt-scene-lampe); }
+.tasse__carte--ecrite { left: 50%; bottom: calc(max(8px, env(safe-area-inset-bottom)) + 54px); transform: translateX(-50%); display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: var(--tako-rayon-pilule); background: color-mix(in srgb, var(--mt-scene-nuit) 84%, transparent); color: var(--mt-scene-papier); }
+/* La vague d'entrée : le même éclat que le survol, le temps d'un passage ; en mouvement réduit, le point seul, en fondu. */
+.point--vague .point__rond { opacity: 1; transform: scale(1.2); transition: opacity .2s ease, transform .2s ease; }
+.point--vague .point__etiquette { opacity: 1; transform: translate(calc(-50% + var(--decalage, 0px)), 0); }
+html.mouvement-reduit .point--vague .point__rond { transform: none; }
+html.mouvement-reduit .point--vague .point__etiquette { opacity: 0; }
+/* Le sucre, dans la vue du café : un point de la lampe et son invitation, affichés en attendant le clic ; un léger sursaut à l'arrivée, seulement si l'on veut du mouvement. */
+.tasse[data-phase="arrivee"] .tasse__sucre-bulle { opacity: 1; transform: translate(-50%, 0); }
+.tasse__sucre--tenu .tasse__sucre-bulle, .tasse[data-phase="arrivee"] .tasse__sucre--tenu .tasse__sucre-bulle { opacity: 0; }
+.tasse__sucre-lueur { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: color-mix(in srgb, var(--mt-scene-lampe) 70%, var(--mt-scene-papier)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--mt-scene-nuit) 40%, transparent), 0 0 14px 5px color-mix(in srgb, var(--mt-scene-lampe) 60%, transparent); pointer-events: none; }
+.tasse__sucre-lueur::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--mt-scene-lampe) 50%, transparent); animation: pouls 3.6s ease-out infinite; }
+.tasse__sucre--sursaut { animation: sursaut-sucre .7s ease-out 1; }
+@keyframes sursaut-sucre { 0%, 100% { transform: translateY(0); } 35% { transform: translateY(-9px); } 70% { transform: translateY(2px); } }
+html.mouvement-reduit .tasse__sucre--sursaut { animation: none; }
+html.mouvement-reduit .tasse__sucre-lueur::after { animation: none; opacity: .5; }
+/* Le bas des vues rapprochées : la mention d'Échap et sa croix, qui fait la même chose. Au doigt, la mention s'efface, la croix reste. */
+.vue-bas { position: absolute; z-index: 2; left: 0; right: 0; bottom: max(8px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: center; gap: 10px; pointer-events: none; }
+.vue-bas .tasse__aide, .vue-bas .tiroir__aide { position: static; left: auto; right: auto; bottom: auto; transform: none; }
+.fermer-x { flex: none; width: 44px; height: 44px; padding: 0; border: 1px solid color-mix(in srgb, var(--mt-scene-papier) 45%, transparent); border-radius: 50%; background: color-mix(in srgb, var(--mt-scene-nuit) 72%, transparent); color: var(--mt-scene-papier); font: 400 24px/1 var(--mt-police-ui); cursor: pointer; pointer-events: auto; }
+.fermer-x:hover { border-color: var(--mt-scene-lampe); }
+.grand-angle .tiroir__aide { position: static; }
+/* Une étiquette affichée sans survol ne montre que son invitation, comme au doigt : son texte visible reste ainsi contenu dans le nom accessible du bouton. */
+body.vue-caisson .point .point__etiquette span, .point--vague .point__etiquette span { display: none; }
+.point[data-sous="true"] .point__etiquette { bottom: auto; top: 46px; }
+.point[data-objet="tiroir:surprise"] .point__etiquette span { display: none; }
+/* Devant le caisson, les deux tiroirs disent ce qu'ils sont sans attendre le survol. */
+body.vue-caisson .point[data-objet^="tiroir:"][data-cache="false"] .point__etiquette { opacity: 1; transform: translate(calc(-50% + var(--decalage, 0px)), 0); }
+.piece__remonter { position: absolute; z-index: 10; left: 50%; top: calc(var(--barre-hauteur, 64px) + 14px); transform: translateX(-50%); font: var(--tako-texte-sm)/1 var(--mt-police-ui); background: color-mix(in srgb, var(--tako-surface) 86%, transparent); }
+.piece__remonter[hidden] { display: none; }
+/* Le Psst : une petite bulle posée sur elle, pas un panneau. Il suit sa place à l'écran (js/pieuvre-psst.js). */
+.pieuvre-psst { position: absolute; z-index: 9; left: 0; top: 0; min-width: 44px; min-height: 32px; padding: 4px 10px; border: 1px solid color-mix(in srgb, var(--mt-scene-papier) 40%, transparent); border-radius: 10px; background: var(--tako-surface); color: var(--tako-texte); font: var(--tako-texte-sm)/1.2 var(--mt-police-prose); cursor: pointer; animation: psst .32s ease-out both; }
+.pieuvre-psst[hidden] { display: none; }
+body.etiquettes .point[data-psst] .point__etiquette, .zone[data-psst] { opacity: 0; }
+.pieuvre-psst[data-cache="true"], body:is(.panneau-ouvert, .tiroir-actif, .tasse-active, .plongee-active, .vue-caisson, .pieuvre-proche) .pieuvre-psst { display: none; }
+@keyframes psst { from { opacity: 0; scale: .7; } to { opacity: 1; scale: 1; } }
+html.mouvement-reduit .pieuvre-psst { animation: none; }
+@media (prefers-reduced-motion: reduce) { .pieuvre-psst { animation: none; } }
+/* Vers la pieuvre, la carte d'accueil s'efface : elle couvrirait la moitié de ce qu'on est venu voir. */
+body.pieuvre-proche .intro { opacity: 0; pointer-events: none; }
+body.pieuvre-proche :is(.points, .zones) { visibility: hidden; }
+/* Au milieu, il tombait sur l'étiquette de l'objectif dans une fenêtre basse. À gauche, sous la marque : le geste de retour, loin de tout ce qu'on vise dans le tiroir. */
+body.vue-caisson .piece__remonter { left: 20px; top: calc(var(--barre-hauteur, 64px) + 20px); transform: none; }
+/* Le choix du ciel : en bas à gauche, au-dessus des commandes, jamais sur la fenêtre. Petit, et il porte sa météo. */
+.ciel-choix { position: absolute; z-index: 9; left: max(16px, env(safe-area-inset-left)); bottom: 52px; display: flex; align-items: flex-end; gap: 4px; padding: 4px; border-radius: 8px; background: color-mix(in srgb, var(--mt-scene-nuit) 58%, transparent); border: 1px solid color-mix(in srgb, var(--mt-scene-papier) 18%, transparent); }
+html.sans-js .ciel-choix, html.sans-scene .ciel-choix, body.panneau-ouvert .ciel-choix, body.tiroir-actif .ciel-choix, body.plongee-active .ciel-choix, body.tasse-active .ciel-choix { display: none; }
+.ciel-choix__vignette { position: relative; display: grid; gap: 3px; min-width: 58px; padding: 0 0 2px; border: 0; border-radius: 5px; background: none; cursor: pointer; color: var(--mt-scene-papier); font: 500 var(--tako-texte-xs)/1.25 var(--mt-police-ui); letter-spacing: .03em; text-align: center; }
+.ciel-choix__vignette img { display: block; width: 58px; height: 32px; object-fit: cover; border-radius: 5px; outline: 1px solid color-mix(in srgb, var(--mt-scene-papier) 25%, transparent); transition: outline-color .2s ease, transform .2s ease; }
+.ciel-choix__vignette:hover img { outline-color: var(--mt-scene-papier); transform: translateY(-1px); }
+.ciel__ouvrir { align-content: end; }
+.ciel__picto { display: grid; place-items: center; width: 58px; height: 32px; border-radius: 5px; font-size: 18px; line-height: 1; outline: 1px solid color-mix(in srgb, var(--mt-scene-papier) 25%, transparent); }
+.ciel__ouvrir:hover .ciel__picto, .ciel__ouvrir[aria-expanded="true"] .ciel__picto { outline-color: var(--mt-scene-papier); }
+.ciel-choix__vignette:focus-visible { outline: 2px solid var(--mt-lien); outline-offset: 2px; }
+/* Le ciel en cours se lit à la bordure ; celui qu'on a choisi soi-même, en plus, au point ambre devant son nom. */
+.ciel-choix__vignette[data-actuelle="true"] img { outline: 2px solid var(--mt-scene-ambre); }
+.ciel-choix__vignette[aria-pressed="true"] span::before { content: "● "; color: var(--mt-scene-ambre); }
+html.mouvement-reduit .ciel-choix__vignette img { transition: none; }
+@media (forced-colors: active) { .ciel-choix__vignette[data-actuelle="true"] img { outline-color: Highlight; } }
+@media (max-width: 760px) {
+  .ciel-choix { left: 8px; bottom: 60px; gap: 3px; padding: 3px; max-width: calc(100vw - 16px); }
+  .ciel-choix__vignette { min-width: 0; min-height: 44px; }
+  .ciel-choix__vignette img { width: 50px; height: 28px; }
+  .ciel__picto { width: 50px; height: 28px; }
+  .piece__remonter { min-height: 44px; }
+}
+/* À l'accueil, la carte tient la gauche : le choix du ciel passe à droite. Au doigt, elle tient presque tout l'écran, et il ne
+   resterait que la fenêtre : le choix du ciel attend le bureau. */
+body:not(.exploration) .ciel-choix { left: auto; right: max(16px, env(safe-area-inset-right)); }
+body:not(.exploration) .ciel__panneau { left: auto; right: 0; }
+@media (max-width: 760px) { body:not(.exploration) .ciel-choix { display: none; } }
+.clin { position: absolute; left: 50%; bottom: 72px; z-index: 9; transform: translateX(-50%); margin: 0; max-width: min(90vw, 460px); padding: 8px 14px; border-radius: 4px; background: color-mix(in srgb, var(--mt-scene-nuit) 82%, transparent); color: var(--mt-scene-papier); font: var(--tako-texte-md)/1.4 var(--mt-police-prose); text-align: center; }
+.clin[hidden] { display: none; }
+/* Sans touche Échap sous la main, ne pas en parler ; et dire honnêtement ce qui demande un clavier. */
+.tactile-seul { display: none; }
+@media (pointer: coarse) { .clavier-seul { display: none; } .tactile-seul { display: inline; } }
+/* Rouille : deux portes, rien d'autre à l'œil. */
+.rouille-portes { display: grid; gap: 12px; margin: 16px 0 12px; }
+.rouille-porte { width: 100%; min-height: 64px; font-size: var(--tako-texte-lg, 1.2rem); justify-content: center; }
+@media (min-width: 761px) { .rouille-portes { grid-template-columns: 1fr 1fr; } }
+
+/* --- Le tiroir des objectifs : un dialogue transparent, un bouton sur chaque verre --- */
+.tiroir { position: fixed; inset: 0; z-index: 30; }
+.tiroir__titre { position: absolute; left: 20px; top: 14px; margin: 0; color: var(--mt-scene-papier); font: 400 var(--tako-texte-lg)/1.2 var(--mt-police-prose); text-shadow: 0 1px 6px #000; }
+.tiroir__retour { position: absolute; right: 20px; top: 14px; color: var(--mt-scene-papier); background: color-mix(in srgb, var(--mt-scene-nuit) 70%, transparent); }
+.tiroir__aide { position: absolute; left: 0; right: 0; bottom: 14px; margin: 0; color: var(--mt-scene-papier); font: var(--tako-texte-sm)/1.4 var(--mt-police-ui); text-align: center; text-shadow: 0 1px 6px #000; }
+.tiroir[data-phase="aller"] .tiroir__aide, .tiroir[data-phase="retour"] .tiroir__aide { opacity: 0; }
+.tiroir__objectif { position: absolute; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+.tiroir__objectif[hidden] { display: none; }
+.tiroir__objectif:focus-visible { outline: 2px solid var(--mt-lien); outline-offset: 3px; }
+.tiroir__bulle { position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translateX(-50%); padding: 3px 8px; border-radius: 3px; background: color-mix(in srgb, var(--mt-scene-nuit) 84%, transparent); color: var(--mt-scene-papier); font: var(--tako-texte-sm)/1.3 var(--mt-police-ui); white-space: nowrap; opacity: 0; transition: opacity .2s ease; pointer-events: none; }
+.tiroir__objectif:hover .tiroir__bulle, .tiroir__objectif:focus-visible .tiroir__bulle, .tiroir__objectif[data-vu] .tiroir__bulle { opacity: 1; }
+.visionneuse { position: absolute; inset: 0; display: grid; place-items: center; padding: 56px 16px 16px; background: color-mix(in srgb, var(--mt-scene-nuit) 88%, transparent); }
+.visionneuse__figure { margin: 0; max-width: min(960px, 100%); display: grid; gap: 10px; }
+.visionneuse__figure video, .visionneuse__figure img { display: block; width: 100%; max-height: 70vh; object-fit: contain; background: #000; }
+.visionneuse__legende { color: var(--mt-scene-papier); font: var(--tako-texte-md)/1.5 var(--mt-police-prose); }
+.visionneuse__legende a { color: var(--mt-lien); }
+.visionneuse__fermer { position: absolute; right: 20px; top: 14px; color: var(--mt-scene-papier); background: color-mix(in srgb, var(--mt-scene-nuit) 70%, transparent); }
+body.tiroir-actif .points, body.tiroir-actif .piece__aide, body.tiroir-actif .piece__retour-intro, body.tiroir-actif .piece__recentrer, body.tiroir-actif .piece__montrer, body.tiroir-actif .barre, body.tiroir-actif .onglets { visibility: hidden; }
+@media (max-width: 760px) { .zone { font-size: 11px; padding: 1px 6px; letter-spacing: .06em; } .tiroir__retour, .visionneuse__fermer { min-height: 44px; } .tiroir__aide { display: none; } .tiroir__titre { font-size: var(--tako-texte-md); top: 22px; } }
+
+/* Dans la scène, le focus et les liens prennent la lumière de la lampe, jamais le bleu des pages de lecture : sur le bois et le ciel il jurait
+   (retour de l'utilisateur, 31/10). Le liseré sombre garde 3:1 sur les quatre ambiances (tests/focus-scene.mjs). */
+:root { --mt-focus-scene: var(--mt-scene-lampe); --mt-focus-lisere: #17120d; }
+.points, .ciel-choix, .tiroir, .tasse, .visionneuse, .piece__recentrer, .piece__montrer, .piece__retour-intro, .piece__remonter,
+html:not(.sans-js):not(.sans-scene) body:not(.lecture) .barre { --mt-lien: var(--mt-focus-scene); --tako-lien: var(--mt-focus-scene); }
+:is(.ciel-choix, .tiroir, .tasse, .visionneuse, .barre__reglages) :focus-visible, .piece__recentrer:focus-visible, .piece__montrer:focus-visible, .piece__retour-intro:focus-visible, .piece__remonter:focus-visible,
+html:not(.sans-js):not(.sans-scene) body:not(.lecture) .barre :focus-visible { outline: 2px solid var(--mt-focus-scene); outline-offset: 2px; box-shadow: 0 0 0 2px var(--mt-focus-lisere), 0 0 0 6px var(--mt-focus-lisere); }
+@media (forced-colors: active) { .point:focus-visible .point__rond { outline-color: Highlight; } .point__rond::before { display: none; } }
+/* --- La bulle de la mini-pieuvre (js/pieuvre-bulle.js) : au-dessus du panneau, sous les onglets du téléphone. --- */
+.bulle {
+  /* Comme la navigation, garder une marge au-dessus du seuil tactile de 44 px. */
+  --tako-cible: var(--tako-cible-nav);
+  /* Les réglages sont posés en bas à droite de la pièce : la bulle s'ouvre au-dessus, sans les couvrir. */
+  --bulle-bas: max(64px, env(safe-area-inset-bottom)); --bulle-clavier: 0px;
+  position: fixed; z-index: 44; right: max(24px, env(safe-area-inset-right)); bottom: calc(var(--bulle-bas) + var(--bulle-clavier));
+  box-sizing: border-box; width: min(300px, calc(100vw - 32px)); max-height: min(580px, calc(100svh - 140px - var(--bulle-clavier))); overflow-y: auto; overscroll-behavior: contain;
+  padding: var(--tako-espace-4) var(--tako-espace-5); border: 1px solid var(--tako-bord); border-radius: var(--tako-rayon-carte);
+  background: var(--tako-surface); color: var(--tako-texte); box-shadow: 0 18px 50px -18px rgb(0 0 0 / .6);
+  font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); animation: bulle-entree .18s ease-out;
+}
+.bulle[hidden] { display: none; }
+.bulle__bouton { display: none; }
+@keyframes bulle-entree { from { opacity: 0; transform: translateY(8px); } }
+html.mouvement-reduit .bulle { animation: none; }
+@media (prefers-reduced-motion: reduce) { .bulle { animation: none; } }
+.bulle__tete { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.bulle__titre { margin: 0; font: 600 var(--tako-texte-md)/1.3 var(--mt-police-ui); outline: none; }
+.bulle__fermer { flex: none; width: var(--tako-cible); height: var(--tako-cible); margin: -8px -10px -8px 0; padding: 0; border: 0; border-radius: var(--tako-rayon-petit); background: transparent; color: var(--tako-texte); font-size: 22px; line-height: 1; cursor: pointer; }
+.bulle__fermer:hover, .bulle__chapeau:hover, .bulle__suggestion:hover { background: var(--tako-survol); }
+.bulle__note, .bulle__mention { margin: 4px 0 10px; color: var(--tako-texte-secondaire); font-size: var(--tako-texte-xs); }
+.bulle__etiquette { display: block; margin-bottom: 4px; font-weight: 600; }
+.bulle__ligne { display: flex; gap: 8px; }
+/* 16 px au moins : en dessous, iOS zoome sur le champ. */
+.bulle__champ { flex: 1; min-width: 0; box-sizing: border-box; min-height: var(--tako-cible); padding: 0 10px; border: 1px solid var(--tako-bord); border-radius: var(--tako-rayon-petit); background: var(--tako-fond); color: var(--tako-texte); font: 16px/1.2 var(--mt-police-ui); }
+.bulle__demander { flex: none; padding-inline: var(--tako-espace-4); }
+.bulle__reponse:empty { display: none; }
+.bulle__reponse { margin-top: 12px; }
+.bulle__ton { margin: 0 0 8px; color: var(--tako-texte-secondaire); font-style: italic; }
+.bulle__passages { margin: 0; padding: 0; list-style: none; }
+.bulle__passages li + li { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--tako-bord-doux); }
+.bulle__passage-titre { display: block; }
+.bulle__passage { margin: 2px 0 4px; font: var(--tako-texte-sm)/1.5 var(--mt-police-prose); overflow-wrap: anywhere; }
+.bulle__source { margin: 0; font-size: var(--tako-texte-xs); color: var(--tako-texte-secondaire); }
+.bulle a:not(.tako-bouton) { color: var(--tako-lien); }
+.bulle__ecrire { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+.bulle__ligne-profils { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.bulle__profil { min-height: 36px; padding: 4px 10px; border: 1px solid var(--tako-bord); border-radius: var(--tako-rayon-petit); background: transparent; color: var(--tako-texte); font: var(--tako-texte-xs)/1.2 var(--mt-police-ui); cursor: pointer; }
+.bulle__profil:hover { background: var(--tako-survol); }
+.bulle__profil[aria-pressed="true"] { border-color: var(--tako-lien); color: var(--tako-lien); font-weight: 600; }
+.bulle__suggestions { display: grid; gap: 10px; margin-top: 12px; }
+.bulle--repondue .bulle__suggestions { display: none; }
+.bulle__autres { min-height: 36px; margin-top: 6px; padding: 4px 0; border: 0; background: transparent; color: var(--tako-lien); font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); text-decoration: underline; cursor: pointer; }
+.bulle__groupe { margin: 0 0 4px; font: 600 var(--tako-texte-xs)/1.3 var(--mt-police-ui); color: var(--tako-texte-secondaire); }
+.bulle__liste { margin: 0; padding: 0; list-style: none; }
+.bulle__suggestion { display: block; width: 100%; min-height: 36px; padding: 6px 8px; border: 0; border-radius: var(--tako-rayon-petit); background: transparent; color: var(--tako-lien); font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); text-align: left; cursor: pointer; }
+.bulle__ia { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--tako-bord-doux); }
+.bulle__ia[hidden], .bulle__suite[hidden] { display: none; }
+.bulle__chapeaux { margin: 12px 0 0; padding: 8px 0 0; border: 0; border-top: 1px solid var(--tako-bord-doux); }
+.bulle__chapeaux[hidden] { display: none; }
+.bulle__chapeaux legend { padding: 0; font: 600 var(--tako-texte-xs)/1.3 var(--mt-police-ui); color: var(--tako-texte-secondaire); }
+.bulle__ligne-chapeaux { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.bulle__chapeau { min-height: 36px; padding: 4px 10px; border: 1px solid var(--tako-bord-doux); border-radius: var(--tako-rayon-pilule); background: transparent; color: var(--tako-texte); font: var(--tako-texte-xs)/1.2 var(--mt-police-ui); cursor: pointer; }
+.bulle__chapeau[aria-pressed="true"] { border-color: var(--tako-lien); color: var(--tako-lien); }
+.bulle__fermer:focus-visible, .bulle__profil:focus-visible, .bulle__autres:focus-visible, .bulle__suggestion:focus-visible, .bulle__chapeau:focus-visible, .bulle__champ:focus-visible, .intro__lien:focus-visible { outline: 2px solid var(--tako-lien); outline-offset: 1px; }
+.intro__lien { min-height: 48px; min-width: 48px; padding: 4px 0; border: 0; background: transparent; color: inherit; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); text-decoration: underline; cursor: pointer; }
+/* Les deux portes restent égales : la disponibilité ne doit pas dominer la proposition client par son seul gras. */
+.intro :is(.intro__dispo, .intro__accroche),
+html:not(.sans-js):not(.sans-scene) .intro :is(.intro__dispo, .intro__accroche) { font: 400 var(--tako-texte-sm)/1.5 var(--mt-police-ui); }
+@media (max-width: 760px) {
+  .intro :is(.intro__dispo, .intro__accroche),
+  html:not(.sans-js):not(.sans-scene) .intro :is(.intro__dispo, .intro__accroche) { font-size: var(--tako-texte-xs); }
+}
+.contact__question { margin: 12px 0; }
+@media (max-width: 760px) {
+  /* La barre est pleine à 390 px : la pieuvre se touche, et l'accueil garde son bouton. */
+  #pieuvre-question { display: none; }
+  /* Devant une rubrique, un petit bouton rond tient lieu de panneau : il ne s'ouvre qu'au toucher, il ne couvre rien d'autre. */
+  body.panneau-ouvert .bulle__bouton { position: fixed; display: grid; place-items: center; z-index: 46; right: 8px; bottom: calc(70px + env(safe-area-inset-bottom)); width: var(--tako-cible-nav); height: var(--tako-cible-nav); padding: 0; border-radius: 50%; border: 1px solid var(--tako-bord); background: var(--tako-surface); color: var(--tako-texte); font: 600 18px/1 var(--mt-police-ui); cursor: pointer; }
+  .bulle { --bulle-bas: calc(70px + env(safe-area-inset-bottom)); right: 8px; left: 8px; width: auto; max-height: calc(100svh - 144px - var(--bulle-clavier)); padding: var(--tako-espace-3) var(--tako-espace-4); }
+  .bulle__suggestion, .bulle__autres { min-height: var(--tako-cible); }
+  .bulle__chapeau, .bulle__profil { min-height: var(--tako-cible); }
+}
+
+/* La console de poche « Takito SYSTEM » (site/js/console.js) : l'interface de la maquette choisie le 02/11, thème ambre, posée
+   sur la dalle 3D à l'arrivée (264 px logiques mis à l'échelle de la dalle), ou plein écran au téléphone sous la bande du bouton. */
+.console-poche { --tk-balayage: .4; }
+.console-poche .tk-reposer { z-index: 3; }
+.console-poche .vue-bas { justify-content: flex-end; padding-right: 20px; }
+.console-poche .vue-bas .tiroir__aide { display: none; }
+/* Plein écran au téléphone : le bouton du haut repose la console, la croix du bas couvrirait le dock. */
+.console-poche[data-plein="oui"] .vue-bas { display: none; }
+.tk-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.tk-ecran { position: fixed; z-index: 2; transform-origin: 0 0; overflow: hidden; isolation: isolate; touch-action: none; user-select: none; -webkit-user-select: none;
+  background: var(--tk-fond); color: var(--tk-encre); border-radius: 10px; font: 15px/1.45 ui-monospace, "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
+  box-shadow: 0 0 22px color-mix(in srgb, var(--tk-encre) 30%, transparent), inset 0 0 30px rgba(0, 0, 0, .65); opacity: 1; transition: opacity .25s ease; }
+.console-poche[data-phase="aller"] .tk-ecran, .console-poche[data-phase="retour"] .tk-ecran { opacity: 0; transition: none; }
+.console-poche[data-plein="oui"] .tk-ecran { border-radius: 0; }
+.tk-ecran::before { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, var(--tk-balayage)) 0 1px, transparent 1px 3px); }
+.tk-ecran[data-balayage="non"]::before { display: none; }
+.tk-ecran::after { content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none; border-radius: inherit;
+  background: radial-gradient(120% 70% at 30% 8%, rgba(255, 255, 255, .16), transparent 40%), radial-gradient(140% 100% at 50% 50%, transparent 60%, rgba(0, 0, 0, .55)), rgba(232, 217, 192, .08); }
+.tk-ecran :focus-visible { outline: 3px solid var(--tk-vif); outline-offset: 2px; }
+.tk-vue { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.tk-vue[hidden] { display: none; }
+.tk-etat { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px 0; font-size: 12px; font-weight: 700; }
+.tk-pile { display: inline-flex; align-items: center; gap: 5px; font-size: 9px; letter-spacing: .05em; }
+.tk-pile svg { width: 24px; height: 12px; fill: currentColor; }
+.tk-verrou { align-items: center; justify-content: center; text-align: center; gap: 6px; }
+.tk-verrou .tk-heure { font-size: 58px; font-weight: 700; color: var(--tk-vif); line-height: 1; }
+.tk-verrou .tk-date { font-size: 13px; }
+.tk-invite { position: absolute; bottom: 42px; left: 0; right: 0; font-size: 12px; opacity: .85; animation: tk-respire 2.4s ease-in-out infinite; }
+.tk-deverrouiller { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; }
+.tk-deverrouiller:focus-visible { opacity: 1; background: transparent; border: 0; outline-offset: -6px; color: transparent; }
+@keyframes tk-respire { 50% { opacity: .4; transform: translateY(-4px); } }
+.tk-horloge { text-align: center; margin-top: 16px; } .tk-horloge b { font-size: 40px; color: var(--tk-vif); } .tk-horloge div { font-size: 12px; }
+.tk-grille { list-style: none; margin: 28px 0 0; padding: 0 10px; display: grid; grid-template-columns: repeat(3, 1fr); row-gap: 20px; }
+.tk-appli { font: inherit; color: var(--tk-encre); background: none; border: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; padding: 4px; border-radius: 12px; width: 100%; }
+.tk-tuile { width: 60px; height: 60px; border-radius: 15px; background: var(--tk-pale); display: grid; place-items: center; }
+.tk-tuile svg, .tk-grand-icone svg { width: 46px; height: 46px; fill: currentColor; }
+.tk-appli small { font-size: 11px; font-weight: 600; }
+.tk-dock { margin: auto 14px 26px; background: color-mix(in srgb, var(--tk-pale) 55%, transparent); border-radius: 18px; display: grid; grid-template-columns: repeat(3, 1fr); padding: 6px; }
+.tk-geste { position: absolute; bottom: 8px; left: 50%; width: 100px; height: 5px; margin-left: -50px; border-radius: 3px; background: var(--tk-encre); border: 0; padding: 0; cursor: pointer; }
+.tk-appli-ouverte { background: var(--tk-fond); overflow: auto; }
+.tk-appli-ouverte.tk-ouvre { animation: tk-ouvre .32s cubic-bezier(.2, .8, .2, 1); }
+.tk-appli-ouverte.tk-ferme { animation: tk-ferme .24s cubic-bezier(.4, 0, .8, .4) reverse forwards; }
+@keyframes tk-ouvre { from { transform: scale(.18); opacity: 0; border-radius: 40px; } to { transform: none; opacity: 1; } }
+/* Un nom distinct recrée l'animation : réutiliser celle déjà terminée ne produit plus la fin qui rend le focus. */
+@keyframes tk-ferme { from { transform: scale(.18); opacity: 0; border-radius: 40px; } to { transform: none; opacity: 1; } }
+.tk-entete { display: flex; align-items: center; gap: 8px; padding: 10px 12px 4px; position: sticky; top: 0; background: var(--tk-fond); z-index: 2; }
+.tk-retour { font: inherit; font-size: 12px; color: var(--tk-fond); background: var(--tk-encre); border: 0; border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+.tk-entete h3 { font-size: 18px; margin: 0; color: var(--tk-vif); }
+.tk-corps { padding: 6px 14px 40px; font-size: 12.5px; }
+.tk-corps p { margin: .5em 0; }
+.tk-corps blockquote { margin: .6em 0; padding: .4em .7em; border-left: 3px solid var(--tk-vif); background: color-mix(in srgb, var(--tk-pale) 35%, transparent); }
+.tk-corps img { width: 100%; border-radius: 8px; display: block; margin: .6em 0; }
+.tk-vignettes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tk-statut { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--tk-pale); color: var(--tk-vif); }
+.tk-action { display: block; text-align: center; margin-top: 10px; padding: 8px; border-radius: 12px; background: var(--tk-vif); color: var(--tk-fond); font-weight: 700; text-decoration: none; }
+.tk-grand-icone { display: grid; place-items: center; background: var(--tk-pale); border-radius: 16px; padding: 24px; margin: .6em 0; } .tk-grand-icone svg { width: 120px; height: 120px; }
+.tk-choix { display: grid; gap: 8px; }
+.tk-bascule { font: inherit; font-size: 12px; text-align: left; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--tk-pale); background: none; color: var(--tk-encre); cursor: pointer; }
+.tk-bascule[aria-pressed="true"] { background: var(--tk-pale); color: var(--tk-vif); }
+@media (prefers-reduced-motion: reduce) { .tk-ecran, .tk-ecran * { animation: none !important; transition: none !important; } }
+html.mouvement-reduit .tk-ecran, html.mouvement-reduit .tk-ecran * { animation: none !important; transition: none !important; }
+
+/* La dernière image du film est le décor final ; aucune nouvelle finition ne change ses pixels. */
+.film-fin { position: absolute; inset: 0; overflow: hidden; background: #000; }
+.film-fin__image { position: absolute; width: 100%; height: 100%; object-fit: cover; }
+.film-fin__ecriture { position: absolute; left: 0; top: 0; transform-origin: 0 0; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;
+  font-family: var(--mt-police-prose); animation: film-ecriture 1.4s linear both; }
+.film-fin__lien { display: flex; align-items: center; justify-content: center; flex: 1; width: 100%; margin: 0; color: #ead9b8; text-align: center; font-size: inherit; line-height: 1.15; text-decoration: none; text-shadow: 0 2px 3px #211306; }
+.film-fin__lien:hover { color: #fff4dc; }
+.film-fin__lien:focus-visible { outline: 5px solid #fff4dc; outline-offset: -5px; }
+.film-fin__ecriture--prete { animation: none; }
+@keyframes film-ecriture { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+@media (prefers-reduced-motion: reduce) { .film-fin__ecriture { animation: none; } }

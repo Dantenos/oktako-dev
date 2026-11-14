@@ -1,0 +1,51 @@
+/* Thème MajorTakito : alias sur la charte versionnée (charte.css, copie conforme de la référence).
+   Pourquoi des alias : le site ne réécrit aucun hexadécimal de marque ; il nomme des rôles propres au portfolio
+   et pointe vers les jetons --tako-*. Seules les teintes de DÉCOR (bois, lampe, ville), absentes de la charte,
+   sont posées ici, une seule fois, et lues aussi par la scène 3D (scene/couleurs.js). */
+:root {
+  /* Rôles de lecture : toujours des jetons sémantiques accessibles. */
+  --mt-fond: var(--tako-fond);
+  --mt-surface: var(--tako-surface);
+  --mt-texte: var(--tako-texte);
+  --mt-texte-doux: var(--tako-texte-secondaire);
+  --mt-texte-discret: var(--tako-texte-discret);
+  --mt-lien: var(--tako-lien);
+  --mt-accent: var(--tako-accent-texte);
+  --mt-bord: var(--tako-bord);
+  --mt-bord-doux: var(--tako-bord-doux);
+  --mt-survol: var(--tako-survol);
+  --mt-police-ui: var(--tako-police-interface);
+  --mt-police-prose: var(--tako-police-prose);
+  /* Encres de marque : ornements, papier, grands titres décoratifs ; jamais pour le petit texte. */
+  --mt-marque-rouge: var(--tako-marque-rouge);
+  --mt-marque-marine: var(--tako-marque-marine);
+  --mt-marque-creme: var(--tako-marque-creme);
+
+  /* --- Scène de l'atelier : toujours nocturne, indépendante du thème clair/sombre (comme la scène de la charte). --- */
+  --mt-scene-nuit: var(--tako-scene-fond);
+  --mt-scene-mur: var(--tako-marque-marine);
+  --mt-scene-papier: var(--tako-marque-creme);
+  --mt-scene-encre: var(--tako-pieuvre-encre);
+  --mt-scene-vermillon: var(--tako-marque-rouge);
+  --mt-scene-vermillon-ombre: var(--tako-pieuvre-vermillon-ombre);
+  --mt-scene-laiton: var(--tako-pieuvre-medaillon-bord);
+  --mt-scene-kraft: var(--tako-pieuvre-papier-ombre);
+  --mt-scene-phosphore: var(--tako-pieuvre-iris-clair);
+  --mt-scene-ambre: var(--tako-pieuvre-ambre-clair);
+  --mt-scene-lagon: var(--tako-pieuvre-lagon-clair);
+  /* Teintes de décor propres à l'atelier (hors charte, documentées dans docs/THEME.md). */
+  --mt-scene-bois: #7a4a26;
+  --mt-scene-bois-clair: #a0713f;
+  --mt-scene-lampe: #ffbf7a;
+  /* Dehors, la nuit est BLEUE (pluie, buée de la vitre) : elle tranche avec l'ambre de la pièce. */
+  --mt-scene-ville: #a9c2e6;
+  --mt-scene-ciel-bas: #24324a;
+  --mt-scene-plastique: #bfb294;
+  --mt-scene-metal: #9aa3a8;
+  --mt-scene-rouille: #8a4a2c;
+  --mt-scene-ecran: #1a110a;
+  /* Phosphore ambré des écrans et voile de l'atelier : la pièce reste dans une seule famille chaude
+     (palette resserrée, un seul accent : le vermillon de la marque). */
+  --mt-scene-ecran-lueur: #4a2e14;
+  --mt-scene-voile: #c98a4c;
+}

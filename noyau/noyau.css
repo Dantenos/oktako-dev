@@ -1,0 +1,38 @@
+/* Page isolée du noyau : sobre, lisible, sans dépendre du moteur 3D du portfolio. */
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--mt-fond); color: var(--mt-texte); font: var(--tako-texte-lg)/1.6 var(--mt-police-prose); }
+a { color: var(--mt-lien); }
+:focus-visible { outline: 2px solid var(--mt-lien); outline-offset: 3px; }
+.n-barre { padding: 12px 20px; border-bottom: 1px solid var(--mt-bord-doux); font-family: var(--mt-police-ui); }
+.n-barre a { display: inline-flex; align-items: center; min-height: var(--tako-cible); }
+.n-page { max-width: 860px; margin: 0 auto; padding: 20px; }
+.n-prose { max-width: 68ch; }
+.n-commandes { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0 8px; }
+.n-commandes button { min-height: var(--tako-cible); padding: 0 18px; font: inherit; font-family: var(--mt-police-ui); border-radius: var(--tako-rayon-petit); border: 1px solid var(--mt-bord-doux); background: var(--mt-surface); color: var(--mt-texte); cursor: pointer; }
+.n-commandes button:disabled { opacity: .55; cursor: not-allowed; }
+.n-etat { font-family: var(--mt-police-ui); }
+.n-etat.erreur { color: var(--mt-marque-rouge); font-weight: 600; }
+/* L'écran du noyau fait 800×600 : on le réduit à la largeur disponible sans le déformer. */
+.n-ecran { width: 100%; max-width: 800px; background: var(--mt-scene-nuit); line-height: 0; }
+.n-ecran canvas { width: 100%; height: auto; image-rendering: pixelated; }
+.n-texte { white-space: pre; font: 14px/14px monospace; color: var(--mt-scene-papier); }
+
+/* Le bureau intégré partage le même canevas avec le tube 3D, au même ratio 4:3. */
+body.n-immersion { background: #030608; overflow: hidden; }
+.n-immersion .n-barre, .n-immersion .n-page > :not(.n-ecran) { display: none; }
+/* #jeu enveloppe l'écran depuis les touches mobiles : la règle ci-dessus le masquait, et l'immersion (bureau Rouille du portfolio) n'avait plus d'écran, 0×0 px. */
+.n-immersion .n-page > #jeu { display: block; }
+.n-immersion .n-page { padding: 0; max-width: none; }
+.n-immersion .n-ecran { position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; display: grid; place-items: center; background: #030608; }
+.n-immersion .n-ecran canvas { width: min(100vw, 133.333333vh) !important; height: min(100vh, 75vw) !important; object-fit: contain; image-rendering: auto; }
+/* Le mode 13h occupait un écran 4:3 avec des pixels plus hauts ; conserver toute l'image, sans bandes. */
+.n-ecran canvas[width="320"][height="200"] { aspect-ratio: 4 / 3; object-fit: fill; image-rendering: pixelated; }
+/* L'édition HD n'a pas de grain à garder : 640×400 se lisse vers le même 4:3. */
+.n-ecran canvas[width="640"][height="400"] { aspect-ratio: 4 / 3; object-fit: fill; image-rendering: auto; }
+
+/* Le réglage reste accessible dans l'immersion, sans dépendre du bureau émulé. */
+.n-touches { padding: 8px; background: #10232c; color: #eee; }
+.n-touches button { min-height: 44px; margin: 3px; padding: 6px 10px; }
+.n-touches summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+.n-immersion .n-page > .n-touches { display: block; position: fixed; z-index: 5; right: 8px; top: 64px; max-width: min(36rem, calc(100vw - 16px)); max-height: calc(100vh - 80px); overflow: auto; }

@@ -1,61 +1,422 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" class="sans-js" data-version="533a103ee558">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>Edouard Lantenois — Développeur · Lille</title>
-<meta name="description" content="Je conçois des sites, des outils sur mesure et des automatisations par l'IA pour les indépendants et les petites structures.">
-<style>
-/* Page de dev.oktako.fr, servie en index.html (outils/publier/manifeste-dev.json). Texte relu par l'utilisateur le
-   11/10 : rien ne s'y ajoute. Polices servies par le site lui-même (OFL, licences dans polices/), aucun script. */
-@font-face{font-family:"Archivo";font-style:normal;font-weight:700;font-display:swap;src:url(polices/archivo-bold.woff2) format("woff2")}
-@font-face{font-family:"Archivo";font-style:normal;font-weight:800;font-display:swap;src:url(polices/archivo-extrabold.woff2) format("woff2")}
-@font-face{font-family:"Newsreader";font-style:normal;font-weight:200 800;font-display:swap;src:url(polices/newsreader.woff2) format("woff2")}
-@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:100 800;font-display:swap;src:url(polices/jetbrains-mono.woff2) format("woff2")}
-/* Les jetons de studio.html, pour que les deux sites se reconnaissent. */
-:root{
-  --fond:#F5F1E8; --encre:#211D16; --encre-douce:#4C463B; --trait:#E2D9C6;
-  --laiton:#9A6B18; --laiton-fonce:#5E4522; --sur-laiton:#fff;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --fond:#161309; --encre:#F0EADC; --encre-douce:#C0B7A2; --trait:#302A1B;
-  --laiton:#E0B15A; --laiton-fonce:#C99B45; --sur-laiton:#1a1305;
-}}
-:root[data-theme="dark"]{
-  --fond:#161309; --encre:#F0EADC; --encre-douce:#C0B7A2; --trait:#302A1B;
-  --laiton:#E0B15A; --laiton-fonce:#C99B45; --sur-laiton:#1a1305;
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;background:var(--fond);color:var(--encre);font-family:"Newsreader",Georgia,serif;font-size:17px;line-height:1.55;font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;width:100%;max-width:440px;margin:0 auto;padding:56px 16px 40px}
-.rond{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--encre);color:var(--fond);font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:2rem;letter-spacing:.02em;box-shadow:0 0 0 4px var(--fond),0 0 0 5px var(--laiton)}
-h1{margin:26px 0 0;font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:1.75rem;line-height:1.15;letter-spacing:-.02em}
-.metier{margin:8px 0 0;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.82rem;letter-spacing:.06em;color:var(--laiton)}
-.bio{margin:22px 0 0;max-width:32ch;font-size:1.1rem;color:var(--encre-douce)}
-.rdv{margin-top:32px;width:100%;min-height:52px;display:flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:12px;background:var(--laiton);color:var(--sur-laiton);font-family:"Archivo",system-ui,sans-serif;font-weight:700;font-size:1.05rem;text-decoration:none}
-.rdv:hover{background:var(--laiton-fonce)}
-footer{border-top:1px solid var(--trait);padding:20px 16px 28px;text-align:center}
-.legal{margin:0;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.7rem;line-height:1.8;color:var(--encre-douce)}
-.legal a{color:var(--laiton)}
-/* Sur un écran étroit, le pied se coupe entre ses segments, jamais dans le SIRET : le point médian reste collé au
-   segment qui le précède (espace insécable avant lui), pour qu'aucune ligne ne commence par « · ». */
-.legal span,.legal a{white-space:nowrap}
-:focus-visible{outline:2.5px solid var(--laiton);outline-offset:3px}
-@media (forced-colors:active){.rdv{border:1px solid CanvasText}}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>Édouard Lantenois — Développeur à Lille · MajorTakito</title>
+<meta name="description" content="Développeur à Lille formé à l&#39;École 42 : sites, outils sur mesure et automatisations pour indépendants et petites structures. Stage dès le 2 novembre · puis alternance à partir de janvier 2027, en CDD ou en CDI (apprentissage ou professionnalisation, au rythme de l&#39;École 42).">
+<link rel="canonical" href="https://dev.oktako.fr/">
+<meta property="og:title" content="Édouard Lantenois — Développeur à Lille · MajorTakito">
+<meta property="og:description" content="Développeur à Lille formé à l&#39;École 42 : sites, outils sur mesure et automatisations pour indépendants et petites structures. Stage dès le 2 novembre · puis alternance à partir de janvier 2027, en CDD ou en CDI (apprentissage ou professionnalisation, au rythme de l&#39;École 42).">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dev.oktako.fr/">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="MajorTakito">
+<meta property="og:image" content="https://dev.oktako.fr/affiche/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="L’atelier MajorTakito la nuit : un établi de bois sous une lampe, un écran rétro qui affiche « Édouard Lantenois — MajorTakito », des classeurs, un petit terminal Rouille et un appareil photo, devant une fenêtre mouillée qui donne sur la ville.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b1a2f">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-kaEog0AsPo4/9apXRMvp5eF3zpfBg9ltlJNNm2KUPio=' 'sha256-H/Jxv6B1JCkDln7NFft6B6x5jXwazdPt+hzToKUKY7k='; frame-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; worker-src 'self'; manifest-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="icones/favicon-32.png" type="image/png">
+<link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
+<link rel="stylesheet" href="css/charte.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/site.css">
+<script src="js/amorce.js"></script>
+<script src="js/scene-contenu.js" defer></script>
+<script src="js/courriel.js" defer></script>
+<script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/":"./vendor/three/addons/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://dev.oktako.fr/#personne","name":"Édouard Lantenois","jobTitle":"Développeur","url":"https://dev.oktako.fr/","image":"https://dev.oktako.fr/affiche/og.jpg","address":{"@type":"PostalAddress","addressLocality":"Lille","addressCountry":"FR"},"alumniOf":{"@type":"EducationalOrganization","name":"École 42 Paris"},"knowsLanguage":["fr","en","es"],"sameAs":["https://github.com/Dantenos","https://www.linkedin.com/in/edouard-lantenois"]},{"@type":"ProfessionalService","name":"MajorTakito","url":"https://dev.oktako.fr/","description":"Je conçois des sites, des outils sur mesure et des automatisations par l'IA pour les indépendants et les petites structures.","founder":{"@id":"https://dev.oktako.fr/#personne"},"address":{"@type":"PostalAddress","addressLocality":"Lille","addressCountry":"FR"}}]}</script>
+<script type="module" src="js/app.js"></script>
 </head>
 <body>
-<main>
-  <div class="rond" aria-hidden="true">EL</div>
-  <h1>Edouard Lantenois</h1>
-  <p class="metier">Développeur · Lille</p>
-  <p class="bio">Je conçois des sites, des outils sur mesure et des automatisations par l'IA pour les indépendants et les petites structures.</p>
-  <a class="rdv" href="https://cal.com/oktako/premier-echange">Prendre rendez-vous</a>
+<a class="evitement" href="#presentation">Aller à la présentation</a>
+<header class="barre">
+  <a class="barre__marque" href="#accueil"><span class="barre__logo" aria-hidden="true"></span><span><strong>MajorTakito</strong><span class="barre__nom"> · Édouard Lantenois</span></span></a>
+  <nav class="barre__nav" aria-label="Rubriques"><ul><li><a href="#qui-suis-je" data-destination="qui-suis-je">Qui suis-je</a></li><li><a href="#creations" data-destination="creations">Créations</a></li><li><a href="#services" data-destination="services">Services</a></li><li><a href="#carnet" data-destination="carnet">Carnet</a></li><li><a href="#jouer" data-destination="jouer">Rouille</a></li><li><a href="#contact" data-destination="contact">Contact</a></li></ul></nav>
+  <a class="barre__ecrire" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-courriel-nom="Écrire à ">Écrire</a>
+  <div class="barre__reglages" role="group" aria-label="Réglages de la scène">
+    <button type="button" class="reglage" data-reglage="mouvement" aria-pressed="true">Animations</button>
+    <button type="button" class="reglage" data-reglage="effets" aria-pressed="true" title="Pluie, grain et vapeur à l'écran : ils se coupent ici. Le temps qu'il fait se choisit dans le ciel.">Effets</button>
+    <button type="button" class="reglage" data-reglage="son" aria-pressed="false" title="Son d'ambiance, coupé par défaut ; au premier clic, un pack HD de 344 Ko se télécharge (effets du tiroir, de la radio, de la clé et de l'objectif) ; puis la musique d'atelier se charge morceau par morceau (4,1 Mo au total, par la radio)">Son</button>
+    <button type="button" class="reglage" id="pieuvre-question" title="Pose-moi une question" aria-label="Pose-moi une question" data-pieuvre-question aria-haspopup="dialog" hidden>?</button>
+  </div>
+</header>
+
+<section id="accueil" class="piece" aria-label="L'atelier MajorTakito">
+  <div class="piece__repli" aria-hidden="true"><div class="repli__fenetre"></div><div class="repli__lampe"></div><div class="repli__bureau"></div></div>
+  <div class="piece__scene" id="scene"></div>
+  <p class="piece__alt" id="scene-description">Illustration interactive : un établi de bois, la nuit, à Lille, devant une fenêtre mouillée par la pluie. Le bureau est rangé en quatre zones : à gauche, mon travail (le petit terminal Rouille, les classeurs, les dossiers, le carnet sous la lampe) ; au centre, me découvrir (un écran rétro qui affiche « Édouard Lantenois — MajorTakito », la fiche du parcours, la carte des compétences) ; à droite, une pause (une tasse de café et une carte de visite sur son plateau) et me contacter (une lettre). Derrière, un casier à tiroirs, dont celui des objectifs, et son appareil photo, une radio, une rangée de livres ; aux murs, des tableaux. Sous le plateau, à droite, le caisson du bureau a deux grands tiroirs : celui du haut range d’autres objectifs, celui du bas a une serrure. Chaque objet ouvre une rubrique, la tasse propose un café, le tiroir montre des objectifs ; les mêmes rubriques sont dans le menu et dans la présentation.</p>
+  <div class="points" id="points" role="group" aria-label="Objets du bureau"><button type="button" class="point" data-objet="ecran" data-destination="qui-suis-je" aria-label="Qui suis-je — L&#39;écran"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Qui suis-je</strong><span>L&#39;écran</span></span></button><button type="button" class="point" data-objet="dossiers" data-destination="creations" aria-label="Mes créations — Les dossiers"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Mes créations</strong><span>Les dossiers</span></span></button><button type="button" class="point" data-objet="carnet" data-destination="carnet" aria-label="Carnet de fabrication — Le carnet"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Carnet de fabrication</strong><span>Le carnet</span></span></button><button type="button" class="point" data-objet="terminal" data-destination="jouer" aria-label="Rouille, mon noyau — Le petit terminal Rouille"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Rouille, mon noyau</strong><span>Le petit terminal Rouille</span></span></button><button type="button" class="point" data-objet="lettre" data-destination="contact" aria-label="Contact — La lettre"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Contact</strong><span>La lettre</span></span></button><button type="button" class="point" data-objet="appareil" data-destination="creations" data-fiche="cle-et-cadre" aria-label="Créer des images — L&#39;appareil photo"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Créer des images</strong><span>L&#39;appareil photo</span></span></button><button type="button" class="point" data-objet="competences" data-destination="competences" aria-label="Toutes mes compétences — La carte"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Toutes mes compétences</strong><span>La carte</span></span></button><button type="button" class="point" data-objet="parcours" data-destination="parcours" aria-label="Mon parcours — La fiche"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Mon parcours</strong><span>La fiche</span></span></button><button type="button" class="point" data-objet="radio" data-action="radio" aria-label="Changer de station — La radio"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Changer de station</strong><span>La radio</span></span></button><button type="button" class="point" data-objet="console" data-action="console" aria-label="Mes jeux — La console de poche"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Mes jeux</strong><span>La console de poche</span></span></button><button type="button" class="point" data-objet="caisson" data-action="caisson" aria-label="Les tiroirs — Sous le bureau"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Les tiroirs</strong><span>Sous le bureau</span></span></button><button type="button" class="point" data-objet="tiroir:objectifs2" data-action="tiroir2" aria-label="Ouvrir le tiroir — Le tiroir du caisson"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Ouvrir le tiroir</strong><span>Le tiroir du caisson</span></span></button><button type="button" class="point" data-objet="fisheye" data-action="fisheye" aria-label="Regarder dedans — Un objectif ultra grand angle"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Regarder dedans</strong><span>Un objectif ultra grand angle</span></span></button><button type="button" class="point" data-objet="tiroir:surprise" data-action="surprise" aria-label="Tiens, un tiroir — Un tiroir sans étiquette"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Tiens, un tiroir</strong><span>Un tiroir sans étiquette</span></span></button><button type="button" class="point" data-objet="tiroir:objectifs" data-action="tiroir" aria-label="Ouvrir le tiroir — Le tiroir des objectifs"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Ouvrir le tiroir</strong><span>Le tiroir des objectifs</span></span></button><button type="button" class="point" data-objet="tiroir:secret" data-action="secret" aria-label="Tiens, une serrure — Un tiroir à serrure"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Tiens, une serrure</strong><span>Un tiroir à serrure</span></span></button><button type="button" class="point" data-objet="tasse" data-tasse aria-label="Un café ? — La tasse de café"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>Un café ?</strong><span>La tasse de café</span></span></button><a class="point" data-objet="cadre:travail" data-lien href="https://github.com/Dantenos/factarena" target="_blank" rel="noopener" aria-label="FactArena"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>FactArena</strong><span>Le tableau</span></span></a><a class="point" data-objet="cadre:doont" data-lien href="#jouer" aria-label="DOONT_Rouille, dans Rouille"><span class="point__rond" aria-hidden="true"></span><span class="point__etiquette" aria-hidden="true"><strong>DOONT_Rouille, dans Rouille</strong><span>Le tableau</span></span></a><span class="zone" data-zone="decouvrir" data-cache="true">Me découvrir</span><span class="zone" data-zone="travail" data-cache="true">Mon travail</span><span class="zone" data-zone="pause" data-cache="true">Une pause</span><span class="zone" data-zone="contact" data-cache="true">Me contacter</span></div>
+  <p class="clin" id="clin" role="status" hidden></p>
+  <button type="button" class="pieuvre-psst" id="pieuvre-psst" aria-label="La mini-pieuvre vous fait signe : lui poser une question" hidden>Psst…</button>
+  <div class="intro tako-carte" id="intro">
+    <p class="intro__sur">MajorTakito · Lille, après la pluie</p>
+    <h1>Édouard Lantenois</h1>
+    <p class="intro__metier">Développeur · formé à l’École 42</p>
+    <p class="intro__dispo"><span class="intro__voyant" aria-hidden="true"></span>Stage dès le 2 novembre · puis alternance à partir de janvier 2027, en CDD ou en CDI (apprentissage ou professionnalisation, au rythme de l&#39;École 42)</p>
+    <p class="intro__accroche">Je conçois des sites, des outils sur mesure et des automatisations par l&#39;IA pour les indépendants et les petites structures.</p>
+    <nav class="intro__portes" aria-label="Que cherchez-vous ?"><a class="porte" href="#qui-suis-je" data-porte="recrute"><strong>Je recrute</strong><span>profil, disponibilité et CV</span></a><a class="porte" href="#services" data-porte="projet"><strong>J&#39;ai un projet</strong><span>services sur devis</span></a></nav>
+    <div class="intro__actions">
+      <button type="button" class="tako-bouton tako-bouton--principal" id="explorer">Entrer dans l’atelier</button>
+      <a class="tako-bouton" href="cv.html" id="intro-cv">Voir le CV</a>
+      <a class="tako-bouton" href="#presentation" id="voir-presentation">Voir la présentation</a>
+      <button type="button" class="intro__lien"  data-pieuvre-question aria-haspopup="dialog" hidden>Une question ?</button>
+    </div>
+    <p class="intro__contact"><a href="#creations">Mes créations</a> · <a class="" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-courriel-texte>contact [arobase] oktako.fr</a></p>
+  </div>
+  <div class="ciel-choix" id="ciel-choix" role="group" aria-label="Changer le ciel derrière la fenêtre"><button type="button" class="ciel-choix__vignette" data-ciel-ambiance="nuit" aria-pressed="false"><img src="cadres/ciel-nuit.webp" alt="" width="96" height="54" decoding="async"><span>Nuit</span></button><button type="button" class="ciel-choix__vignette" data-ciel-ambiance="jour" aria-pressed="false"><img src="cadres/ciel-jour.webp" alt="" width="96" height="54" decoding="async"><span>Jour</span></button><button type="button" class="ciel-choix__vignette" data-ciel-ambiance="doree" aria-pressed="false"><img src="cadres/ciel-doree.webp" alt="" width="96" height="54" decoding="async"><span>Doré</span></button><button type="button" class="ciel-choix__vignette" data-ciel-ambiance="crepuscule" aria-pressed="false"><img src="cadres/ciel-crepuscule.webp" alt="" width="96" height="54" decoding="async"><span>Crépuscule</span></button>
+  <div class="ciel" id="ciel">
+    <button type="button" class="ciel-choix__vignette ciel__ouvrir" id="ciel-ouvrir" aria-expanded="false" aria-controls="ciel-panneau"><span class="ciel__picto" aria-hidden="true">☁</span><span>Météo</span></button>
+    <div class="ciel__panneau" id="ciel-panneau" hidden>
+      <div class="ciel__ligne" role="group" aria-label="Météo"><button type="button" data-ciel-meteo="auto" aria-pressed="true">Auto</button><button type="button" data-ciel-meteo="degage" aria-pressed="false"><span aria-hidden="true">☀</span> Dégagé</button><button type="button" data-ciel-meteo="nuages" aria-pressed="false"><span aria-hidden="true">☁</span> Nuages</button><button type="button" data-ciel-meteo="pluie" aria-pressed="false"><span aria-hidden="true">☂</span> Pluie</button><button type="button" data-ciel-meteo="averse" aria-pressed="false">Averse</button><button type="button" data-ciel-meteo="orage" aria-pressed="false"><span aria-hidden="true">ϟ</span> Orage</button><button type="button" data-ciel-meteo="brouillard" aria-pressed="false"><span aria-hidden="true">≋</span> Brouillard</button><button type="button" data-ciel-meteo="neige" aria-pressed="false"><span aria-hidden="true">❄</span> Neige</button></div>
+      <div class="ciel__ligne" role="group" aria-label="Moment de la journée"><button type="button" data-ciel-ambiance="auto" aria-pressed="true">Selon l’heure</button></div>
+      <p class="ciel__etat" id="ciel-etat"></p>
+      
+      <p class="ciel__note">Rien ne quitte la page : l'heure vient de votre appareil, la météo est simulée et change toutes les 4 min 20 s.</p>
+    </div>
+  </div>
+</div>
+  <p class="piece__aide" id="aide" hidden>Glisser : regarder · Double-clic : recentrer · Échap : revenir</p>
+  <button type="button" class="tako-bouton piece__retour-intro" id="retour-intro" hidden>Présentation</button>
+  <button type="button" class="tako-bouton piece__recentrer" id="recentrer" hidden>Recentrer</button>
+  <button type="button" class="tako-bouton piece__montrer" id="montrer" aria-label="Montrer ce qui se clique" hidden>Montrer</button>
+  <button type="button" class="tako-bouton piece__remonter" id="remonter" hidden><span aria-hidden="true">↑</span> Remonter au bureau</button>
+</section>
+
+<main id="presentation" tabindex="-1">
+  <div class="presentation__tete">
+    <p class="rubrique__sur">Présentation</p>
+    <p class="presentation__chapo"><strong>Édouard Lantenois</strong>, développeur à Lille. Formé à l&#39;École 42 (tronc commun validé en septembre 2026), je conçois sous la marque MajorTakito des sites, des outils sur mesure et des automatisations.</p>
+    <p class="presentation__dispo">Stage dès le 2 novembre · puis alternance à partir de janvier 2027, en CDD ou en CDI (apprentissage ou professionnalisation, au rythme de l&#39;École 42) · <a href="cv.html">CV imprimable</a> · <a href="#services">Services sur devis</a> · <a href="https://ko-fi.com/majortakito" rel="noopener">M&#39;offrir un café</a></p>
+    <nav class="sommaire-rubriques" aria-label="Rubriques de la présentation"><ul><li><a href="#qui-suis-je">Qui suis-je</a></li><li><a href="#parcours">Mon parcours</a></li><li><a href="#competences">Ce que je sais faire</a></li><li><a href="#creations">Mes créations</a></li><li><a href="#services">Services</a></li><li><a href="#carnet">Carnet de fabrication</a></li><li><a href="#jouer">Rouille, mon noyau</a></li><li><a href="#contact">Contact</a></li></ul></nav>
+  </div>
+  
+<section id="qui-suis-je" class="rubrique" aria-labelledby="t-qui">
+  <p class="rubrique__sur">L'écran</p>
+  <h2 id="t-qui">Qui suis-je</h2>
+  <div class="dispo tako-carte">
+    <p class="dispo__texte"><strong>Stage dès le 2 novembre · puis alternance à partir de janvier 2027, en CDD ou en CDI (apprentissage ou professionnalisation, au rythme de l&#39;École 42).</strong></p>
+    <p class="dispo__actions"><a class="tako-bouton bouton--plein" href="cv.html">Voir le CV imprimable</a> <a class="tako-bouton" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-objet="Proposition de stage ou d&#39;alternance" data-corps="Bonjour,
+
+Stage ou alternance : 
+Les missions : 
+L&#39;entreprise : 
+Le lieu ou le télétravail : 
+
+">Proposer un stage ou une alternance</a></p>
+  </div>
+  <div class="prose"><p>Développeur, j&#39;écris du C, du C++, du Python et du TypeScript. À l&#39;École 42, j&#39;ai construit un shell Unix, un serveur HTTP et une infrastructure Docker, puis j&#39;ai été le tech lead de FactArena, un projet d&#39;équipe à cinq dont j&#39;ai écrit le service d&#39;IA.</p><p>Sous la marque MajorTakito, je fabrique aussi mes propres outils : une organisation d&#39;agents de code tenue par des tests de mutation, un moteur commercial en Rust, et l&#39;atelier que vous visitez.</p></div>
+  <h3>Parcours</h3>
+  <ol class="frise"><li><span class="frise__date">2024 – 2026</span><span class="frise__titre">École 42 Paris</span><span class="frise__detail">Tronc commun validé en septembre 2026, cursus préparant le titre RNCP niveau 6.</span></li><li><span class="frise__date">janvier – juillet 2023</span><span class="frise__titre">Chef de projet digital · Metagellan / Web3Lille</span><span class="frise__detail">Coordination des équipes créatives et techniques, suivi des livrables.</span></li><li><span class="frise__date">2022</span><span class="frise__titre">Diplôme de l&#39;ESJ Lille</span><span class="frise__detail">Option bimédia, titre RNCP niveau 6, mention bien.</span></li><li><span class="frise__date">2017 – 2024</span><span class="frise__titre">Presse régionale</span><span class="frise__detail">Le Télégramme, La Voix du Nord, Le Dauphiné Libéré et Le Progrès : rédacteur presse écrite et web. Photo reporter pour le journal L&#39;Union. Rédaction, reportage, photo et vidéo. Vérification des sources, synthèse, respect du bouclage.</span></li><li><span class="frise__date">2014</span><span class="frise__titre">Licence Histoire de l&#39;Art et du Patrimoine · Université de Reims</span></li><li><span class="frise__date"></span><span class="frise__titre">Une année parcours Langues appliquées / Histoire · Sorbonne</span></li></ol>
+  <h3>Pratique technique</h3>
+  <dl class="pratique"><div><dt>École 42</dt><dd>C · C++ · Python · TypeScript · SQL</dd></div><div><dt>Backend</dt><dd>FastAPI · NestJS · API REST · SSE · PostgreSQL</dd></div><div><dt>Outils</dt><dd>Git · Linux · Bash · Docker/Compose · nginx</dd></div><div><dt>En cours</dt><dd>Rust · Go · .NET à venir</dd></div></dl>
+  <p class="qui__competences"><a href="#parcours">Mon parcours</a> · <a href="#competences">Ce que je sais faire</a></p>
+  <p class="note">Français natif · Anglais C1 · Espagnol B1</p>
+</section>
+  
+<section id="parcours" class="rubrique parcours" aria-labelledby="t-parcours">
+  <p class="rubrique__sur">La fiche</p>
+  <h2 id="t-parcours">Mon parcours</h2>
+  <p class="parcours__chapo">Du plus récent au plus ancien.</p>
+  <ol class="jalons" data-parcours>
+    <li class="jalon"><p class="jalon__annee">2026</p><h3 class="jalon__titre">MajorTakito, mon atelier</h3><p class="jalon__phrase">Je conçois et je vends des sites, des outils et des automatisations (micro-entreprise).</p><p class="jalon__preuve"><a href="https://studio.oktako.fr/studio.html" rel="noopener">Clé &amp; Cadre</a></p></li>
+    <li class="jalon"><p class="jalon__annee">Novembre 2024</p><h3 class="jalon__titre">42 Paris</h3><p class="jalon__phrase">Formation de développeur, rentrée le 4 novembre 2024.</p><p class="jalon__preuve"><a href="https://github.com/Dantenos/factarena" rel="noopener">FactArena, projet d&#39;équipe à 42</a></p></li>
+    <li class="jalon"><p class="jalon__annee">janvier 2023 – juillet 2023</p><h3 class="jalon__titre">Chef de projet digital · Metagellan / Web3Lille</h3><p class="jalon__phrase">Coordination des équipes créatives et techniques.</p></li>
+    <li class="jalon"><p class="jalon__annee">2022</p><h3 class="jalon__titre">Diplôme de l&#39;ESJ Lille</h3><p class="jalon__phrase">Option bimédia, titre RNCP niveau 6.</p></li>
+    <li class="jalon"><p class="jalon__annee">2017 – 2024</p><h3 class="jalon__titre">Presse régionale</h3><p class="jalon__phrase">Le Télégramme, La Voix du Nord, Le Dauphiné Libéré et Le Progrès : rédacteur presse écrite et web. Photo reporter pour le journal L&#39;Union. Rédaction, reportage, photo et vidéo.</p></li>
+  </ol>
+</section>
+  
+<section id="competences" class="rubrique competences" aria-labelledby="t-competences">
+  <p class="rubrique__sur">La carte</p>
+  <h2 id="t-competences">Ce que je sais faire</h2>
+  <ul class="savoirs" data-competences>
+    <li class="savoir"><h3 class="savoir__libelle">Python et Rust</h3><p class="savoir__phrase">Des services et des outils qui tournent chaque jour sur mon serveur.</p><p class="savoir__preuves"><a href="https://github.com/Dantenos/factarena" rel="noopener">FactArena (Python, dépôt public)</a></p></li>
+    <li class="savoir"><h3 class="savoir__libelle">Sites et interfaces web</h3><p class="savoir__phrase">HTML, CSS, JavaScript, three.js pour ce bureau, React pour FactArena.</p><p class="savoir__preuves">Ce site · <a href="https://github.com/Dantenos/factarena" rel="noopener">FactArena</a></p></li>
+    <li class="savoir"><h3 class="savoir__libelle">Linux et serveur</h3><p class="savoir__phrase">Un serveur que j&#39;administre : systemd, Caddy, sauvegardes, mises en ligne.</p></li>
+    <li class="savoir"><h3 class="savoir__libelle">IA appliquée</h3><p class="savoir__phrase">Recherche sourcée (RAG) et agents de code encadrés par des tests.</p><p class="savoir__preuves"><a href="https://github.com/Dantenos/factarena" rel="noopener">FactArena</a></p></li>
+    <li class="savoir"><h3 class="savoir__libelle">Tests et qualité</h3><p class="savoir__phrase">Une règle n&#39;existe que si un test la vérifie ; tests de mutation pour vérifier les tests.</p></li>
+    <li class="savoir"><h3 class="savoir__libelle">Produit et vente</h3><p class="savoir__phrase">Une offre en ligne, ses prix, ses devis et ses mentions légales.</p><p class="savoir__preuves"><a href="https://studio.oktako.fr/studio.html" rel="noopener">Clé &amp; Cadre</a></p></li>
+    <li class="savoir"><h3 class="savoir__libelle">Avant le code</h3><p class="savoir__phrase">Presse régionale de 2017 à 2024 : rédaction, reportage, photo et vidéo. En 2023, six mois de chef de projet digital dans une start-up.</p></li>
+  </ul>
+</section>
+  
+<section id="creations" class="rubrique" aria-labelledby="t-creations">
+  <p class="rubrique__sur">Les dossiers</p>
+  <h2 id="t-creations">Mes créations</h2>
+  <aside class="une tako-carte" aria-labelledby="une-titre">
+    <p class="une__sur">La preuve principale</p>
+    <h3 id="une-titre">FactArena</h3>
+    <p>FactArena est le projet où l&#39;on voit le mieux comment je travaille : architecture d&#39;une application à plusieurs services, IA tenue par des sources, et une équipe de cinq à coordonner.</p>
+    <p class="une__equipe">ft_transcendence · École 42 · projet d&#39;équipe à cinq · tech lead. Un projet d&#39;équipe : chacun a sa part, vérifiable dans l&#39;historique git du dépôt public.</p>
+    <p class="une__actions"><a class="tako-bouton bouton--plein" href="#creations-factarena">Lire la fiche FactArena</a> <a class="tako-bouton" href="https://github.com/Dantenos/factarena" rel="noopener">Dépôt GitHub</a></p>
+  </aside>
+  <p class="prose creations__intro">Projets d'école, outils personnels et un service en ligne. Le badge dit où en est chacun : <strong>démonstration</strong> (réalisé et montrable), <strong>prototype</strong> (fonctionne, pas encore livré à d'autres) ou <strong>service confirmé</strong> (offre publique en ligne). Les explorations sans preuve ne sont pas affichées.</p>
+  <ul class="sommaire" aria-label="Toutes les fiches">
+    <li><a class="sommaire__lien" href="#creations-factarena"><span class="sommaire__titre">FactArena</span><span class="tako-badge statut statut--prototype">prototype</span><span class="sommaire__sous">ft_transcendence · École 42 · projet d&#39;équipe à cinq · tech lead</span><span class="sommaire__resume">Jeu multijoueur de vérification des faits : les joueurs regardent de courtes vidéos virales, misent des crédits virtuels et jugent « fait » ou « faux ». J&#39;étais le tech lead et l&#39;architecte du projet, et j&#39;ai écrit son service d&#39;IA.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
+    <li><a class="sommaire__lien" href="#creations-oktako-agents"><span class="sommaire__titre">MajorTakito, organisation d&#39;agents de code</span><span class="tako-badge statut statut--prototype">prototype</span><span class="sommaire__sous">Projet personnel · conception, architecture et garde-fous</span><span class="sommaire__resume">Un coordinateur découpe le travail en lots et le confie à des agents de code (Claude Code, Codex), jusqu&#39;à quinze en parallèle, chacun isolé dans sa propre copie du dépôt. J&#39;en conçois l&#39;architecture, les règles et les tests. Outil interne, non public.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
+    <li><a class="sommaire__lien" href="#creations-moteur-commercial"><span class="sommaire__titre">Moteur commercial de MajorTakito</span><span class="tako-badge statut statut--prototype">prototype</span><span class="sommaire__sous">Rust · devis, preuves, prospection</span><span class="sommaire__resume">Outil interne en Rust qui prépare devis, preuves et prospection, couvert par plus de 2 000 tests automatisés.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
+    <li><a class="sommaire__lien" href="#creations-rouille"><span class="sommaire__titre">Rouille</span><span class="tako-badge statut statut--demo">démonstration</span><span class="sommaire__sous">Noyau i686 de loisir et petit bureau rétro, en Rust</span><span class="sommaire__resume">Un noyau no_std qui démarre en mode protégé 32 bits sur un bureau original : fenêtres, bloc-notes en mémoire, démineur, horloge CMOS. Un terrain d&#39;essai, pas un produit.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
+    <li><a class="sommaire__lien" href="#creations-webserv"><span class="sommaire__titre">Webserv</span><span class="tako-badge statut statut--demo">démonstration</span><span class="sommaire__sous">C++ · École 42</span><span class="sommaire__resume">Serveur HTTP/1.1 non bloquant : poll(), connexions concurrentes, CGI, upload et configuration.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
+    <li><a class="sommaire__lien" href="#creations-minishell"><span class="sommaire__titre">Minishell</span><span class="tako-badge statut statut--demo">démonstration</span><span class="sommaire__sous">C · École 42</span><span class="sommaire__resume">Shell Unix : analyse syntaxique, processus, pipes, redirections et signaux POSIX.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
+    <li><a class="sommaire__lien" href="#creations-inception"><span class="sommaire__titre">Inception</span><span class="tako-badge statut statut--demo">démonstration</span><span class="sommaire__sous">Docker/Linux · École 42</span><span class="sommaire__resume">Infrastructure multi-conteneurs : nginx/TLS, WordPress, MariaDB et réseaux isolés.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
+    <li><a class="sommaire__lien" href="#creations-cle-et-cadre"><span class="sommaire__titre">Clé &amp; Cadre</span><span class="tako-badge statut statut--service">service confirmé</span><span class="sommaire__sous">Photo et vidéo pour locations courte durée</span><span class="sommaire__resume">Reportage photo, vidéo verticale et texte d&#39;annonce pour locations courte durée, à Lille et en région parisienne.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
+  </ul>
+  <div class="fiches">
+    <article class="fiche tako-carte" id="creations-factarena" aria-labelledby="f-factarena">
+      <header><h3 id="f-factarena">FactArena</h3><span class="tako-badge statut statut--prototype">prototype</span></header>
+      <p class="fiche__sous">ft_transcendence · École 42 · projet d&#39;équipe à cinq · tech lead · 2025–2026</p>
+      <p>Jeu multijoueur de vérification des faits : les joueurs regardent de courtes vidéos virales, misent des crédits virtuels et jugent « fait » ou « faux ». J&#39;étais le tech lead et l&#39;architecte du projet, et j&#39;ai écrit son service d&#39;IA.</p>
+      <ul><li>Service d&#39;IA en Python/FastAPI : schéma pgvector et index HNSW, embeddings Mistral, recherche, streaming SSE des réponses (assistant sourcé et chat libre), modération des messages par modèle, limiteur de débit.</li><li>Corpus sourcé : 1 653 passages livrés avec le dépôt et leurs vecteurs précalculés (fact-checks publiés, articles de vérification, chiffres de l&#39;INSEE, d&#39;Eurostat et de la Banque mondiale), et 54 clips vérifiés à la main.</li><li>Le choix qui tient le projet : le verdict qui fait gagner vient d&#39;un corrigé publié, rangé en base, jamais du modèle. L&#39;IA explique un verdict déjà connu ; elle ne juge pas la partie.</li><li>Côté interface : pages branchées sur la vraie API, écran des amis, historique des parties, retour OAuth 42 et passage responsive.</li></ul>
+      <p class="fiche__technos">Python · FastAPI · pgvector · Mistral · SSE · NestJS · PostgreSQL · Docker</p>
+      <div class="equipe"><h4>L'équipe</h4><p>Un projet d&#39;équipe : chacun a sa part, vérifiable dans l&#39;historique git du dépôt public.</p><ul><li><strong>elanteno</strong> (moi) : tech lead et architecte, service d&#39;IA (Python)</li><li><strong>slario</strong> : DevOps et gestion de projet : Docker Compose, nginx et TLS, intégration continue</li><li><strong>alaroque</strong> : back-end : application NestJS, authentification, boucle de jeu, WebSockets, paris et crédits</li><li><strong>krfranco</strong> : front-end et Product Owner : identité visuelle, thème, pages d&#39;accueil, de profil et de salon</li><li><strong>oztozdem</strong> : front-end temps réel : écran de partie, chat, statistiques, révélation des verdicts</li></ul></div>
+      <p class="fiche__liens"><a href="https://github.com/Dantenos/factarena" rel="noopener">Dépôt GitHub</a></p>
+      <p class="fiche__source">Code public : dépôt GitHub, contributions de chacun dans l&#39;historique git</p>
+      <nav class="fiche__suite" aria-label="Autres fiches">
+        <a href="#creations-cle-et-cadre" rel="prev"><span aria-hidden="true">← </span>Clé &amp; Cadre</a>
+        <a href="#creations">Toutes les créations</a>
+        <a href="#creations-oktako-agents" rel="next">MajorTakito, organisation d&#39;agents de code<span aria-hidden="true"> →</span></a>
+      </nav>
+    </article>
+    <article class="fiche tako-carte" id="creations-oktako-agents" aria-labelledby="f-oktako-agents">
+      <header><h3 id="f-oktako-agents">MajorTakito, organisation d&#39;agents de code</h3><span class="tako-badge statut statut--prototype">prototype</span></header>
+      <p class="fiche__sous">Projet personnel · conception, architecture et garde-fous · 2026</p>
+      <p>Un coordinateur découpe le travail en lots et le confie à des agents de code (Claude Code, Codex), jusqu&#39;à quinze en parallèle, chacun isolé dans sa propre copie du dépôt. J&#39;en conçois l&#39;architecture, les règles et les tests. Outil interne, non public.</p>
+      <ul><li>Mon rôle : architecture, découpage en lots, spécifications et critères d&#39;acceptation, relecture avant fusion, résolution des conflits.</li><li>Chaque règle est prouvée par un test que l&#39;on casse volontairement (tests de mutation) ; plafonds mémoire et verrou de compilation.</li><li>Isolation des agents par le noyau Linux (Landlock, cgroups).</li><li>Principe : la machine prépare, l&#39;humain valide ; rien ne part vers une personne sans un clic.</li></ul>
+      <p class="fiche__technos">Rust · Python · Bash · Git · Linux · Tests de mutation</p>
+      
+      
+      <p class="fiche__source">Outil interne, en usage sur un serveur Linux personnel ; pas de démonstration publique</p>
+      <nav class="fiche__suite" aria-label="Autres fiches">
+        <a href="#creations-factarena" rel="prev"><span aria-hidden="true">← </span>FactArena</a>
+        <a href="#creations">Toutes les créations</a>
+        <a href="#creations-moteur-commercial" rel="next">Moteur commercial de MajorTakito<span aria-hidden="true"> →</span></a>
+      </nav>
+    </article>
+    <article class="fiche tako-carte" id="creations-moteur-commercial" aria-labelledby="f-moteur-commercial">
+      <header><h3 id="f-moteur-commercial">Moteur commercial de MajorTakito</h3><span class="tako-badge statut statut--prototype">prototype</span></header>
+      <p class="fiche__sous">Rust · devis, preuves, prospection · 2026</p>
+      <p>Outil interne en Rust qui prépare devis, preuves et prospection, couvert par plus de 2 000 tests automatisés.</p>
+      
+      <p class="fiche__technos">Rust</p>
+      
+      
+      <p class="fiche__source">Outil interne, non public</p>
+      <nav class="fiche__suite" aria-label="Autres fiches">
+        <a href="#creations-oktako-agents" rel="prev"><span aria-hidden="true">← </span>MajorTakito, organisation d&#39;agents de code</a>
+        <a href="#creations">Toutes les créations</a>
+        <a href="#creations-rouille" rel="next">Rouille<span aria-hidden="true"> →</span></a>
+      </nav>
+    </article>
+    <article class="fiche tako-carte" id="creations-rouille" aria-labelledby="f-rouille">
+      <header><h3 id="f-rouille">Rouille</h3><span class="tako-badge statut statut--demo">démonstration</span></header>
+      <p class="fiche__sous">Noyau i686 de loisir et petit bureau rétro, en Rust · 2026</p>
+      <p>Un noyau no_std qui démarre en mode protégé 32 bits sur un bureau original : fenêtres, bloc-notes en mémoire, démineur, horloge CMOS. Un terrain d&#39;essai, pas un produit.</p>
+      <ul><li>Multiboot, GDT, IDT, PIC, PIT, clavier et souris PS/2, framebuffer Bochs DISPI.</li><li>Allocateur premier ajustement à listes libres coalescées, testé sur l&#39;hôte.</li><li>Rejoué le 22/10/2026 : 25 tests hôte réussis, démarrage observé sous QEMU (-kernel et ISO GRUB).</li></ul>
+      <p class="fiche__technos">Rust · no_std · x86 · QEMU</p>
+      
+      <p class="fiche__liens"><a href="noyau/" rel="noopener">Le démarrer dans votre navigateur</a></p>
+      <p class="fiche__source">Démo jouable sur ce site ; démarrage revérifié le 27/10/2026</p>
+      <nav class="fiche__suite" aria-label="Autres fiches">
+        <a href="#creations-moteur-commercial" rel="prev"><span aria-hidden="true">← </span>Moteur commercial de MajorTakito</a>
+        <a href="#creations">Toutes les créations</a>
+        <a href="#creations-webserv" rel="next">Webserv<span aria-hidden="true"> →</span></a>
+      </nav>
+    </article>
+    <article class="fiche tako-carte" id="creations-webserv" aria-labelledby="f-webserv">
+      <header><h3 id="f-webserv">Webserv</h3><span class="tako-badge statut statut--demo">démonstration</span></header>
+      <p class="fiche__sous">C++ · École 42 · 2024–2026</p>
+      <p>Serveur HTTP/1.1 non bloquant : poll(), connexions concurrentes, CGI, upload et configuration.</p>
+      
+      <p class="fiche__technos">C++ · HTTP · poll()</p>
+      
+      
+      <p class="fiche__source">Projet validé à l&#39;École 42 · code non publié</p>
+      <nav class="fiche__suite" aria-label="Autres fiches">
+        <a href="#creations-rouille" rel="prev"><span aria-hidden="true">← </span>Rouille</a>
+        <a href="#creations">Toutes les créations</a>
+        <a href="#creations-minishell" rel="next">Minishell<span aria-hidden="true"> →</span></a>
+      </nav>
+    </article>
+    <article class="fiche tako-carte" id="creations-minishell" aria-labelledby="f-minishell">
+      <header><h3 id="f-minishell">Minishell</h3><span class="tako-badge statut statut--demo">démonstration</span></header>
+      <p class="fiche__sous">C · École 42 · 2024–2026</p>
+      <p>Shell Unix : analyse syntaxique, processus, pipes, redirections et signaux POSIX.</p>
+      
+      <p class="fiche__technos">C · POSIX</p>
+      
+      
+      <p class="fiche__source">Projet validé à l&#39;École 42 · code non publié</p>
+      <nav class="fiche__suite" aria-label="Autres fiches">
+        <a href="#creations-webserv" rel="prev"><span aria-hidden="true">← </span>Webserv</a>
+        <a href="#creations">Toutes les créations</a>
+        <a href="#creations-inception" rel="next">Inception<span aria-hidden="true"> →</span></a>
+      </nav>
+    </article>
+    <article class="fiche tako-carte" id="creations-inception" aria-labelledby="f-inception">
+      <header><h3 id="f-inception">Inception</h3><span class="tako-badge statut statut--demo">démonstration</span></header>
+      <p class="fiche__sous">Docker/Linux · École 42 · 2024–2026</p>
+      <p>Infrastructure multi-conteneurs : nginx/TLS, WordPress, MariaDB et réseaux isolés.</p>
+      
+      <p class="fiche__technos">Docker · nginx · TLS · MariaDB</p>
+      
+      
+      <p class="fiche__source">Projet validé à l&#39;École 42 · code non publié</p>
+      <nav class="fiche__suite" aria-label="Autres fiches">
+        <a href="#creations-minishell" rel="prev"><span aria-hidden="true">← </span>Minishell</a>
+        <a href="#creations">Toutes les créations</a>
+        <a href="#creations-cle-et-cadre" rel="next">Clé &amp; Cadre<span aria-hidden="true"> →</span></a>
+      </nav>
+    </article>
+    <article class="fiche tako-carte" id="creations-cle-et-cadre" aria-labelledby="f-cle-et-cadre">
+      <header><h3 id="f-cle-et-cadre">Clé &amp; Cadre</h3><span class="tako-badge statut statut--service">service confirmé</span></header>
+      <p class="fiche__sous">Photo et vidéo pour locations courte durée · 2026</p>
+      <p>Reportage photo, vidéo verticale et texte d&#39;annonce pour locations courte durée, à Lille et en région parisienne.</p>
+      
+      <p class="fiche__technos">Photographie · Vidéo · Rédaction</p>
+      
+      <p class="fiche__liens"><a href="https://studio.oktako.fr/" rel="noopener">studio.oktako.fr</a></p>
+      <p class="fiche__source">Offre publique en ligne sur studio.oktako.fr</p>
+      <nav class="fiche__suite" aria-label="Autres fiches">
+        <a href="#creations-inception" rel="prev"><span aria-hidden="true">← </span>Inception</a>
+        <a href="#creations">Toutes les créations</a>
+        <a href="#creations-factarena" rel="next">FactArena<span aria-hidden="true"> →</span></a>
+      </nav>
+    </article>
+  </div>
+</section>
+  
+<section id="services" class="rubrique" aria-labelledby="t-services">
+  <p class="rubrique__sur">L&#39;établi</p>
+  <h2 id="t-services">Services</h2>
+  <p class="prose">Pour les indépendants, les commerces et les petites structures. Pas de forfait affiché : chaque projet commence par un échange, puis un devis écrit.</p>
+  <p class="services__devis"><a data-devis class="tako-bouton bouton--plein" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-objet="Demande de devis" data-corps="Bonjour,
+
+Ce que je veux faire : 
+Pour qui : 
+Pour quand : 
+Ce qui existe déjà : 
+
+">Demander un devis</a></p>
+  <ul class="offres">
+    <li class="offre tako-carte" id="services-stock"><h3>Le stock de votre commerce</h3><p class="offre__tarif">Sur devis</p><p>Vous voulez connaître les quantités en stock aujourd&#39;hui et vérifier qu&#39;une livraison a bien été enregistrée.</p><p><strong>Ce que vous recevez :</strong> Un projet de gestion de stock en bêta : un premier échange pour vérifier votre besoin, à partir d&#39;un prototype de réception et de suivi des lots. L&#39;adaptation aux boutiques reste à éprouver avec vous.</p><p class="offre__preuve">La preuve : <a href="stock/index.html">Essayez une réception : 4 carnets + 6 reçus = 10 en stock</a></p></li>
+    <li class="offre tako-carte" id="services-site"><h3>Votre site</h3><p class="offre__tarif">Sur devis</p><p>Vous voulez un site clair, rapide et sans traceur, qui présente votre activité et se met à jour sans peine.</p><p><strong>Ce que vous recevez :</strong> Un site sur mesure, léger, hébergé simplement, lisible sans JavaScript et sur téléphone.</p><p class="offre__preuve">La preuve : <a href="exemple-sobre/index.html">Un exemple sobre : une page de moins de 6 Ko, sans script ni ressource externe</a></p></li>
+    <li class="offre tako-carte" id="services-outil"><h3>Votre outil sur mesure</h3><p class="offre__tarif">Sur devis</p><p>Une tâche répétée chaque semaine, un tableur qui déborde, un suivi de clients ou de devis à remettre d&#39;aplomb.</p><p><strong>Ce que vous recevez :</strong> Un outil fait pour votre façon de travailler, couvert par des tests, que vous gardez.</p><p class="offre__preuve">La preuve : <a href="stock/index.html">Une livraison vérifiée une seule fois, un stock mis à jour</a></p></li>
+    <li class="offre tako-carte" id="services-automatisation"><h3>Vos automatisations, IA comprise</h3><p class="offre__tarif">Sur devis</p><p>Trier, rechercher, résumer vos documents ou préparer des réponses, sans perdre la main.</p><p><strong>Ce que vous recevez :</strong> Une automatisation encadrée : la machine prépare, vous validez ; les réponses citent leurs sources.</p><p class="offre__preuve">La preuve : <a href="stock/index.html">Recevoir une livraison après vérification : un exemple sans IA, dont vous gardez la validation</a></p></li>
+  </ul>
+  <h3>Comment ça se passe</h3>
+  <ol class="etapes"><li>Vous décrivez votre besoin en quelques lignes.</li><li>Nous en parlons, par écrit ou de vive voix.</li><li>Je vous envoie un devis écrit.</li></ol>
+  <p class="services__devis"><a data-devis class="tako-bouton bouton--plein" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-objet="Demande de devis" data-corps="Bonjour,
+
+Ce que je veux faire : 
+Pour qui : 
+Pour quand : 
+Ce qui existe déjà : 
+
+">Demander un devis</a> <span class="note">Un courriel prérempli s'ouvre dans votre messagerie : rien n'est envoyé sans vous.</span></p>
+</section>
+  
+<section id="carnet" class="rubrique" aria-labelledby="t-carnet">
+  <p class="rubrique__sur">Le carnet</p>
+  <h2 id="t-carnet">Carnet de fabrication</h2>
+  <p class="prose">Ce que j'ai fabriqué, et quand.</p>
+  <ol class="carnet">
+    <li class="carnet__entree" id="carnet-2026-10-30-une-ville-en-3d-derriere-la-fenetre"><p class="carnet__date"><time datetime="2026-10-30">30 oct. 2026</time></p><h3>Une ville en 3D derrière la fenêtre</h3><p>La vue de la fenêtre n&#39;est plus une image à plat : c&#39;est un modèle 3D du centre de Lille (beffroi, Euralille) modélisé dans Blender et précalculé, vu avec la même caméra que la pièce. La lune et les feux d&#39;artifice passent derrière les toits.</p></li>
+    <li class="carnet__entree" id="carnet-2026-10-30-doont-rouille-un-jeu-dans-rouille"><p class="carnet__date"><time datetime="2026-10-30">30 oct. 2026</time></p><h3>DOONT_Rouille : un jeu dans Rouille</h3><p>Un jeu en vue subjective tourne dans le noyau Rouille : six niveaux, lancé depuis son icône sur le bureau. Échap rend le bureau. Il ne démarre qu&#39;au clic.</p></li>
+    <li class="carnet__entree" id="carnet-2026-10-28-la-tasse-et-ko-fi"><p class="carnet__date"><time datetime="2026-10-28">28 oct. 2026</time></p><h3>La tasse et Ko-fi</h3><p>Un clic sur la tasse approche la caméra et la mousse écrit deux propositions : prendre rendez-vous, ou offrir un café via une page Ko-fi. Ce dernier est un simple lien, sans widget ni script de la plateforme. Le même lien est dans la présentation classique.</p></li>
+    <li class="carnet__entree" id="carnet-2026-10-28-un-ciel-qui-suit-l-heure"><p class="carnet__date"><time datetime="2026-10-28">28 oct. 2026</time></p><h3>Un ciel qui suit l&#39;heure</h3><p>Derrière la fenêtre, quatre ambiances précalculées (jour, soir, nuit, pluie). L&#39;heure et le fuseau viennent de l&#39;horloge de votre appareil ; la météo est un tirage local. Aucune requête n&#39;est envoyée à un autre site.</p></li>
+    <li class="carnet__entree" id="carnet-2026-10-22-rouille-demarre-a-nouveau"><p class="carnet__date"><time datetime="2026-10-22">22 oct. 2026</time></p><h3>Rouille démarre à nouveau</h3><p>Rejeu complet de l&#39;archive d&#39;origine avec un nightly daté : 25 tests hôte réussis, noyau compilé, démarrage observé sous QEMU, ISO GRUB produite et démarrée. Un lint clippy récent échoue sur une ligne : noté, pas masqué.</p></li>
+    <li class="carnet__entree" id="carnet-2026-10-22-un-bureau-plutot-qu-une-page"><p class="carnet__date"><time datetime="2026-10-22">22 oct. 2026</time></p><h3>Un bureau plutôt qu&#39;une page</h3><p>Début de l&#39;atelier MajorTakito : une pièce interactive pour présenter mon parcours et mes projets, avec une présentation classique équivalente pour qui préfère lire.</p></li>
+    <li class="carnet__entree" id="carnet-2026-09-tronc-commun-42-valide"><p class="carnet__date"><time datetime="2026-09">sept. 2026</time></p><h3>Tronc commun 42 validé</h3><p>Fin du tronc commun de l&#39;École 42 Paris.</p></li>
+    <li class="carnet__entree" id="carnet-2026-des-agents-des-lots-des-tests-qu-on-casse"><p class="carnet__date">2026</p><h3>Des agents, des lots, des tests qu&#39;on casse</h3><p>Conception de MajorTakito : un coordinateur répartit des lots entre agents de code isolés ; chaque règle est prouvée par un test de mutation. Une trentaine de lots testés et publiés en une journée.</p></li>
+    <li class="carnet__entree" id="carnet-2025-2026-factarena-a-cinq"><p class="carnet__date">2025–2026</p><h3>FactArena, à cinq</h3><p>Tech lead d&#39;une équipe de cinq : un jeu multijoueur de vérification des faits, dont j&#39;ai écrit le service d&#39;IA (recherche sourcée, streaming SSE, modération).</p><p class="carnet__lien"><a href="https://github.com/Dantenos/factarena" rel="noopener">Le dépôt sur GitHub</a></p></li>
+  </ol>
+</section>
+  
+<section id="jouer" class="rubrique" aria-labelledby="t-jouer">
+  <p class="rubrique__sur">Le petit terminal</p>
+  <h2 id="t-jouer">Rouille, mon noyau</h2>
+  <div class="rouille-portes">
+    <button type="button" class="tako-bouton tako-bouton--principal rouille-porte" data-entrer-rouille>Démarrer Rouille</button>
+    <button type="button" class="tako-bouton tako-bouton--principal rouille-porte" data-entrer-rouille data-porte-doont>DOONT_Rouille</button>
+  </div>
+  <p class="note">Le jeu est dans Rouille : Démarrer → DOONT_Rouille. <span class="tactile-seul">DOONT_Rouille se joue au clavier.</span></p>
+  <p class="note">Rien ne se charge avant votre clic (3,6 Mo). <span class="clavier-seul">Échap pour revenir.</span></p>
+  <details class="regles">
+  <summary>Comment ça marche</summary>
+  <h3 id="noyau-rust">Le noyau Rust</h3>
+  <div class="prose">
+    <p>Rouille est mon noyau de loisir, écrit en Rust pour l'architecture i686 (x86 32 bits). Ce qui est réel, revérifié le 27 octobre 2026 :</p>
+    <ul>
+      <li><strong>Démarrage</strong> : un fichier ELF Multiboot sans bibliothèque standard (<code>no_std</code>), chargé à 1 Mio, qui installe sa propre GDT en mode protégé.</li>
+      <li><strong>Mémoire</strong> : un allocateur « premier ajustement » à listes libres coalescées, testé sur l'ordinateur hôte et exercé au démarrage.</li>
+      <li><strong>Interruptions</strong> : IDT, contrôleur PIC et minuterie PIT ; clavier et souris PS/2 pilotés par interruption.</li>
+      <li><strong>Affichage</strong> : le noyau programme lui-même la carte vidéo Bochs DISPI en 800×600 et trouve son framebuffer linéaire sur le bus PCI.</li>
+      <li><strong>Bureau</strong> : fenêtres, bloc-notes en mémoire, démineur 9×9, horloge CMOS et DOONT_Rouille (jeu en vue subjective, rendu à demi-résolution).</li>
+    </ul>
+    <p>Ce qu'il n'a pas : ni processus, ni disque, ni réseau, ni protection mémoire entre applications. C'est un terrain de jeu, pas une frontière de sécurité : rien de MajorTakito ne repose dessus.</p>
+    <p><a href="noyau/">Le noyau dans le navigateur (page dédiée)</a> — il ne démarre que sur votre clic, environ 3,6 Mo à charger (taille non compressée).</p>
+    <p><a href="#creations-rouille">Fiche du projet Rouille</a></p>
+  </div>
+  <figure class="capture"><img src="assets/rouille-bureau-qemu.png" width="800" height="600" loading="lazy" alt="Capture du bureau Rouille démarré dans QEMU le 22 octobre 2026 : fenêtres « Bloc-notes » et « À propos » sur fond bleu-vert, barre des tâches avec horloge."><figcaption>Bureau Rouille démarré sous QEMU, le 22 octobre 2026.</figcaption></figure>
+</details>
+</section>
+  
+<section id="contact" class="rubrique" aria-labelledby="t-contact">
+  <p class="rubrique__sur">La lettre</p>
+  <h2 id="t-contact">Contact</h2>
+  <p class="prose">Un projet, un stage ou une alternance, une question : écrivez-moi, je réponds moi-même. Pour un devis, trois lignes suffisent : ce que vous voulez faire, pour qui, et pour quand.</p>
+  <ul class="contact__adresses"><li><span class="courriel"><a class="tako-bouton tako-bouton--principal" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-courriel-texte>contact [arobase] oktako.fr</a> <button type="button" class="tako-bouton courriel__copier" data-courriel-copier="390e061b171ef0cbfdf2d4c6c5da92a5b8" hidden>Copier</button></span></li><li><span class="courriel"><a class="tako-bouton tako-bouton--principal" href="#contact" data-courriel="3600061b1313ebe2e1b7c5c3c1c0ddb1ae91bfb2878498d561667d" data-courriel-texte>lantenois.edouard [arobase] gmail.com</a> <button type="button" class="tako-bouton courriel__copier" data-courriel-copier="3600061b1313ebe2e1b7c5c3c1c0ddb1ae91bfb2878498d561667d" hidden>Copier</button></span></li></ul>
+  <p class="contact__principal"><a class="tako-bouton bouton--plein" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-objet="Demande de devis" data-corps="Bonjour,
+
+Ce que je veux faire : 
+Pour qui : 
+Pour quand : 
+Ce qui existe déjà : 
+
+">Demander un devis</a> <a class="tako-bouton" href="https://cal.com/oktako/premier-echange" rel="noopener">Prendre rendez-vous</a></p>
+  <p class="contact__question"><button type="button" class="tako-bouton"  data-pieuvre-question aria-haspopup="dialog" hidden>Une question ?</button></p>
+  <ul class="contact__liens"><li><a href="https://github.com/Dantenos" rel="noopener">GitHub</a></li><li><a href="https://www.linkedin.com/in/edouard-lantenois" rel="noopener">LinkedIn</a></li><li><a href="https://studio.oktako.fr/" rel="noopener">Clé &amp; Cadre</a></li><li><a href="cv.html">CV imprimable</a></li></ul>
+</section>
 </main>
-<footer>
-  <p class="legal"><span data-profil="nom">Edouard LANTENOIS EI</span>&nbsp;· SIRET&nbsp;<span data-profil="siret">130 811 144 00018</span>&nbsp;· <a href="mentions-legales.html">Mentions légales</a></p>
+
+<footer class="pied">
+  <ul class="pied__adresses" aria-label="Écrire"><li><span class="courriel"><a class="" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-courriel-texte>contact [arobase] oktako.fr</a> <button type="button" class="tako-bouton courriel__copier" data-courriel-copier="390e061b171ef0cbfdf2d4c6c5da92a5b8" hidden>Copier</button></span></li><li><span class="courriel"><a class="" href="#contact" data-courriel="3600061b1313ebe2e1b7c5c3c1c0ddb1ae91bfb2878498d561667d" data-courriel-texte>lantenois.edouard [arobase] gmail.com</a> <button type="button" class="tako-bouton courriel__copier" data-courriel-copier="3600061b1313ebe2e1b7c5c3c1c0ddb1ae91bfb2878498d561667d" hidden>Copier</button></span></li></ul>
+  <p>Edouard LANTENOIS EI · SIRET 130 811 144 00018 · <a href="mentions-legales.html">Mentions légales</a> · Aucun cookie, aucune requête vers un autre site.</p>
+  <p>Décor : création originale, modélisée et éclairée dans Blender par un script versionné, lumière précalculée. Rendu : three.js (MIT). L’atelier 3D pèse 7,1 Mo sur ordinateur, 6,0 Mo sur téléphone (taille non compressée), chargés après la page, avec une seule ambiance : celle de votre heure. Première visite, page et copie hors ligne comprises : 8,3 Mo au plus. Chacune des 3 autres ambiances (1,9 Mo au plus) ne se télécharge que si le ciel change ou si vous la choisissez ; le noyau Rouille (3,6 Mo), seulement sur votre clic ; les vidéos du tiroir des objectifs, seulement au survol de leur objectif.</p>
 </footer>
+
+<nav class="onglets" aria-label="Rubriques (mobile)"><ul><li><a href="#qui-suis-je" data-destination="qui-suis-je">Parcours</a></li><li><a href="#creations" data-destination="creations">Projets</a></li><li><a href="#services" data-destination="services">Services</a></li><li><a href="#carnet" data-destination="carnet">Carnet</a></li><li><a href="#jouer" data-destination="jouer">Rouille</a></li><li><a href="#contact" data-destination="contact">Contact</a></li></ul></nav>
+
+<aside class="panneau" id="panneau" role="dialog" aria-modal="false" aria-labelledby="panneau-titre" hidden>
+  <div class="panneau__tete">
+    <span class="panneau__poignee" aria-hidden="true"></span>
+    <p class="panneau__objet" id="panneau-objet"></p>
+    <button type="button" class="tako-bouton panneau__fermer" id="panneau-fermer">Retour au bureau <kbd class="clavier-seul">Échap</kbd></button>
+  </div>
+  <div class="panneau__corps" id="panneau-corps"></div>
+</aside>
+<template id="cafe-propositions" data-film="film/film.json" data-rendez-vous-libelle="Prendre rendez-vous" data-sucre-invite="Un sucre ?" data-sucre-libelle="Ajouter un sucre : affiche la proposition de pourboire"><a class="tasse__proposition" href="https://cal.com/oktako/premier-echange" rel="noopener" data-proposition="rendez-vous" hidden>Prendre un café avec moi : 15 min en visio</a><a class="tasse__proposition" href="https://ko-fi.com/majortakito" rel="noopener" data-proposition="pourboire" data-apres-sucre hidden>M&#39;offrir un café</a></template>
+<template id="pied-panneau"><div class="panneau__pied"><a class="tako-bouton tako-bouton--principal" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-courriel-nom="Écrire un courriel à ">Écrire un courriel</a><a class="tako-bouton panneau__suivant" href="#contact" data-suivant>Rubrique suivante</a></div></template>
+<button type="button" class="bulle__bouton" title="Pose-moi une question" aria-label="Pose-moi une question" data-pieuvre-question aria-haspopup="dialog" hidden>?</button><aside class="bulle" id="bulle" role="dialog" aria-modal="false" aria-labelledby="bulle-titre" data-passerelle="" hidden>
+  <div class="bulle__tete"><h2 class="bulle__titre" id="bulle-titre" tabindex="-1">Pose-moi une question</h2><button type="button" class="bulle__fermer" id="bulle-fermer" aria-label="Fermer la bulle"><span aria-hidden="true">×</span></button></div>
+  <p class="bulle__note">Je réponds avec des passages de ce site, mot pour mot. Rien ne sort de votre navigateur.</p>
+  <div class="bulle__profils" role="group" aria-labelledby="bulle-profils-titre"><p class="bulle__groupe" id="bulle-profils-titre">Qui êtes-vous ?</p><div class="bulle__ligne-profils"><button type="button" class="bulle__profil" data-profil="client" aria-pressed="false">Je suis client</button><button type="button" class="bulle__profil" data-profil="investisseur" aria-pressed="false">Je suis investisseur</button><button type="button" class="bulle__profil" data-profil="recruteur" aria-pressed="false">Je recrute</button></div></div>
+  <div class="bulle__suite" id="bulle-suite" hidden>
+    <form class="bulle__form" id="bulle-form"><label class="bulle__etiquette" for="bulle-question">Votre question</label><div class="bulle__ligne"><input class="bulle__champ" id="bulle-question" type="text" maxlength="200" autocomplete="off" enterkeyhint="send"><button type="submit" class="tako-bouton tako-bouton--principal bulle__demander">Demander</button></div></form>
+    <div class="bulle__reponse" id="bulle-reponse" role="status" aria-live="polite" data-cherche="Je fouille…" data-panne="Ma mémoire n&#39;a pas pu se charger. Édouard, lui, répond toujours." data-source="Relire sur le site :" data-autres="Autres questions"></div>
+    <div class="bulle__suggestions"><ul class="bulle__liste" data-groupe="client" hidden><li><button type="button" class="bulle__suggestion" data-bulle-question="Que faites-vous pour un indépendant ?">Que faites-vous pour un indépendant ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Combien coûte un site ?">Combien coûte un site ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Comment se passe un projet ?">Comment se passe un projet ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Faites-vous de l&#39;IA ?">Faites-vous de l&#39;IA ?</button></li></ul><ul class="bulle__liste" data-groupe="investisseur" hidden><li><button type="button" class="bulle__suggestion" data-bulle-question="Quels outils existent déjà ?">Quels outils existent déjà ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quelle est la méthode de travail ?">Quelle est la méthode de travail ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quelle offre est en ligne ?">Quelle offre est en ligne ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Comment les outils sont-ils testés ?">Comment les outils sont-ils testés ?</button></li></ul><ul class="bulle__liste" data-groupe="recruteur" hidden><li><button type="button" class="bulle__suggestion" data-bulle-question="Quelle est sa disponibilité ?">Quelle est sa disponibilité ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quels langages utilise-t-il ?">Quels langages utilise-t-il ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quel est son parcours ?">Quel est son parcours ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="A-t-il un projet d&#39;équipe ?">A-t-il un projet d&#39;équipe ?</button></li></ul></div>
+    <p class="bulle__ecrire"><a class="tako-bouton" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-courriel-nom="Écrire à Édouard : ">Écrire à Édouard</a><span data-groupe="recruteur" hidden> <a class="tako-bouton" href="cv.html">Voir le CV</a></span></p>
+    
+  </div>
+  <fieldset class="bulle__chapeaux" id="bulle-chapeaux" hidden><legend>Mon couvre-chef</legend><div class="bulle__ligne-chapeaux" id="bulle-chapeaux-liste"></div></fieldset>
+</aside>
+<div class="annonce" aria-live="polite" id="annonce"></div>
+<div class="maj" id="maj" role="region" aria-label="Mise à jour du site" aria-live="polite" hidden><p>Une nouvelle version du site est prête. Vos notes sont conservées.</p><button type="button" class="tako-bouton tako-bouton--principal" id="maj-ok">Mettre à jour</button><button type="button" class="tako-bouton" id="maj-plus-tard">Plus tard</button></div>
 </body>
 </html>

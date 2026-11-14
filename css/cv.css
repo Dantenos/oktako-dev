@@ -1,0 +1,31 @@
+/* CV imprimable : la même page sert à l'écran et sur papier A4. À l'impression, tout passe en noir sur blanc,
+   sans la barre ni les boutons : seul le contenu tiré de content/*.json reste. */
+.cv { max-width: 820px; margin: 0 auto; padding: 32px 20px 64px; }
+.cv__barre { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.cv__outils { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.cv__tete { padding-bottom: 18px; border-bottom: 2px solid var(--mt-bord); }
+.cv h1 { margin: 0; font: 400 clamp(30px, 5vw, 44px)/1.05 var(--mt-police-prose); color: var(--mt-accent); }
+.cv__metier { margin: 6px 0 0; font: var(--tako-texte-base)/1.5 var(--mt-police-ui); }
+.cv__dispo { margin: 10px 0 0; color: var(--tako-succes); }
+.cv__contact { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 10px 0 0; padding: 0; list-style: none; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); }
+.cv__contact a { display: inline-flex; align-items: center; min-height: var(--tako-cible); }
+.cv section { margin-top: 26px; }
+.cv h2 { margin: 0 0 10px; font: 700 var(--tako-texte-sm)/1.4 var(--mt-police-ui); letter-spacing: .14em; text-transform: uppercase; color: var(--mt-texte-doux); }
+.cv p { margin: 0 0 10px; max-width: 72ch; }
+.cv__projet { margin: 0 0 16px; }
+.cv__projet h3 { margin: 0; font-size: var(--tako-texte-lg); }
+.cv__statut { font: var(--tako-texte-xs)/1 var(--mt-police-ui); color: var(--mt-texte-discret); }
+.cv__sous, .cv__technos { margin: 2px 0 6px; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.cv__projet ul { margin: 0 0 8px; padding-left: 20px; }
+@media print {
+  @page { size: A4; margin: 14mm 15mm; }
+  html, body { background: #fff !important; color: #000 !important; font-size: 10pt; }
+  .cv__barre, .ips { display: none !important; }
+  .cv { max-width: none; padding: 0; }
+  .cv *, .cv *::before { color: #000 !important; background: none !important; box-shadow: none !important; border-color: #888 !important; }
+  .cv a { text-decoration: none; min-height: 0 !important; }
+  .cv section { margin-top: 12pt; }
+  .cv__projet, .frise li, .pratique div { break-inside: avoid; }
+  .cv .pratique { grid-template-columns: repeat(2, 1fr); gap: 6pt; }
+  .cv .pratique div { padding: 4pt 6pt; }
+}

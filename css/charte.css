@@ -1,0 +1,233 @@
+/* La suite : les encres de l'estampe, des rôles communs et aucune police distante.
+   Les composants sont opt-in pour permettre une conversion écran par écran. */
+/* Encres de MARQUE mesurées sur la planche LotsCocologo, stables dans les deux thèmes.
+   Leurs zones d'échantillonnage sont consignées dans docs/CHARTE.md. */
+:root {
+  --tako-marque-rouge: #fc271f;
+  --tako-marque-marine: #103353;
+  --tako-marque-creme: #fdf7e5;
+}
+/* Encres de la PIEUVRE DESSINÉE (l'atelier, lot identite-pieuvre) : celles de la gravure calculée,
+   stables dans les deux thèmes comme celles de la marque. Le dessin et le générateur des logos les
+   lisent ici, par le même lecteur (`atelier/jetons.mjs`) : aucune couleur n'est écrite dans leur code.
+   Le vermillon du corps EST le rouge de la marque ; les trois autres palettes en sont les variantes, une par
+   rôle (D1 a du 14/10 : quatre couleurs, pour qu'à 16 px la couleur seule distingue encore les rôles). */
+:root {
+  --tako-pieuvre-encre: #071c2d;
+  --tako-pieuvre-papier: #fff0cf;
+  --tako-pieuvre-papier-clair: #fff6dd;
+  --tako-pieuvre-papier-ombre: #dfcd9f;
+  --tako-pieuvre-grain: #80623a;
+  --tako-pieuvre-reflet: #ffffff;
+  --tako-pieuvre-joue: #ffe0bd;
+  --tako-pieuvre-dent: #ffdfb2;
+  --tako-pieuvre-peau-profonde: #10293c;
+  --tako-pieuvre-iris-clair: #4dacc5;
+  --tako-pieuvre-iris: #164d70;
+  --tako-pieuvre-marine-clair: #40718b;
+  --tako-pieuvre-marine: #183d58;
+  --tako-pieuvre-marine-trait: #7c9dae;
+  --tako-pieuvre-marine-reflet: #99b5bf;
+  --tako-pieuvre-tricolore-bleu: #2158ac;
+  --tako-pieuvre-tricolore-blanc: #fff8e9;
+  --tako-pieuvre-tricolore-rouge: #ed3738;
+  --tako-pieuvre-bonnet: #b99b59;
+  --tako-pieuvre-bonnet-trait: #675332;
+  --tako-pieuvre-medaillon: var(--tako-marque-marine);
+  --tako-pieuvre-medaillon-bord: #b9a576;
+  --tako-pieuvre-mer: #789da9;
+  --tako-pieuvre-vague: #245471;
+  --tako-pieuvre-vague-trait: #0a3048;
+  --tako-pieuvre-vague-clair: #8cb0b9;
+  --tako-pieuvre-ventouse: #f8dfb6;
+  --tako-pieuvre-ventouse-creux: #233546;
+  --tako-pieuvre-bras-reflet: #ffd2aa;
+  --tako-pieuvre-selection: #e8c77a;
+  --tako-pieuvre-vermillon-corps: var(--tako-marque-rouge);
+  --tako-pieuvre-vermillon-ombre: #ae3026;
+  --tako-pieuvre-vermillon-clair: #ff9a72;
+  --tako-pieuvre-lagon-corps: #299f9c;
+  --tako-pieuvre-lagon-ombre: #166664;
+  --tako-pieuvre-lagon-clair: #88d7c3;
+  --tako-pieuvre-prune-corps: #9665ad;
+  --tako-pieuvre-prune-ombre: #624179;
+  --tako-pieuvre-prune-clair: #d8ace3;
+  --tako-pieuvre-ambre-corps: #e39a2c;
+  --tako-pieuvre-ambre-ombre: #9b5d12;
+  --tako-pieuvre-ambre-clair: #ffd38a;
+}
+/* Les rôles d'INTERFACE peuvent s'écarter des encres pour garder les textes lisibles. */
+:root {
+  color-scheme: dark;
+  --tako-fond: #0b1a2f;
+  --tako-surface: #10233d;
+  --tako-surface-discrete: #0e2038;
+  --tako-surface-saisie: #0c1725;
+  --tako-surface-avis: #1a2b45;
+  --tako-surface-danger: #291c26;
+  --tako-texte: #f5ebd6;
+  --tako-texte-secondaire: #c9d6df;
+  --tako-texte-discret: #9bb0b8;
+  --tako-lien: #7fb4ca;
+  --tako-attente: #e6c384;
+  --tako-succes: #98bb6c;
+  --tako-danger: #ff9388;
+  --tako-danger-texte: #f2bbb4;
+  --tako-perdu: #bf9c9a;
+  --tako-accent-texte: #ff9388;
+  --tako-bord: #6a8db0;
+  --tako-bord-doux: #365471;
+  --tako-survol: #1e3a5f;
+  --tako-ombre: 0 8px 24px #00000030;
+  --tako-police-interface: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --tako-police-prose: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  --tako-texte-xs: 12px;
+  --tako-texte-sm: 13px;
+  --tako-texte-base: 14px;
+  --tako-texte-md: 15px;
+  --tako-texte-lg: 16px;
+  --tako-texte-xl: 20px;
+  --tako-texte-titre: 26px;
+  --tako-texte-chiffre: 34px;
+  --tako-interligne: 1.5;
+  --tako-espace-1: 2px;
+  --tako-espace-2: 4px;
+  --tako-espace-3: 8px;
+  --tako-espace-4: 12px;
+  --tako-espace-5: 16px;
+  --tako-espace-6: 24px;
+  --tako-espace-7: 32px;
+  --tako-espace-8: 40px;
+  --tako-rayon-petit: 4px;
+  --tako-rayon-carte: 8px;
+  --tako-rayon-pilule: 999px;
+  --tako-cible: 44px;
+  --tako-cible-nav: 48px;
+  --tako-largeur: 1100px;
+  /* La scène additive garde sa mer nocturne même sur le papier clair.
+     Les triplets sont les canaux sRGB 0–255 lus par WebGL, sans seconde palette JS. */
+  --tako-scene-fond: #0b1a2f;
+  --tako-scene-halo: #122842;
+  --tako-scene-voile: #0b1a2fcc;
+  --tako-scene-texte: #9bb0b8;
+  --tako-scene-etabli: 245 235 214;
+  --tako-scene-suppose: 230 195 132;
+  --tako-scene-inconnu: 87 116 125;
+  --tako-scene-eteint: 107 133 148;
+  --tako-scene-fiche: 92 135 158;
+  --tako-scene-jointe: 140 194 219;
+  --tako-scene-gagne: 153 186 107;
+  --tako-scene-perdue: 133 71 69;
+  --tako-scene-verrou: 209 66 51;
+}
+/* Le choix explicite prime sur le système ; sans choix, le système décide. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --tako-fond: #f5ebd6;
+    --tako-surface: #fff9ee;
+    --tako-surface-discrete: #eee3ce;
+    --tako-surface-saisie: #fffdf7;
+    --tako-surface-avis: #e9e0cd;
+    --tako-surface-danger: #f6ddd5;
+    --tako-texte: #10233d;
+    --tako-texte-secondaire: #30475b;
+    --tako-texte-discret: #4d606a;
+    --tako-lien: #23576b;
+    --tako-attente: #76500f;
+    --tako-succes: #3d622a;
+    --tako-accent-texte: #a02520;
+    --tako-danger: #a02520;
+    --tako-danger-texte: #86251f;
+    --tako-perdu: #77534f;
+    --tako-bord: #80704f;
+    --tako-bord-doux: #a39378;
+    --tako-survol: #e4d7bf;
+    --tako-ombre: 0 8px 24px #10233d18;
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --tako-fond: #f5ebd6;
+  --tako-surface: #fff9ee;
+  --tako-surface-discrete: #eee3ce;
+  --tako-surface-saisie: #fffdf7;
+  --tako-surface-avis: #e9e0cd;
+  --tako-surface-danger: #f6ddd5;
+  --tako-texte: #10233d;
+  --tako-texte-secondaire: #30475b;
+  --tako-texte-discret: #4d606a;
+  --tako-lien: #23576b;
+  --tako-attente: #76500f;
+  --tako-succes: #3d622a;
+  --tako-accent-texte: #a02520;
+  --tako-danger: #a02520;
+  --tako-danger-texte: #86251f;
+  --tako-perdu: #77534f;
+  --tako-bord: #80704f;
+  --tako-bord-doux: #a39378;
+  --tako-survol: #e4d7bf;
+  --tako-ombre: 0 8px 24px #10233d18;
+}
+.tako-bouton {
+  display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box; min-height: var(--tako-cible);
+  padding: var(--tako-espace-3) var(--tako-espace-5);
+  border: 1px solid var(--tako-bord); border-radius: var(--tako-rayon-petit);
+  background: transparent; color: var(--tako-texte); cursor: pointer;
+  font: inherit; text-decoration: none;
+}
+.tako-bouton:hover { background: var(--tako-survol); }
+.tako-bouton--principal { color: var(--tako-lien); border-color: var(--tako-lien); }
+.tako-bouton--danger { color: var(--tako-danger); border-color: var(--tako-danger); }
+.tako-bouton:disabled { opacity: .45; cursor: not-allowed; }
+.tako-carte {
+  box-sizing: border-box; min-width: 0; padding: var(--tako-espace-5);
+  background: var(--tako-surface); color: var(--tako-texte);
+  border: 1px solid var(--tako-bord-doux); border-radius: var(--tako-rayon-carte);
+}
+.tako-bandeau {
+  padding: var(--tako-espace-3) var(--tako-espace-4);
+  border-left: 3px solid var(--tako-attente);
+  border-radius: 0 var(--tako-rayon-petit) var(--tako-rayon-petit) 0;
+  background: var(--tako-surface-avis); color: var(--tako-texte);
+}
+.tako-bandeau--danger { border-color: var(--tako-danger); background: var(--tako-surface-danger); }
+.tako-badge {
+  display: inline-block; padding: var(--tako-espace-1) var(--tako-espace-3);
+  border: 1px solid currentColor; border-radius: var(--tako-rayon-pilule);
+  font-size: var(--tako-texte-xs); color: var(--tako-texte);
+}
+.tako-badge--attente { color: var(--tako-attente); border-style: dashed; }
+.tako-badge--danger { color: var(--tako-danger); border-style: dotted; }
+.tako-champ {
+  box-sizing: border-box; min-width: 0; max-width: 100%; min-height: var(--tako-cible);
+  padding: var(--tako-espace-3) var(--tako-espace-4);
+  border: 1px solid var(--tako-bord); border-radius: var(--tako-rayon-petit);
+  background: var(--tako-surface-saisie); color: var(--tako-texte); font: inherit;
+}
+:where(.tako-bouton, .tako-champ):focus-visible { outline: 2px solid var(--tako-lien); outline-offset: 2px; }
+.tako-champ[aria-invalid="true"] { border-color: var(--tako-danger); }
+/* La barre commune (`/barre.js`) : posée en tête de chaque page qui la charge. Sur un téléphone,
+   la liste passe à la ligne : un lien caché dans un défilement latéral sortirait du cadre (mesuré
+   par test/pont.sh) ; chaque lien garde sa cible de navigation. */
+.tako-barre {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--tako-espace-4); min-width: 0;
+  max-width: var(--tako-largeur); margin: 0 auto; padding-block: var(--tako-espace-3);
+  border-bottom: 1px solid var(--tako-bord-doux);
+  font: var(--tako-texte-sm)/var(--tako-interligne) var(--tako-police-interface);
+}
+/* Le nom affiché est configurable (TAKO_MARQUE_NOM) : long, il passe à la ligne au lieu de sortir du cadre. */
+.tako-barre__nom { flex: 0 1 auto; min-width: 0; overflow-wrap: anywhere; color: var(--tako-accent-texte); font-weight: bold; }
+.tako-barre ul {
+  display: flex; flex-wrap: wrap; gap: var(--tako-espace-2); min-width: 0; margin: 0; padding: 0;
+  list-style: none;
+}
+.tako-barre a {
+  display: inline-flex; align-items: center; min-height: var(--tako-cible-nav);
+  padding: 0 var(--tako-espace-4); border: 1px solid transparent; border-radius: var(--tako-rayon-pilule);
+  color: var(--tako-lien); text-decoration: none; white-space: nowrap;
+}
+.tako-barre a[aria-current="page"] { color: var(--tako-texte); border-color: var(--tako-bord); }
+.tako-barre a:hover { background: var(--tako-survol); }
+.tako-barre a:focus-visible { outline: 2px solid var(--tako-lien); outline-offset: 2px; }

@@ -1,0 +1,130 @@
+{
+ "depart": {
+  "position": [
+   0.31,
+   -0.125,
+   0.24059980205868117
+  ],
+  "vise": [
+   0.31,
+   -0.125,
+   0.0799
+  ],
+  "champ": 34.0,
+  "haut": [
+   0.0,
+   1.0,
+   0.0
+  ]
+ },
+ "fin": {
+  "position": [
+   0.222,
+   -0.503,
+   -0.135
+  ],
+  "vise": [
+   0.22,
+   -0.505,
+   -0.76
+  ],
+  "champ": 34.0,
+  "haut": [
+   0.0,
+   1.0,
+   0.0
+  ],
+  "sol": -0.76,
+  "chapeau": [
+   0.335,
+   -0.46
+  ],
+  "veilleuse": [
+   0.5245994925498962,
+   -0.5498908162117004,
+   -0.7427608966827393
+  ],
+  "couleur": [
+   1.0,
+   0.6,
+   0.27
+  ]
+ },
+ "images": 529,
+ "ips": 24,
+ "large": {
+  "video": "film-large.mp4",
+  "image": "fin-large.webp",
+  "largeur": 1920,
+  "hauteur": 800,
+  "ecriture": [
+   [
+    0.33094,
+    0.2186
+   ],
+   [
+    0.60362,
+    0.2186
+   ],
+   [
+    0.60356,
+    0.49346
+   ],
+   [
+    0.33103,
+    0.49346
+   ]
+  ],
+  "rapport": 0.42,
+  "calque": 1000,
+  "police": 92,
+  "video_muet": "film-large-muet.mp4"
+ },
+ "telephone": {
+  "video": "film-tel.mp4",
+  "image": "fin-tel.webp",
+  "largeur": 540,
+  "hauteur": 960,
+  "ecriture": [
+   [
+    0.1044,
+    0.2186
+   ],
+   [
+    0.89553,
+    0.2186
+   ],
+   [
+    0.8954,
+    0.49346
+   ],
+   [
+    0.1047,
+    0.49346
+   ]
+  ],
+  "rapport": 0.6176470588235293,
+  "calque": 640,
+  "police": 72,
+  "recadrage": {
+   "x": 0.3501,
+   "largeur": 0.23438
+  },
+  "video_muet": "film-tel-muet.mp4"
+ },
+ "son": {
+  "duree_s": 22.0417,
+  "kbps": 160,
+  "source": "mixage.wav"
+ },
+ "ambiances": [
+  "nuit"
+ ],
+ "teinte": {
+  "nuit": [
+   0.933,
+   0.993,
+   1.237
+  ]
+ }
+}

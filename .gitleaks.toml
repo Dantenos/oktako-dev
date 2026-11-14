@@ -1,0 +1,34 @@
+# gitleaks du portfolio MajorTakito.
+# libv86.js est la bibliothèque v86 TIERCE vendorée (BSD-2-Clause), copiée de rouille. Minifiée, elle déclenche le
+# même faux positif generic-api-key que dans rouille (code ATAPI, lignes 524/537) : aucun secret n'y vit. On écarte
+# CE fichier, aux deux endroits où le site le porte, pour CETTE SEULE règle.
+title = "majortakito-portfolio"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "v86 vendoré (libv86.js) : faux positif generic-api-key dans un fichier tiers minifié"
+targetRules = ["generic-api-key"]
+paths = ['''(^|/)(web/vendor|noyau/v86)/libv86\.js$''']
+
+# docs/rouille-source.json épingle le SHA-256 de chaque fichier vendoré de rouille ; l'un s'appelle
+# docs/doont/textes/secrets.json (les salles secrètes du jeu), et le mot « secrets » devant une empreinte suffit à
+# déclencher generic-api-key. On écarte une empreinte hexadécimale de 64 caractères, dans CE manifeste seulement.
+[[allowlists]]
+description = "manifeste des sources rouille : empreintes SHA-256, faux positif generic-api-key"
+targetRules = ["generic-api-key"]
+paths = ['''(^|/)docs/rouille-source\.json$''']
+condition = "AND"
+regexTarget = "match"
+regexes = ['''": "[0-9a-f]{64}"$''']
+
+# site/affiche/affiche.json garde l'empreinte SHA-256 de chaque fichier de la pièce ; l'atlas du tiroir secret s'appelle
+# cuit-secret.webp, et le mot « secret » devant une empreinte suffit à déclencher generic-api-key. Même règle étroite.
+[[allowlists]]
+description = "provenance de l'affiche : empreintes SHA-256, faux positif generic-api-key"
+targetRules = ["generic-api-key"]
+paths = ['''(^|/)(site/)?affiche/affiche\.json$''']
+condition = "AND"
+regexTarget = "match"
+regexes = ['''": "[0-9a-f]{64}"$''']
