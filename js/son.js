@@ -3,8 +3,9 @@
 // Le contexte audio n'est créé qu'au premier clic explicite sur « Son » (politique des navigateurs,
 // et respect du visiteur : rien ne sonne sans qu'il l'ait demandé).
 import { creerPack, courbeFondu, DUREE_FONDU_FILM } from './pack-sons.js';
-export function creerSon() {
+export function creerSon({ observerRadio = () => {} } = {}) {
   let ctx = null, maitre = null, minuteur = null, actif = false, pack = null, sortiePack = null, prete = Promise.resolve();
+  let activation = 0;
 
   function bruit(duree, couleur = 'rose') {
     const n = Math.floor(ctx.sampleRate * duree); const buf = ctx.createBuffer(2, n, ctx.sampleRate);
@@ -28,6 +29,7 @@ export function creerSon() {
     // Les sons du pack sont des enregistrements déjà mixés : ils passent à côté du maître de l'ambiance (0,22), à leur propre niveau.
     sortiePack = ctx.createGain(); sortiePack.gain.value = 0.8; sortiePack.connect(ctx.destination);
     pack = creerPack({ racine: 'sons/', contexte: () => ctx, sortie: () => sortiePack });
+    pack.observerRadio(observerRadio);
     // Nappe de pluie : bruit rose en boucle, passe-bas + légère respiration de volume.
     const nappe = ctx.createBufferSource(); nappe.buffer = bruit(4); nappe.loop = true;
     const pb = ctx.createBiquadFilter(); pb.type = 'lowpass'; pb.frequency.value = 2400; pb.Q.value = 0.3;
@@ -56,15 +58,19 @@ export function creerSon() {
     get actif() { return actif; },
     async activer() {
       if (!ctx) construire();
+      const tour = ++activation;
       actif = true;
       // Premier clic seulement : le pack se télécharge ici, jamais avant. Un échec laisse l'ambiance maison seule.
       // Puis la musique d'atelier (lo-fi -> boss), SI ses fichiers sont au manifeste : sinon rien ne se charge ni ne joue.
-      prete = pack.activer().then(() => pack.atelier.preparer()).catch(() => {});
+      prete = pack.activer().then(() => tour === activation && actif ? pack.atelier.preparer() : false).catch(() => {});
       if (ctx.state === 'suspended') await ctx.resume();
+      // Un réveil WebAudio peut finir après le geste suivant : il ne doit ni relever le gain ni rallumer la pluie.
+      if (tour !== activation || !actif) { if (!actif) await ctx.suspend(); return; }
       const t = ctx.currentTime; maitre.gain.cancelScheduledValues(t); maitre.gain.setValueAtTime(maitre.gain.value, t); maitre.gain.linearRampToValueAtTime(0.22, t + 1.5);
       clearTimeout(minuteur); construire.goutte();
     },
     couper() {
+      activation++;
       actif = false; clearTimeout(minuteur);
       if (!ctx) return;
       pack?.couper();

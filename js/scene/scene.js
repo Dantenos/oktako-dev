@@ -4,6 +4,7 @@
 // Le rendu est un bonus : toute la navigation et le contenu vivent dans le HTML (app.js) et survivent à une erreur
 // de chargement ou à une perte de contexte WebGL.
 import * as THREE from 'three';
+import { creerRadioTakosound } from './radio-takosound.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -141,6 +142,7 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
     (groupes[cle] ??= new THREE.Group()).add(m);
   }
   for (const g of Object.values(groupes)) scene.add(g);
+  const radioTakosound = creerRadioTakosound({ THREE, groupes, contrat: D.radio_takosound });
   scene.updateMatrixWorld(true);
   const boiteDe = (o) => new THREE.Box3().setFromObject(o);
   // Les tableaux : une image du contenu, multipliée par la lumière cuite de leur feuille (cadres.js).
@@ -153,9 +155,12 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   groupes.parcours = fiche.groupe;
   // Le pense-bête de l'écran recouvert du nom du jeu, DOONT (pensebete.js) : décalcomanie sur le papillon cuit.
   const penseBete = creerPenseBete({ scene, statiques });
-  // La console de poche « Takito SYSTEM », au coin avant gauche du plateau (console-poche.js) : comme la fiche, rien n'est
-  // cuit ; elle rejoint les objets qu'on vise et survole. Son verre reçoit le reflet de la pièce une fois le café prêt.
-  const consolePoche = creerConsole({ scene, sol: [statiques, ...Object.values(groupes)], carnet: groupes.carnet, posLampe: new THREE.Vector3().fromArray(D.lampe), env: null });
+  // Le corps de Takito SYSTEM reçoit sa cuisson propre ; dalle, sérigraphie et verre gardent leurs usages vivants.
+  const corpsConsoleCuit = groupes['console:corps'];
+  if (D.console_cuite && !corpsConsoleCuit) throw Error('Console : corps cuit absent');
+  delete groupes['console:corps'];
+  corpsConsoleCuit?.traverse(m => { if (m.isMesh) m.material = fondre(m.material.clone()); });
+  const consolePoche = creerConsole({ scene, sol: [statiques, ...Object.values(groupes)], carnet: groupes.carnet, posLampe: new THREE.Vector3().fromArray(D.lampe), env: null, corpsCuit: corpsConsoleCuit });
   groupes.console = consolePoche.groupe;
   let relaisConsole = 1, minuteConsole = Math.floor(Date.now() / 60000);
 
@@ -804,7 +809,9 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   function posePieuvre(cam = camera) {
     const P = pieuvre.groupe.position, H = PIEUVRE_HAUT * PIEUVRE_ZOOM.echelle(disposition), c = new THREE.Vector3(P.x, P.y + H / 2, P.z), t = Math.tan(THREE.MathUtils.degToRad(34 / 2));
     const debout = disposition === 'portrait', d = debout ? PIEUVRE_ZOOM.debout : PIEUVRE_ZOOM.distance;
-    const vers = new THREE.Vector3().subVectors(cam === camera && tiroir.depart ? tiroir.depart.pos : cam.position, c).setY(0).normalize().setY(PIEUVRE_ZOOM.hausse).normalize();
+    // La direction vient de la vue d'ensemble (base.pos, comme poseDe), jamais de la caméra de départ : depuis une fiche, celle-ci est
+    // cadrée sur les dossiers, et le gros plan arrivait de biais, la pieuvre derrière les livres ou hors de l'image (bogue du 15/11).
+    const vers = new THREE.Vector3().subVectors(base.pos, c).setY(0).normalize().setY(PIEUVRE_ZOOM.hausse).normalize();
     const droite = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), vers).normalize(), cible = c.clone();
     if (debout) cible.y -= 2 * d * t * PIEUVRE_ZOOM.vers_le_haut; else cible.addScaledVector(droite, 2 * d * t * cam.aspect * PIEUVRE_ZOOM.vers_la_gauche);
     return { pos: c.clone().addScaledVector(vers, d), cible, fov: 34, haut: new THREE.Vector3(0, 1, 0), quaternion: new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().lookAt(c.clone().addScaledVector(vers, d), cible, new THREE.Vector3(0, 1, 0))) };
@@ -1106,7 +1113,7 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
       }
       // Le retour doux au bureau, sans geste depuis RETOUR ms ; en mouvement réduit, d'un coup (la boucle dort : un
       // minuteur la réveille à l'échéance).
-      if (actif && !regard.glisse && !regard.fige && survolClavier !== 'console' && (regard.x || regard.y)) {
+      if (actif && !regard.glisse && !regard.fige && survolClavier !== 'console' && survolClavier !== 'radio' && (regard.x || regard.y)) {
         if (maintenant - regard.dernier > RETOUR) {
           if (reglages.mouvementReduit) regard.x = regard.y = 0;
           else { regard.x *= Math.exp(-vraiDt * 1.8); regard.y *= Math.exp(-vraiDt * 1.8); if (Math.hypot(regard.x, regard.y) < 1e-3) regard.x = regard.y = 0; }
@@ -1170,6 +1177,7 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
     fiche.mettreAJour({ survol: surlignage.parcours.h, lampe: piece.lampe });
     pieuvre?.mettreAJour(dt, { anime, lampe: piece.lampe, enVue: !enPlongee && !enTasse && (!enTiroir || tiroir.pieuvre), proche: enTiroir && tiroir.pieuvre ? tiroir.t : 0 });
     penseBete?.mettreAJour();
+    radioTakosound?.image(temps, reglages.mouvementReduit);
     ouvrirRabat(surlignage.lettre.h);
     for (const [id, T] of Object.entries(petits)) {
       const avant = T.k, but = T.ouvert ? 1 : 0;
@@ -1386,6 +1394,8 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
 
   const ndcCafe = new THREE.Vector2();
   return {
+    observerRadio(etat) { radioTakosound?.observer(etat); demarrer(); },
+    etatRadio() { return radioTakosound?.etat() ?? null; },
     cadrer,
     entrerTasse, sortirTasse, rectanglesCafe,
     // La carte de visite, posée sur le plateau, dans la vue d'arrivée sans rendu : le lien s'y pose. Sans recadrer : hors champ, null (écran étroit).
@@ -1479,6 +1489,13 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
     etatLettre() { return { rabat: charniere?.angle ?? null, survol: surlignage.lettre.h }; },
     // Pour les essais : la boîte exacte d'un objet (sans marge), en coordonnées du monde.
     boiteObjet(id) { const b = boiteDe(groupes[id]); return { min: b.min.toArray(), max: b.max.toArray() }; },
+    // La présence d'une ancre ne prouve pas que l'objet entier tient dans l'image.
+    cadreObjet(id) {
+      const b = boiteDe(groupes[id]), points = [];
+      for (const x of [b.min.x,b.max.x]) for (const y of [b.min.y,b.max.y]) for (const z of [b.min.z,b.max.z])
+        points.push(new THREE.Vector3(x,y,z).project(camera).toArray());
+      return points;
+    },
     // Les propositions arrivent du HTML (liens servis par le build) : la mousse écrit exactement ce que lisent les liens.
     preparerCafe(phrases) { const p = cafe.preparer(phrases); demarrer(); return p; },
     survolCafe(i) { cafe.survol(i); demarrer(); },
@@ -1746,10 +1763,10 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
       survolClavier = id;
       if (id && recentrer) {
         regard.x = regard.y = regard.vx = regard.vy = 0;
-        // Au coin gauche, revenir au centre ferait disparaître la console qu'on vient d'atteindre avec Tab.
-        if (id === 'console') {
+        // Revenir au centre ferait disparaître ces objets en bord de bureau qu'on vient d'atteindre avec Tab.
+        if (id === 'console' || id === 'radio') {
           const orientation = (cible) => new THREE.Euler().setFromRotationMatrix(new THREE.Matrix4().lookAt(base.pos, cible, new THREE.Vector3(0, 1, 0)), 'YXZ');
-          const a = orientation(base.cible), b = orientation(objets.console.ancre);
+          const a = orientation(base.cible), b = orientation(objets[id].ancre);
           regard.x = b.y - a.y; regard.y = b.x - a.x; borner(regard);
         }
       }
@@ -1759,6 +1776,14 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
     pause(p) { enPause = p; if (p && boucle) { cancelAnimationFrame(boucle); boucle = null; } if (!p) { horloge.getDelta(); chauffe = Math.max(chauffe, 1); demarrer(); } },
     get canvas() { return canvas; },
     // Pour les essais : progression de la transition et nombre d'images rendues.
+    // Pour les essais : ce que le rayon du clic touche en premier en ce point de l'écran, même pendant un gros plan où le clic est coupé
+    // (toucher() y rend null). « décor » pour un obstacle sans objet : un livre devant la pieuvre la cache.
+    premierTouche(x, y) {
+      const r = canvas.getBoundingClientRect(); ndc.set(((x - r.left) / r.width) * 2 - 1, -(((y - r.top) / r.height) * 2 - 1));
+      rayon.setFromCamera(ndc, camera); ndc.set(9, 9);
+      const h = rayon.intersectObjects([statiques, ...Object.values(groupes), ...(pieuvre ? [pieuvre.zone] : [])], true)[0];
+      return h ? h.object.userData.objet || 'décor' : null;
+    },
     etatCamera() { return { t: pose.t, images, position: camera.position.toArray(), decalage: camera.view?.enabled ? [camera.view.offsetX, camera.view.offsetY] : [0, 0] }; },
     // Pour les essais : quel objet se trouve sous ce point de l'écran (même lancer de rayon que le clic).
     objetA(x, y) { const r = canvas.getBoundingClientRect(); ndc.set(((x - r.left) / r.width) * 2 - 1, -(((y - r.top) / r.height) * 2 - 1)); const id = toucher(); ndc.set(9, 9); return id; },

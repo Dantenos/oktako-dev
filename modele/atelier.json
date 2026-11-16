@@ -7,12 +7,15 @@
   "piece": 2048,
   "bureau": 2048,
   "objets": 4096,
+  "tasse": 1024,
   "etiquettes": 1024,
   "rideaux": 1024,
   "objectifs": 1024,
   "objectifs2": 1024,
   "secret": 512,
-  "surprise": 512
+  "surprise": 512,
+  "radio": 2048,
+  "console": 1024
  },
  "camera": {
   "position": [
@@ -25,79 +28,103 @@
    0.23499999940395355,
    -0.5
   ],
-  "fov": 39.0
+  "fov": 39
  },
  "atlas": {
   "piece": {
    "ordinateur": "cuit-piece.webp",
    "telephone": "telephone/cuit-piece.webp",
    "octets": {
-    "ordinateur": 74958,
-    "telephone": 32072
+    "ordinateur": 71710,
+    "telephone": 33600
    }
   },
   "rideaux": {
    "ordinateur": "cuit-rideaux.webp",
    "telephone": "telephone/cuit-rideaux.webp",
    "octets": {
-    "ordinateur": 10678,
-    "telephone": 4160
+    "ordinateur": 10536,
+    "telephone": 4206
    }
   },
   "bureau": {
    "ordinateur": "cuit-bureau.webp",
    "telephone": "telephone/cuit-bureau.webp",
    "octets": {
-    "ordinateur": 55560,
-    "telephone": 21912
+    "ordinateur": 39798,
+    "telephone": 16536
    }
   },
   "objets": {
    "ordinateur": "cuit-objets.webp",
    "telephone": "telephone/cuit-objets.webp",
    "octets": {
-    "ordinateur": 620904,
-    "telephone": 280370
+    "ordinateur": 559004,
+    "telephone": 248472
    }
   },
   "etiquettes": {
    "ordinateur": "cuit-etiquettes.webp",
    "telephone": "telephone/cuit-etiquettes.webp",
    "octets": {
-    "ordinateur": 34046,
-    "telephone": 14158
+    "ordinateur": 33800,
+    "telephone": 14296
+   }
+  },
+  "tasse": {
+   "ordinateur": "cuit-tasse.webp",
+   "telephone": "telephone/cuit-tasse.webp",
+   "octets": {
+    "ordinateur": 13178,
+    "telephone": 6004
    }
   },
   "objectifs2": {
    "ordinateur": "cuit-objectifs2.webp",
    "telephone": "telephone/cuit-objectifs2.webp",
    "octets": {
-    "ordinateur": 27902,
-    "telephone": 11374
+    "ordinateur": 11572,
+    "telephone": 4658
    }
   },
   "secret": {
    "ordinateur": "cuit-secret.webp",
    "telephone": "telephone/cuit-secret.webp",
    "octets": {
-    "ordinateur": 8268,
-    "telephone": 3278
+    "ordinateur": 6848,
+    "telephone": 3186
    }
   },
   "objectifs": {
    "ordinateur": "cuit-objectifs.webp",
    "telephone": "telephone/cuit-objectifs.webp",
    "octets": {
-    "ordinateur": 21744,
-    "telephone": 8926
+    "ordinateur": 10128,
+    "telephone": 3932
    }
   },
   "surprise": {
    "ordinateur": "cuit-surprise.webp",
    "telephone": "telephone/cuit-surprise.webp",
    "octets": {
-    "ordinateur": 8134,
-    "telephone": 3692
+    "ordinateur": 7456,
+    "telephone": 3774
+   }
+  },
+  "radio": {
+   "ordinateur": "cuit-radio.webp",
+   "telephone": "telephone/cuit-radio.webp",
+   "octets": {
+    "ordinateur": 100172,
+    "telephone": 42342
+   }
+  },
+  "console": {
+   "ordinateur": "cuit-console.webp",
+   "telephone": "telephone/cuit-console.webp",
+   "octets": {
+    "ordinateur": 18556,
+    "telephone": 8082
    }
   }
  },
@@ -109,12 +136,12 @@
    "min": [
     -1.3799999952316284,
     -0.7999999523162842,
-    -1.0
+    -1
    ],
    "echelle": [
     2.759999990463257,
     2.619999885559082,
-    3.0
+    3
    ],
    "positions": {
     "decalage": 0,
@@ -423,12 +450,44 @@
    "triangles": 768
   },
   {
-   "nom": "objets-ecran-10",
+   "nom": "bureau-decor:caisson-gauche-10",
+   "atlas": "bureau",
+   "objet": "decor:caisson-gauche",
+   "min": [
+    -0.9899999499320984,
+    -0.6620000004768372,
+    -0.6399999856948853
+   ],
+   "echelle": [
+    0.41999995708465576,
+    0.6320000290870667,
+    0.8219999670982361
+   ],
+   "positions": {
+    "decalage": 433848,
+    "type": "u16",
+    "nombre": 56466
+   },
+   "uv": {
+    "decalage": 546780,
+    "type": "u16",
+    "nombre": 37644
+   },
+   "indices": {
+    "decalage": 622068,
+    "type": "u16",
+    "nombre": 55992
+   },
+   "sommets": 18822,
+   "triangles": 18664
+  },
+  {
+   "nom": "objets-ecran-11",
    "atlas": "objets",
    "objet": "ecran",
    "min": [
     -0.2544507086277008,
-    0.0,
+    0,
     -0.5105423331260681
    ],
    "echelle": [
@@ -437,17 +496,17 @@
     0.41959959268569946
    ],
    "positions": {
-    "decalage": 433848,
+    "decalage": 734052,
     "type": "u16",
     "nombre": 13077
    },
    "uv": {
-    "decalage": 460004,
+    "decalage": 760208,
     "type": "u16",
     "nombre": 8718
    },
    "indices": {
-    "decalage": 477440,
+    "decalage": 777644,
     "type": "u16",
     "nombre": 16056
    },
@@ -455,12 +514,12 @@
    "triangles": 5352
   },
   {
-   "nom": "objets-statique-11",
+   "nom": "objets-statique-12",
    "atlas": "objets",
    "objet": null,
    "min": [
     -0.6000340580940247,
-    3.4372787922620773e-06,
+    0.0000034372787922620773,
     -0.9194000363349915
    ],
    "echelle": [
@@ -469,17 +528,17 @@
     1.1800000667572021
    ],
    "positions": {
-    "decalage": 509552,
+    "decalage": 809756,
     "type": "u16",
     "nombre": 48093
    },
    "uv": {
-    "decalage": 605740,
+    "decalage": 905944,
     "type": "u16",
     "nombre": 32062
    },
    "indices": {
-    "decalage": 669864,
+    "decalage": 970068,
     "type": "u16",
     "nombre": 55677
    },
@@ -487,12 +546,12 @@
    "triangles": 18559
   },
   {
-   "nom": "objets-terminal-12",
+   "nom": "objets-terminal-13",
    "atlas": "objets",
    "objet": "terminal",
    "min": [
     -0.6397231817245483,
-    0.0,
+    0,
     -0.6669809222221375
    ],
    "echelle": [
@@ -501,17 +560,17 @@
     0.5389412641525269
    ],
    "positions": {
-    "decalage": 781220,
+    "decalage": 1081424,
     "type": "u16",
     "nombre": 20478
    },
    "uv": {
-    "decalage": 822176,
+    "decalage": 1122380,
     "type": "u16",
     "nombre": 13652
    },
    "indices": {
-    "decalage": 849480,
+    "decalage": 1149684,
     "type": "u16",
     "nombre": 23982
    },
@@ -519,7 +578,7 @@
    "triangles": 7994
   },
   {
-   "nom": "objets-decor:lampe-13",
+   "nom": "objets-decor:lampe-14",
    "atlas": "objets",
    "objet": "decor:lampe",
    "min": [
@@ -533,17 +592,17 @@
     0.3677298128604889
    ],
    "positions": {
-    "decalage": 897444,
+    "decalage": 1197648,
     "type": "u16",
     "nombre": 8169
    },
    "uv": {
-    "decalage": 913784,
+    "decalage": 1213988,
     "type": "u16",
     "nombre": 5446
    },
    "indices": {
-    "decalage": 924676,
+    "decalage": 1224880,
     "type": "u16",
     "nombre": 11286
    },
@@ -551,7 +610,7 @@
    "triangles": 3762
   },
   {
-   "nom": "objets-carnet-14",
+   "nom": "objets-carnet-15",
    "atlas": "objets",
    "objet": "carnet",
    "min": [
@@ -565,17 +624,17 @@
     0.30013418197631836
    ],
    "positions": {
-    "decalage": 947248,
+    "decalage": 1247452,
     "type": "u16",
     "nombre": 5502
    },
    "uv": {
-    "decalage": 958252,
+    "decalage": 1258456,
     "type": "u16",
     "nombre": 3668
    },
    "indices": {
-    "decalage": 965588,
+    "decalage": 1265792,
     "type": "u16",
     "nombre": 6864
    },
@@ -583,71 +642,71 @@
    "triangles": 2288
   },
   {
-   "nom": "objets-decor:tasse-15",
+   "nom": "objets-decor:tasse-16",
    "atlas": "objets",
    "objet": "decor:tasse",
    "min": [
-    0.26805755496025085,
-    0.0044999998062849045,
-    0.08305756002664566
+    0.27457600831985474,
+    0.07750000059604645,
+    0.08957600593566895
    ],
    "echelle": [
-    0.10643017292022705,
-    0.09300000220537186,
-    0.08388488739728928
+    0.07084798812866211,
+    0.0020000040531158447,
+    0.07084798812866211
    ],
    "positions": {
-    "decalage": 979316,
+    "decalage": 1279520,
     "type": "u16",
-    "nombre": 3438
+    "nombre": 408
    },
    "uv": {
-    "decalage": 986192,
+    "decalage": 1280336,
     "type": "u16",
-    "nombre": 2292
+    "nombre": 272
    },
    "indices": {
-    "decalage": 990776,
+    "decalage": 1280880,
     "type": "u16",
-    "nombre": 4056
+    "nombre": 372
    },
-   "sommets": 1146,
-   "triangles": 1352
+   "sommets": 136,
+   "triangles": 124
   },
   {
-   "nom": "objets-decor:veilleuse-16",
+   "nom": "objets-decor:veilleuse-17",
    "atlas": "objets",
    "objet": "decor:veilleuse",
    "min": [
-    0.3480171263217926,
+    0.2660171389579773,
     0.0044999998062849045,
-    0.05701713636517525
+    0.17301712930202484
    ],
    "echelle": [
     0.03596574068069458,
     0.07400000095367432,
-    0.03596573695540428
+    0.03596574068069458
    ],
    "positions": {
-    "decalage": 998888,
+    "decalage": 1281624,
     "type": "u16",
-    "nombre": 6339
+    "nombre": 6870
    },
    "uv": {
-    "decalage": 1011568,
+    "decalage": 1295364,
     "type": "u16",
-    "nombre": 4226
+    "nombre": 4580
    },
    "indices": {
-    "decalage": 1020020,
+    "decalage": 1304524,
     "type": "u16",
-    "nombre": 7752
+    "nombre": 8472
    },
-   "sommets": 2113,
-   "triangles": 2584
+   "sommets": 2290,
+   "triangles": 2824
   },
   {
-   "nom": "objets-appareil-17",
+   "nom": "objets-appareil-18",
    "atlas": "objets",
    "objet": "appareil",
    "min": [
@@ -661,25 +720,25 @@
     0.11481073498725891
    ],
    "positions": {
-    "decalage": 1035524,
+    "decalage": 1321468,
     "type": "u16",
-    "nombre": 6735
+    "nombre": 8448
    },
    "uv": {
-    "decalage": 1048996,
+    "decalage": 1338364,
     "type": "u16",
-    "nombre": 4490
+    "nombre": 5632
    },
    "indices": {
-    "decalage": 1057976,
+    "decalage": 1349628,
     "type": "u16",
-    "nombre": 8544
+    "nombre": 10464
    },
-   "sommets": 2245,
-   "triangles": 2848
+   "sommets": 2816,
+   "triangles": 3488
   },
   {
-   "nom": "objets-dossiers-18",
+   "nom": "objets-dossiers-19",
    "atlas": "objets",
    "objet": "dossiers",
    "min": [
@@ -693,17 +752,17 @@
     0.3794235587120056
    ],
    "positions": {
-    "decalage": 1075064,
+    "decalage": 1370556,
     "type": "u16",
     "nombre": 10320
    },
    "uv": {
-    "decalage": 1095704,
+    "decalage": 1391196,
     "type": "u16",
     "nombre": 6880
    },
    "indices": {
-    "decalage": 1109464,
+    "decalage": 1404956,
     "type": "u16",
     "nombre": 13092
    },
@@ -711,7 +770,7 @@
    "triangles": 4364
   },
   {
-   "nom": "objets-lettre-19",
+   "nom": "objets-lettre-20",
    "atlas": "objets",
    "objet": "lettre",
    "min": [
@@ -725,17 +784,17 @@
     0.14449374377727509
    ],
    "positions": {
-    "decalage": 1135648,
+    "decalage": 1431140,
     "type": "u16",
     "nombre": 1812
    },
    "uv": {
-    "decalage": 1139272,
+    "decalage": 1434764,
     "type": "u16",
     "nombre": 1208
    },
    "indices": {
-    "decalage": 1141688,
+    "decalage": 1437180,
     "type": "u16",
     "nombre": 2250
    },
@@ -743,7 +802,7 @@
    "triangles": 750
   },
   {
-   "nom": "objets-lettre:rabat-20",
+   "nom": "objets-lettre:rabat-21",
    "atlas": "objets",
    "objet": "lettre:rabat",
    "min": [
@@ -757,17 +816,17 @@
     0.0852811336517334
    ],
    "positions": {
-    "decalage": 1146188,
+    "decalage": 1441680,
     "type": "u16",
     "nombre": 2352
    },
    "uv": {
-    "decalage": 1150892,
+    "decalage": 1446384,
     "type": "u16",
     "nombre": 1568
    },
    "indices": {
-    "decalage": 1154028,
+    "decalage": 1449520,
     "type": "u16",
     "nombre": 3180
    },
@@ -775,12 +834,12 @@
    "triangles": 1060
   },
   {
-   "nom": "objets-decor:pile-21",
+   "nom": "objets-decor:pile-22",
    "atlas": "objets",
    "objet": "decor:pile",
    "min": [
     0.8326734304428101,
-    0.0,
+    0,
     -0.22421953082084656
    ],
    "echelle": [
@@ -789,25 +848,25 @@
     0.24843907356262207
    ],
    "positions": {
-    "decalage": 1160388,
+    "decalage": 1455880,
     "type": "u16",
-    "nombre": 1830
+    "nombre": 1824
    },
    "uv": {
-    "decalage": 1164048,
+    "decalage": 1459528,
     "type": "u16",
-    "nombre": 1220
+    "nombre": 1216
    },
    "indices": {
-    "decalage": 1166488,
+    "decalage": 1461960,
     "type": "u16",
     "nombre": 1812
    },
-   "sommets": 610,
+   "sommets": 608,
    "triangles": 604
   },
   {
-   "nom": "objets-decor:livre:factarena-22",
+   "nom": "objets-decor:livre:factarena-23",
    "atlas": "objets",
    "objet": "decor:livre:factarena",
    "min": [
@@ -821,17 +880,17 @@
     0.12000000476837158
    ],
    "positions": {
-    "decalage": 1170112,
+    "decalage": 1465584,
     "type": "u16",
     "nombre": 456
    },
    "uv": {
-    "decalage": 1171024,
+    "decalage": 1466496,
     "type": "u16",
     "nombre": 304
    },
    "indices": {
-    "decalage": 1171632,
+    "decalage": 1467104,
     "type": "u16",
     "nombre": 456
    },
@@ -839,7 +898,7 @@
    "triangles": 152
   },
   {
-   "nom": "objets-decor:livre:rouille-23",
+   "nom": "objets-decor:livre:rouille-24",
    "atlas": "objets",
    "objet": "decor:livre:rouille",
    "min": [
@@ -853,17 +912,17 @@
     0.12000000476837158
    ],
    "positions": {
-    "decalage": 1172544,
+    "decalage": 1468016,
     "type": "u16",
     "nombre": 432
    },
    "uv": {
-    "decalage": 1173408,
+    "decalage": 1468880,
     "type": "u16",
     "nombre": 288
    },
    "indices": {
-    "decalage": 1173984,
+    "decalage": 1469456,
     "type": "u16",
     "nombre": 456
    },
@@ -871,7 +930,7 @@
    "triangles": 152
   },
   {
-   "nom": "objets-decor:livre:doont-24",
+   "nom": "objets-decor:livre:doont-25",
    "atlas": "objets",
    "objet": "decor:livre:doont",
    "min": [
@@ -885,17 +944,17 @@
     0.12000000476837158
    ],
    "positions": {
-    "decalage": 1174896,
+    "decalage": 1470368,
     "type": "u16",
     "nombre": 432
    },
    "uv": {
-    "decalage": 1175760,
+    "decalage": 1471232,
     "type": "u16",
     "nombre": 288
    },
    "indices": {
-    "decalage": 1176336,
+    "decalage": 1471808,
     "type": "u16",
     "nombre": 456
    },
@@ -903,7 +962,7 @@
    "triangles": 152
   },
   {
-   "nom": "objets-decor:livre:argonet-25",
+   "nom": "objets-decor:livre:argonet-26",
    "atlas": "objets",
    "objet": "decor:livre:argonet",
    "min": [
@@ -917,17 +976,17 @@
     0.12000000476837158
    ],
    "positions": {
-    "decalage": 1177248,
+    "decalage": 1472720,
     "type": "u16",
     "nombre": 456
    },
    "uv": {
-    "decalage": 1178160,
+    "decalage": 1473632,
     "type": "u16",
     "nombre": 304
    },
    "indices": {
-    "decalage": 1178768,
+    "decalage": 1474240,
     "type": "u16",
     "nombre": 456
    },
@@ -935,7 +994,7 @@
    "triangles": 152
   },
   {
-   "nom": "objets-decor:livre:cle-et-cadre-26",
+   "nom": "objets-decor:livre:cle-et-cadre-27",
    "atlas": "objets",
    "objet": "decor:livre:cle-et-cadre",
    "min": [
@@ -949,17 +1008,17 @@
     0.12000000476837158
    ],
    "positions": {
-    "decalage": 1179680,
+    "decalage": 1475152,
     "type": "u16",
     "nombre": 456
    },
    "uv": {
-    "decalage": 1180592,
+    "decalage": 1476064,
     "type": "u16",
     "nombre": 304
    },
    "indices": {
-    "decalage": 1181200,
+    "decalage": 1476672,
     "type": "u16",
     "nombre": 456
    },
@@ -967,7 +1026,7 @@
    "triangles": 152
   },
   {
-   "nom": "objets-decor:livre:webserv-27",
+   "nom": "objets-decor:livre:webserv-28",
    "atlas": "objets",
    "objet": "decor:livre:webserv",
    "min": [
@@ -981,17 +1040,17 @@
     0.12000000476837158
    ],
    "positions": {
-    "decalage": 1182112,
+    "decalage": 1477584,
     "type": "u16",
     "nombre": 456
    },
    "uv": {
-    "decalage": 1183024,
+    "decalage": 1478496,
     "type": "u16",
     "nombre": 304
    },
    "indices": {
-    "decalage": 1183632,
+    "decalage": 1479104,
     "type": "u16",
     "nombre": 456
    },
@@ -999,7 +1058,7 @@
    "triangles": 152
   },
   {
-   "nom": "objets-decor:livre:inception-28",
+   "nom": "objets-decor:livre:inception-29",
    "atlas": "objets",
    "objet": "decor:livre:inception",
    "min": [
@@ -1013,17 +1072,17 @@
     0.12000000476837158
    ],
    "positions": {
-    "decalage": 1184544,
+    "decalage": 1480016,
     "type": "u16",
     "nombre": 432
    },
    "uv": {
-    "decalage": 1185408,
+    "decalage": 1480880,
     "type": "u16",
     "nombre": 288
    },
    "indices": {
-    "decalage": 1185984,
+    "decalage": 1481456,
     "type": "u16",
     "nombre": 456
    },
@@ -1031,7 +1090,7 @@
    "triangles": 152
   },
   {
-   "nom": "objets-decor:ficus-29",
+   "nom": "objets-decor:ficus-30",
    "atlas": "objets",
    "objet": "decor:ficus",
    "min": [
@@ -1045,17 +1104,17 @@
     0.5876428484916687
    ],
    "positions": {
-    "decalage": 1186896,
+    "decalage": 1482368,
     "type": "u16",
     "nombre": 40248
    },
    "uv": {
-    "decalage": 1267392,
+    "decalage": 1562864,
     "type": "u16",
     "nombre": 26832
    },
    "indices": {
-    "decalage": 1321056,
+    "decalage": 1616528,
     "type": "u16",
     "nombre": 52140
    },
@@ -1063,12 +1122,12 @@
    "triangles": 17380
   },
   {
-   "nom": "objets-decor:pot-30",
+   "nom": "objets-decor:pot-31",
    "atlas": "objets",
    "objet": "decor:pot",
    "min": [
     0.6819999814033508,
-    0.0,
+    0,
     -0.2929999828338623
    ],
    "echelle": [
@@ -1077,17 +1136,17 @@
     0.06599998474121094
    ],
    "positions": {
-    "decalage": 1425336,
+    "decalage": 1720808,
     "type": "u16",
     "nombre": 1371
    },
    "uv": {
-    "decalage": 1428080,
+    "decalage": 1723552,
     "type": "u16",
     "nombre": 914
    },
    "indices": {
-    "decalage": 1429908,
+    "decalage": 1725380,
     "type": "u16",
     "nombre": 1140
    },
@@ -1095,12 +1154,12 @@
    "triangles": 380
   },
   {
-   "nom": "objets-decor:classeurs-31",
+   "nom": "objets-decor:classeurs-32",
    "atlas": "objets",
    "objet": "decor:classeurs",
    "min": [
     -1.104743480682373,
-    0.0,
+    0,
     -0.6536338925361633
    ],
    "echelle": [
@@ -1109,17 +1168,17 @@
     0.2672678232192993
    ],
    "positions": {
-    "decalage": 1432188,
+    "decalage": 1727660,
     "type": "u16",
     "nombre": 6312
    },
    "uv": {
-    "decalage": 1444812,
+    "decalage": 1740284,
     "type": "u16",
     "nombre": 4208
    },
    "indices": {
-    "decalage": 1453228,
+    "decalage": 1748700,
     "type": "u16",
     "nombre": 8370
    },
@@ -1127,12 +1186,12 @@
    "triangles": 2790
   },
   {
-   "nom": "objets-decor:serveur-32",
+   "nom": "objets-decor:serveur-33",
    "atlas": "objets",
    "objet": "decor:serveur",
    "min": [
     0.10471069812774658,
-    0.0,
+    0,
     -0.7558419704437256
    ],
    "echelle": [
@@ -1141,17 +1200,17 @@
     0.23915082216262817
    ],
    "positions": {
-    "decalage": 1469968,
+    "decalage": 1765440,
     "type": "u16",
     "nombre": 2298
    },
    "uv": {
-    "decalage": 1474564,
+    "decalage": 1770036,
     "type": "u16",
     "nombre": 1532
    },
    "indices": {
-    "decalage": 1477628,
+    "decalage": 1773100,
     "type": "u16",
     "nombre": 2298
    },
@@ -1159,7 +1218,7 @@
    "triangles": 766
   },
   {
-   "nom": "objets-competences-33",
+   "nom": "objets-competences-34",
    "atlas": "objets",
    "objet": "competences",
    "min": [
@@ -1173,17 +1232,17 @@
     0.1352313905954361
    ],
    "positions": {
-    "decalage": 1482224,
+    "decalage": 1777696,
     "type": "u16",
     "nombre": 60
    },
    "uv": {
-    "decalage": 1482344,
+    "decalage": 1777816,
     "type": "u16",
     "nombre": 40
    },
    "indices": {
-    "decalage": 1482424,
+    "decalage": 1777896,
     "type": "u16",
     "nombre": 30
    },
@@ -1191,7 +1250,7 @@
    "triangles": 10
   },
   {
-   "nom": "objets-decor:visite-34",
+   "nom": "objets-decor:visite-35",
    "atlas": "objets",
    "objet": "decor:visite",
    "min": [
@@ -1205,17 +1264,17 @@
     0.031587108969688416
    ],
    "positions": {
-    "decalage": 1482484,
+    "decalage": 1777956,
     "type": "u16",
     "nombre": 72
    },
    "uv": {
-    "decalage": 1482628,
+    "decalage": 1778100,
     "type": "u16",
     "nombre": 48
    },
    "indices": {
-    "decalage": 1482724,
+    "decalage": 1778196,
     "type": "u16",
     "nombre": 36
    },
@@ -1223,44 +1282,12 @@
    "triangles": 12
   },
   {
-   "nom": "objets-radio-35",
-   "atlas": "objets",
-   "objet": "radio",
-   "min": [
-    0.7340309023857117,
-    0.0009134486317634583,
-    -0.5548517107963562
-   ],
-   "echelle": [
-    0.25193822383880615,
-    0.1440865397453308,
-    0.27979400753974915
-   ],
-   "positions": {
-    "decalage": 1482796,
-    "type": "u16",
-    "nombre": 4569
-   },
-   "uv": {
-    "decalage": 1491936,
-    "type": "u16",
-    "nombre": 3046
-   },
-   "indices": {
-    "decalage": 1498028,
-    "type": "u16",
-    "nombre": 5520
-   },
-   "sommets": 1523,
-   "triangles": 1840
-  },
-  {
    "nom": "objets-decor:casier-36",
    "atlas": "objets",
    "objet": "decor:casier",
    "min": [
     0.2799999713897705,
-    0.0,
+    0,
     -0.5799999833106995
    ],
    "echelle": [
@@ -1269,21 +1296,21 @@
     0.23999997973442078
    ],
    "positions": {
-    "decalage": 1509068,
+    "decalage": 1778268,
     "type": "u16",
-    "nombre": 1224
+    "nombre": 1230
    },
    "uv": {
-    "decalage": 1511516,
+    "decalage": 1780728,
     "type": "u16",
-    "nombre": 816
+    "nombre": 820
    },
    "indices": {
-    "decalage": 1513148,
+    "decalage": 1782368,
     "type": "u16",
     "nombre": 1242
    },
-   "sommets": 408,
+   "sommets": 410,
    "triangles": 414
   },
   {
@@ -1301,17 +1328,17 @@
     0.0010606944561004639
    ],
    "positions": {
-    "decalage": 1515632,
+    "decalage": 1784852,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1515656,
+    "decalage": 1784876,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1515672,
+    "decalage": 1784892,
     "type": "u16",
     "nombre": 6
    },
@@ -1333,17 +1360,17 @@
     0.01717427372932434
    ],
    "positions": {
-    "decalage": 1515684,
+    "decalage": 1784904,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1515708,
+    "decalage": 1784928,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1515724,
+    "decalage": 1784944,
     "type": "u16",
     "nombre": 6
    },
@@ -1365,17 +1392,17 @@
     0.16083797812461853
    ],
    "positions": {
-    "decalage": 1515736,
+    "decalage": 1784956,
     "type": "u16",
     "nombre": 60
    },
    "uv": {
-    "decalage": 1515856,
+    "decalage": 1785076,
     "type": "u16",
     "nombre": 40
    },
    "indices": {
-    "decalage": 1515936,
+    "decalage": 1785156,
     "type": "u16",
     "nombre": 30
    },
@@ -1397,17 +1424,17 @@
     0.08642124384641647
    ],
    "positions": {
-    "decalage": 1515996,
+    "decalage": 1785216,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516020,
+    "decalage": 1785240,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516036,
+    "decalage": 1785256,
     "type": "u16",
     "nombre": 6
    },
@@ -1426,20 +1453,20 @@
    "echelle": [
     0.03599998354911804,
     0.17000001668930054,
-    9.999999974752427e-07
+    9.999999974752427e-7
    ],
    "positions": {
-    "decalage": 1516048,
+    "decalage": 1785268,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516072,
+    "decalage": 1785292,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516088,
+    "decalage": 1785308,
     "type": "u16",
     "nombre": 6
    },
@@ -1458,20 +1485,20 @@
    "echelle": [
     0.03399999439716339,
     0.17000001668930054,
-    9.999999974752427e-07
+    9.999999974752427e-7
    ],
    "positions": {
-    "decalage": 1516100,
+    "decalage": 1785320,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516124,
+    "decalage": 1785344,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516140,
+    "decalage": 1785360,
     "type": "u16",
     "nombre": 6
    },
@@ -1490,20 +1517,20 @@
    "echelle": [
     0.03600001335144043,
     0.17000001668930054,
-    9.999999974752427e-07
+    9.999999974752427e-7
    ],
    "positions": {
-    "decalage": 1516152,
+    "decalage": 1785372,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516176,
+    "decalage": 1785396,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516192,
+    "decalage": 1785412,
     "type": "u16",
     "nombre": 6
    },
@@ -1522,20 +1549,20 @@
    "echelle": [
     0.0339999794960022,
     0.17000001668930054,
-    9.999999974752427e-07
+    9.999999974752427e-7
    ],
    "positions": {
-    "decalage": 1516204,
+    "decalage": 1785424,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516228,
+    "decalage": 1785448,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516244,
+    "decalage": 1785464,
     "type": "u16",
     "nombre": 6
    },
@@ -1554,20 +1581,20 @@
    "echelle": [
     0.03600001335144043,
     0.17000001668930054,
-    9.999999974752427e-07
+    9.999999974752427e-7
    ],
    "positions": {
-    "decalage": 1516256,
+    "decalage": 1785476,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516280,
+    "decalage": 1785500,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516296,
+    "decalage": 1785516,
     "type": "u16",
     "nombre": 6
    },
@@ -1586,20 +1613,20 @@
    "echelle": [
     0.029999971389770508,
     0.17000001668930054,
-    9.999999974752427e-07
+    9.999999974752427e-7
    ],
    "positions": {
-    "decalage": 1516308,
+    "decalage": 1785528,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516332,
+    "decalage": 1785552,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516348,
+    "decalage": 1785568,
     "type": "u16",
     "nombre": 6
    },
@@ -1618,20 +1645,20 @@
    "echelle": [
     0.029999971389770508,
     0.17000001668930054,
-    9.999999974752427e-07
+    9.999999974752427e-7
    ],
    "positions": {
-    "decalage": 1516360,
+    "decalage": 1785580,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516384,
+    "decalage": 1785604,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516400,
+    "decalage": 1785620,
     "type": "u16",
     "nombre": 6
    },
@@ -1653,17 +1680,17 @@
     0.05950206518173218
    ],
    "positions": {
-    "decalage": 1516412,
+    "decalage": 1785632,
     "type": "u16",
     "nombre": 36
    },
    "uv": {
-    "decalage": 1516484,
+    "decalage": 1785704,
     "type": "u16",
     "nombre": 24
    },
    "indices": {
-    "decalage": 1516532,
+    "decalage": 1785752,
     "type": "u16",
     "nombre": 18
    },
@@ -1685,17 +1712,17 @@
     0.012439638376235962
    ],
    "positions": {
-    "decalage": 1516568,
+    "decalage": 1785788,
     "type": "u16",
     "nombre": 60
    },
    "uv": {
-    "decalage": 1516688,
+    "decalage": 1785908,
     "type": "u16",
     "nombre": 40
    },
    "indices": {
-    "decalage": 1516768,
+    "decalage": 1785988,
     "type": "u16",
     "nombre": 30
    },
@@ -1717,17 +1744,17 @@
     0.006789445877075195
    ],
    "positions": {
-    "decalage": 1516828,
+    "decalage": 1786048,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516852,
+    "decalage": 1786072,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516868,
+    "decalage": 1786088,
     "type": "u16",
     "nombre": 6
    },
@@ -1745,21 +1772,21 @@
    ],
    "echelle": [
     0.1865236908197403,
-    9.999999974752427e-07,
+    9.999999974752427e-7,
     0.13198135793209076
    ],
    "positions": {
-    "decalage": 1516880,
+    "decalage": 1786100,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516904,
+    "decalage": 1786124,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516920,
+    "decalage": 1786140,
     "type": "u16",
     "nombre": 6
    },
@@ -1777,21 +1804,21 @@
    ],
    "echelle": [
     0.045467525720596313,
-    9.999999974752427e-07,
+    9.999999974752427e-7,
     0.030035659670829773
    ],
    "positions": {
-    "decalage": 1516932,
+    "decalage": 1786152,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1516956,
+    "decalage": 1786176,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1516972,
+    "decalage": 1786192,
     "type": "u16",
     "nombre": 6
    },
@@ -1810,20 +1837,20 @@
    "echelle": [
     0.10000002384185791,
     0.022000014781951904,
-    9.999999974752427e-07
+    9.999999974752427e-7
    ],
    "positions": {
-    "decalage": 1516984,
+    "decalage": 1786204,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1517008,
+    "decalage": 1786228,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1517024,
+    "decalage": 1786244,
     "type": "u16",
     "nombre": 6
    },
@@ -1842,20 +1869,20 @@
    "echelle": [
     0.07499998807907104,
     0.01600000262260437,
-    9.999999974752427e-07
+    9.999999974752427e-7
    ],
    "positions": {
-    "decalage": 1517036,
+    "decalage": 1786256,
     "type": "u16",
     "nombre": 12
    },
    "uv": {
-    "decalage": 1517060,
+    "decalage": 1786280,
     "type": "u16",
     "nombre": 8
    },
    "indices": {
-    "decalage": 1517076,
+    "decalage": 1786296,
     "type": "u16",
     "nombre": 6
    },
@@ -1863,7 +1890,39 @@
    "triangles": 2
   },
   {
-   "nom": "objectifs2-tiroir:objectifs2-55",
+   "nom": "tasse-decor:tasse-55",
+   "atlas": "tasse",
+   "objet": "decor:tasse",
+   "min": [
+    0.26902925968170166,
+    0.005279803182929754,
+    0.08402925729751587
+   ],
+   "echelle": [
+    0.10558772087097168,
+    0.09144938737154007,
+    0.08194148540496826
+   ],
+   "positions": {
+    "decalage": 1786308,
+    "type": "u16",
+    "nombre": 13395
+   },
+   "uv": {
+    "decalage": 1813100,
+    "type": "u16",
+    "nombre": 8930
+   },
+   "indices": {
+    "decalage": 1830960,
+    "type": "u16",
+    "nombre": 25524
+   },
+   "sommets": 4465,
+   "triangles": 8508
+  },
+  {
+   "nom": "objectifs2-tiroir:objectifs2-56",
    "atlas": "objectifs2",
    "objet": "tiroir:objectifs2",
    "min": [
@@ -1877,17 +1936,17 @@
     0.46000003814697266
    ],
    "positions": {
-    "decalage": 1517088,
+    "decalage": 1882008,
     "type": "u16",
     "nombre": 43458
    },
    "uv": {
-    "decalage": 1604004,
+    "decalage": 1968924,
     "type": "u16",
     "nombre": 28972
    },
    "indices": {
-    "decalage": 1661948,
+    "decalage": 2026868,
     "type": "u16",
     "nombre": 39696
    },
@@ -1895,7 +1954,7 @@
    "triangles": 13232
   },
   {
-   "nom": "secret-tiroir:secret-56",
+   "nom": "secret-tiroir:secret-57",
    "atlas": "secret",
    "objet": "tiroir:secret",
    "min": [
@@ -1909,17 +1968,17 @@
     0.46000003814697266
    ],
    "positions": {
-    "decalage": 1741340,
+    "decalage": 2106260,
     "type": "u16",
     "nombre": 8352
    },
    "uv": {
-    "decalage": 1758044,
+    "decalage": 2122964,
     "type": "u16",
     "nombre": 5568
    },
    "indices": {
-    "decalage": 1769180,
+    "decalage": 2134100,
     "type": "u16",
     "nombre": 10464
    },
@@ -1927,71 +1986,71 @@
    "triangles": 3488
   },
   {
-   "nom": "objectifs-tiroir:objectifs-57",
+   "nom": "objectifs-tiroir:objectifs-58",
    "atlas": "objectifs",
    "objet": "tiroir:objectifs",
    "min": [
-    0.28999999165534973,
+    0.2889999747276306,
     0.008999999612569809,
     -0.5600000023841858
    ],
    "echelle": [
-    0.37999996542930603,
-    0.0729999989271164,
+    0.38200002908706665,
+    0.0794999897480011,
     0.2395000159740448
    ],
    "positions": {
-    "decalage": 1790108,
+    "decalage": 2155028,
     "type": "u16",
-    "nombre": 44376
+    "nombre": 44352
    },
    "uv": {
-    "decalage": 1878860,
+    "decalage": 2243732,
     "type": "u16",
-    "nombre": 29584
+    "nombre": 29568
    },
    "indices": {
-    "decalage": 1938028,
+    "decalage": 2302868,
     "type": "u16",
     "nombre": 40824
    },
-   "sommets": 14792,
+   "sommets": 14784,
    "triangles": 13608
   },
   {
-   "nom": "surprise-tiroir:surprise-58",
+   "nom": "surprise-tiroir:surprise-59",
    "atlas": "surprise",
    "objet": "tiroir:surprise",
    "min": [
-    0.28999999165534973,
-    0.09550000727176666,
+    0.2889999747276306,
+    0.09549999982118607,
     -0.5600000023841858
    ],
    "echelle": [
-    0.37999996542930603,
-    0.046999990940093994,
+    0.38200002908706665,
+    0.05549999326467514,
     0.2395000159740448
    ],
    "positions": {
-    "decalage": 2019676,
+    "decalage": 2384516,
     "type": "u16",
-    "nombre": 1203
+    "nombre": 1212
    },
    "uv": {
-    "decalage": 2022084,
+    "decalage": 2386940,
     "type": "u16",
-    "nombre": 802
+    "nombre": 808
    },
    "indices": {
-    "decalage": 2023688,
+    "decalage": 2388556,
     "type": "u16",
     "nombre": 1272
    },
-   "sommets": 401,
+   "sommets": 404,
    "triangles": 424
   },
   {
-   "nom": "surprise-cadre:surprise-0-59",
+   "nom": "surprise-cadre:surprise-0-60",
    "atlas": "surprise",
    "objet": "cadre:surprise-0",
    "min": [
@@ -2005,17 +2064,17 @@
     0.11752969026565552
    ],
    "positions": {
-    "decalage": 2026232,
+    "decalage": 2391100,
     "type": "u16",
     "nombre": 72
    },
    "uv": {
-    "decalage": 2026376,
+    "decalage": 2391244,
     "type": "u16",
     "nombre": 48
    },
    "indices": {
-    "decalage": 2026472,
+    "decalage": 2391340,
     "type": "u16",
     "nombre": 36
    },
@@ -2023,7 +2082,7 @@
    "triangles": 12
   },
   {
-   "nom": "surprise-cadre:surprise-1-60",
+   "nom": "surprise-cadre:surprise-1-61",
    "atlas": "surprise",
    "objet": "cadre:surprise-1",
    "min": [
@@ -2037,22 +2096,214 @@
     0.11828428506851196
    ],
    "positions": {
-    "decalage": 2026544,
+    "decalage": 2391412,
     "type": "u16",
     "nombre": 72
    },
    "uv": {
-    "decalage": 2026688,
+    "decalage": 2391556,
     "type": "u16",
     "nombre": 48
    },
    "indices": {
-    "decalage": 2026784,
+    "decalage": 2391652,
     "type": "u16",
     "nombre": 36
    },
    "sommets": 24,
    "triangles": 12
+  },
+  {
+   "nom": "radio-radio-62",
+   "atlas": "radio",
+   "objet": "radio",
+   "min": [
+    0.8619518280029297,
+    0.10400000214576721,
+    -0.20338743925094604
+   ],
+   "echelle": [
+    0.23528289794921875,
+    0.15753060579299927,
+    0.18460196256637573
+   ],
+   "positions": {
+    "decalage": 2391724,
+    "type": "u16",
+    "nombre": 103029
+   },
+   "uv": {
+    "decalage": 2597784,
+    "type": "u16",
+    "nombre": 68686
+   },
+   "indices": {
+    "decalage": 2735156,
+    "type": "u16",
+    "nombre": 120906
+   },
+   "sommets": 34343,
+   "triangles": 40302
+  },
+  {
+   "nom": "radio-radio:verre-63",
+   "atlas": "radio",
+   "objet": "radio:verre",
+   "min": [
+    0.8783507943153381,
+    0.15449999272823334,
+    -0.15674248337745667
+   ],
+   "echelle": [
+    0.17518848180770874,
+    0.11750383675098419,
+    0.12753841280937195
+   ],
+   "positions": {
+    "decalage": 2976968,
+    "type": "u16",
+    "nombre": 13560
+   },
+   "uv": {
+    "decalage": 3004088,
+    "type": "u16",
+    "nombre": 9040
+   },
+   "indices": {
+    "decalage": 3022168,
+    "type": "u16",
+    "nombre": 18516
+   },
+   "sommets": 4520,
+   "triangles": 6172
+  },
+  {
+   "nom": "radio-radio:ambre-64",
+   "atlas": "radio",
+   "objet": "radio:ambre",
+   "min": [
+    0.9028472304344177,
+    0.16200000047683716,
+    -0.14157254993915558
+   ],
+   "echelle": [
+    0.14053946733474731,
+    0.10016000270843506,
+    0.07768521457910538
+   ],
+   "positions": {
+    "decalage": 3059200,
+    "type": "u16",
+    "nombre": 1152
+   },
+   "uv": {
+    "decalage": 3061504,
+    "type": "u16",
+    "nombre": 768
+   },
+   "indices": {
+    "decalage": 3063040,
+    "type": "u16",
+    "nombre": 768
+   },
+   "sommets": 384,
+   "triangles": 256
+  },
+  {
+   "nom": "radio-radio:bleu-65",
+   "atlas": "radio",
+   "objet": "radio:bleu",
+   "min": [
+    0.9295227527618408,
+    0.16200000047683716,
+    -0.12396085262298584
+   ],
+   "echelle": [
+    0.034750938415527344,
+    0.10016000270843506,
+    0.01256667822599411
+   ],
+   "positions": {
+    "decalage": 3064576,
+    "type": "u16",
+    "nombre": 288
+   },
+   "uv": {
+    "decalage": 3065152,
+    "type": "u16",
+    "nombre": 192
+   },
+   "indices": {
+    "decalage": 3065536,
+    "type": "u16",
+    "nombre": 192
+   },
+   "sommets": 96,
+   "triangles": 64
+  },
+  {
+   "nom": "radio-radio:station-66",
+   "atlas": "radio",
+   "objet": "radio:station",
+   "min": [
+    1.0147570371627808,
+    0.12600499391555786,
+    -0.03561773523688316
+   ],
+   "echelle": [
+    0.02060091495513916,
+    0.01999002695083618,
+    0.01666223630309105
+   ],
+   "positions": {
+    "decalage": 3065920,
+    "type": "u16",
+    "nombre": 3702
+   },
+   "uv": {
+    "decalage": 3073324,
+    "type": "u16",
+    "nombre": 2468
+   },
+   "indices": {
+    "decalage": 3078260,
+    "type": "u16",
+    "nombre": 3654
+   },
+   "sommets": 1234,
+   "triangles": 1218
+  },
+  {
+   "nom": "console-console:corps-67",
+   "atlas": "console",
+   "objet": "console:corps",
+   "min": [
+    -1.062657356262207,
+    1.1920923449759702e-11,
+    0.04471496120095253
+   ],
+   "echelle": [
+    0.14232158660888672,
+    0.023600000888109207,
+    0.20057007670402527
+   ],
+   "positions": {
+    "decalage": 3198944,
+    "type": "u16",
+    "nombre": 8136
+   },
+   "uv": {
+    "decalage": 3215216,
+    "type": "u16",
+    "nombre": 5424
+   },
+   "indices": {
+    "decalage": 3226064,
+    "type": "u16",
+    "nombre": 10944
+   },
+   "sommets": 2712,
+   "triangles": 3648
   }
  ],
  "vivants": {
@@ -2064,17 +2315,17 @@
    ],
    "droite": [
     0.9999513030052185,
-    0.0,
+    0,
     -0.009866980835795403
    ],
    "haut": [
     4.312994406063808e-10,
-    1.0,
-    4.370926021124433e-08
+    1,
+    4.370926021124433e-8
    ],
    "normale": [
     0.009866980835795403,
-    -4.371138828673793e-08,
+    -4.371138828673793e-8,
     0.9999513030052185
    ],
    "largeur": 0.31,
@@ -2089,17 +2340,17 @@
    ],
    "droite": [
     0.9723174571990967,
-    0.0,
+    0,
     -0.23366370797157288
    ],
    "haut": [
-    1.0213764944921877e-08,
-    1.0,
-    4.2501344665879515e-08
+    1.0213764944921877e-8,
+    1,
+    4.2501344665879515e-8
    ],
    "normale": [
     0.23366370797157288,
-    -4.371138828673793e-08,
+    -4.371138828673793e-8,
     0.9723174571990967
    ],
    "largeur": 0.17550000000000002,
@@ -2109,7 +2360,7 @@
  },
  "vitre": {
   "centre": [
-   0.0,
+   0,
    0.7850000262260437,
    -0.949999988079071
   ],
@@ -2119,7 +2370,7 @@
  "dehors": {
   "ordinateur": "dehors.webp",
   "telephone": "telephone/dehors.webp",
-  "distance": 12.0,
+  "distance": 12,
   "largeur": 21.609697063148158,
   "hauteur": 13.506060664467599,
   "centre": [
@@ -2128,7 +2379,7 @@
    -10.741783142089844
   ],
   "normale": [
-   -0.0,
+   0,
    -0.07974521815776825,
    0.9968152642250061
   ]
@@ -2151,7 +2402,7 @@
   ],
   "axe": [
    0.8791630268096924,
-   0.0,
+   0,
    0.4765211045742035
   ]
  },
@@ -2163,19 +2414,19 @@
     -0.7928000092506409
    ],
    "droite": [
-    1.0,
-    0.0,
-    -0.0
+    1,
+    0,
+    0
    ],
    "haut": [
-    0.0,
-    1.0,
-    -0.0
+    0,
+    1,
+    0
    ],
    "normale": [
-    0.0,
-    0.0,
-    1.0
+    0,
+    0,
+    1
    ],
    "largeur": 0.33,
    "hauteur": 0.44
@@ -2187,19 +2438,19 @@
     -0.7928000092506409
    ],
    "droite": [
-    1.0,
-    0.0,
-    -0.0
+    1,
+    0,
+    0
    ],
    "haut": [
-    0.0,
-    1.0,
-    -0.0
+    0,
+    1,
+    0
    ],
    "normale": [
-    0.0,
-    0.0,
-    1.0
+    0,
+    0,
+    1
    ],
    "largeur": 0.33,
    "hauteur": 0.44
@@ -2211,19 +2462,19 @@
     -0.41999998688697815
    ],
    "droite": [
-    0.0,
-    0.0,
-    -1.0
+    0,
+    0,
+    -1
    ],
    "haut": [
-    0.0,
-    1.0,
-    -0.0
+    0,
+    1,
+    0
    ],
    "normale": [
-    1.0,
-    0.0,
-    -0.0
+    1,
+    0,
+    0
    ],
    "largeur": 0.32,
    "hauteur": 0.24
@@ -2235,19 +2486,19 @@
     0.019999999552965164
    ],
    "droite": [
-    0.0,
-    0.0,
-    -1.0
+    0,
+    0,
+    -1
    ],
    "haut": [
-    0.0,
-    1.0,
-    -0.0
+    0,
+    1,
+    0
    ],
    "normale": [
-    1.0,
-    0.0,
-    -0.0
+    1,
+    0,
+    0
    ],
    "largeur": 0.32,
    "hauteur": 0.24
@@ -2259,19 +2510,19 @@
     0.2199999988079071
    ],
    "droite": [
-    0.0,
-    0.0,
-    1.0
+    0,
+    0,
+    1
    ],
    "haut": [
-    0.0,
-    1.0,
-    -0.0
+    0,
+    1,
+    0
    ],
    "normale": [
-    -1.0,
-    0.0,
-    -0.0
+    -1,
+    0,
+    0
    ],
    "largeur": 0.32,
    "hauteur": 0.44
@@ -2284,18 +2535,18 @@
    ],
    "droite": [
     0.9981347918510437,
-    0.0,
+    0,
     0.061048541218042374
    ],
    "haut": [
     0.061048541218042374,
-    0.0,
+    0,
     -0.9981347918510437
    ],
    "normale": [
-    0.0,
-    1.0,
-    -0.0
+    0,
+    1,
+    0
    ],
    "largeur": 0.094,
    "hauteur": 0.112
@@ -2308,18 +2559,18 @@
    ],
    "droite": [
     0.9975640773773193,
-    0.0,
+    0,
     -0.06975647062063217
    ],
    "haut": [
     -0.06975647062063217,
-    0.0,
+    0,
     -0.9975640773773193
    ],
    "normale": [
-    0.0,
-    1.0,
-    -0.0
+    0,
+    1,
+    0
    ],
    "largeur": 0.094,
    "hauteur": 0.112
@@ -2329,9 +2580,9 @@
   "objectifs": {
    "course": 0.205,
    "axe": [
-    0.0,
-    0.0,
-    1.0
+    0,
+    0,
+    1
    ],
    "objectifs": [
     {
@@ -2402,9 +2653,9 @@
   "objectifs2": {
    "course": 0.35,
    "axe": [
-    0.0,
-    0.0,
-    1.0
+    0,
+    0,
+    1
    ],
    "objectifs": [
     {
@@ -2475,9 +2726,9 @@
   "secret": {
    "course": 0.3,
    "axe": [
-    0.0,
-    0.0,
-    1.0
+    0,
+    0,
+    1
    ],
    "cle": [
     0.7799999713897705,
@@ -2498,9 +2749,9 @@
   "surprise": {
    "course": 0.17,
    "axe": [
-    0.0,
-    0.0,
-    1.0
+    0,
+    0,
+    1
    ],
    "cle": [
     0.47999998927116394,
@@ -2517,7 +2768,7 @@
  "caisson": {
   "bord": [
    0.7799999713897705,
-   0.0,
+   0,
    0.25999999046325684
   ],
   "centre": [
@@ -2532,5 +2783,42 @@
   "yMin": -0.46,
   "zMin": -0.7000000000000001
  },
- "octets_geometrie": 2026856
+ "octets_geometrie": 3247952,
+ "radio_takosound": {
+  "version": 1,
+  "marque": "TakoSound",
+  "atlas": "radio",
+  "pose_blender": [
+   0.98,
+   0.112,
+   0.104
+  ],
+  "lacet_blender": -0.4188790204786391,
+  "station": {
+   "objet": "radio:station",
+   "point": [
+    1.0261454582214355,
+    0.13600000739097595,
+    -0.0312497541308403
+   ],
+   "axe": [
+    0.4067366421222687,
+    0,
+    -0.9135454297065735
+   ],
+   "cran": 0.5235987755982988
+  },
+  "emissions": {
+   "radio:ambre": "#ff921e",
+   "radio:bleu": "#64baff"
+  },
+  "verre": "radio:verre",
+  "lecture": {
+   "periode": 3,
+   "amplitude": 0.08,
+   "force": 2,
+   "silence": 0
+  }
+ },
+ "console_cuite": true
 }

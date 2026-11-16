@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr" class="sans-js" data-version="533a103ee558">
+<html lang="fr" class="sans-js" data-version="fffd7f160c03">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -60,6 +60,7 @@
     <p class="intro__metier">Développeur · formé à l’École 42</p>
     <p class="intro__dispo"><span class="intro__voyant" aria-hidden="true"></span>Stage dès le 2 novembre · puis alternance à partir de janvier 2027, en CDD ou en CDI (apprentissage ou professionnalisation, au rythme de l&#39;École 42)</p>
     <p class="intro__accroche">Je conçois des sites, des outils sur mesure et des automatisations par l&#39;IA pour les indépendants et les petites structures.</p>
+    <p class="intro__mascotte">Je crée aussi des mascottes 3D : <button type="button" class="intro__rencontre" data-rencontre aria-haspopup="dialog" hidden>Rencontrer la mascotte</button><a class="intro__rencontre-lien" href="#creations-pieuvre">Comment je l&#39;ai créée</a></p>
     <nav class="intro__portes" aria-label="Que cherchez-vous ?"><a class="porte" href="#qui-suis-je" data-porte="recrute"><strong>Je recrute</strong><span>profil, disponibilité et CV</span></a><a class="porte" href="#services" data-porte="projet"><strong>J&#39;ai un projet</strong><span>services sur devis</span></a></nav>
     <div class="intro__actions">
       <button type="button" class="tako-bouton tako-bouton--principal" id="explorer">Entrer dans l’atelier</button>
@@ -159,6 +160,7 @@ Le lieu ou le télétravail :
   <p class="prose creations__intro">Projets d'école, outils personnels et un service en ligne. Le badge dit où en est chacun : <strong>démonstration</strong> (réalisé et montrable), <strong>prototype</strong> (fonctionne, pas encore livré à d'autres) ou <strong>service confirmé</strong> (offre publique en ligne). Les explorations sans preuve ne sont pas affichées.</p>
   <ul class="sommaire" aria-label="Toutes les fiches">
     <li><a class="sommaire__lien" href="#creations-factarena"><span class="sommaire__titre">FactArena</span><span class="tako-badge statut statut--prototype">prototype</span><span class="sommaire__sous">ft_transcendence · École 42 · projet d&#39;équipe à cinq · tech lead</span><span class="sommaire__resume">Jeu multijoueur de vérification des faits : les joueurs regardent de courtes vidéos virales, misent des crédits virtuels et jugent « fait » ou « faux ». J&#39;étais le tech lead et l&#39;architecte du projet, et j&#39;ai écrit son service d&#39;IA.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
+    <li><a class="sommaire__lien" href="#creations-pieuvre"><span class="sommaire__titre">La mini-pieuvre, de la création à l&#39;intégration web</span><span class="tako-badge statut statut--demo">démonstration</span><span class="sommaire__sous">Mascotte 3D de ce site · Blender, glTF, three.js</span><span class="sommaire__resume">La mini-pieuvre du bureau est une mascotte 3D que j&#39;ai créée de bout en bout : son modèle, son squelette, ses expressions et ses animations dans Blender, puis son intégration web en 3D temps réel. Ici, elle réagit aux gestes du visiteur.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
     <li><a class="sommaire__lien" href="#creations-oktako-agents"><span class="sommaire__titre">MajorTakito, organisation d&#39;agents de code</span><span class="tako-badge statut statut--prototype">prototype</span><span class="sommaire__sous">Projet personnel · conception, architecture et garde-fous</span><span class="sommaire__resume">Un coordinateur découpe le travail en lots et le confie à des agents de code (Claude Code, Codex), jusqu&#39;à quinze en parallèle, chacun isolé dans sa propre copie du dépôt. J&#39;en conçois l&#39;architecture, les règles et les tests. Outil interne, non public.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
     <li><a class="sommaire__lien" href="#creations-moteur-commercial"><span class="sommaire__titre">Moteur commercial de MajorTakito</span><span class="tako-badge statut statut--prototype">prototype</span><span class="sommaire__sous">Rust · devis, preuves, prospection</span><span class="sommaire__resume">Outil interne en Rust qui prépare devis, preuves et prospection, couvert par plus de 2 000 tests automatisés.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
     <li><a class="sommaire__lien" href="#creations-rouille"><span class="sommaire__titre">Rouille</span><span class="tako-badge statut statut--demo">démonstration</span><span class="sommaire__sous">Noyau i686 de loisir et petit bureau rétro, en Rust</span><span class="sommaire__resume">Un noyau no_std qui démarre en mode protégé 32 bits sur un bureau original : fenêtres, bloc-notes en mémoire, démineur, horloge CMOS. Un terrain d&#39;essai, pas un produit.</span><span class="sommaire__ouvrir" aria-hidden="true">Ouvrir la fiche →</span></a></li>
@@ -176,9 +178,26 @@ Le lieu ou le télétravail :
       <p class="fiche__technos">Python · FastAPI · pgvector · Mistral · SSE · NestJS · PostgreSQL · Docker</p>
       <div class="equipe"><h4>L'équipe</h4><p>Un projet d&#39;équipe : chacun a sa part, vérifiable dans l&#39;historique git du dépôt public.</p><ul><li><strong>elanteno</strong> (moi) : tech lead et architecte, service d&#39;IA (Python)</li><li><strong>slario</strong> : DevOps et gestion de projet : Docker Compose, nginx et TLS, intégration continue</li><li><strong>alaroque</strong> : back-end : application NestJS, authentification, boucle de jeu, WebSockets, paris et crédits</li><li><strong>krfranco</strong> : front-end et Product Owner : identité visuelle, thème, pages d&#39;accueil, de profil et de salon</li><li><strong>oztozdem</strong> : front-end temps réel : écran de partie, chat, statistiques, révélation des verdicts</li></ul></div>
       <p class="fiche__liens"><a href="https://github.com/Dantenos/factarena" rel="noopener">Dépôt GitHub</a></p>
+      
       <p class="fiche__source">Code public : dépôt GitHub, contributions de chacun dans l&#39;historique git</p>
       <nav class="fiche__suite" aria-label="Autres fiches">
         <a href="#creations-cle-et-cadre" rel="prev"><span aria-hidden="true">← </span>Clé &amp; Cadre</a>
+        <a href="#creations">Toutes les créations</a>
+        <a href="#creations-pieuvre" rel="next">La mini-pieuvre, de la création à l&#39;intégration web<span aria-hidden="true"> →</span></a>
+      </nav>
+    </article>
+    <article class="fiche tako-carte" id="creations-pieuvre" aria-labelledby="f-pieuvre">
+      <header><h3 id="f-pieuvre">La mini-pieuvre, de la création à l&#39;intégration web</h3><span class="tako-badge statut statut--demo">démonstration</span></header>
+      <p class="fiche__sous">Mascotte 3D de ce site · Blender, glTF, three.js · 2026</p>
+      <p>La mini-pieuvre du bureau est une mascotte 3D que j&#39;ai créée de bout en bout : son modèle, son squelette, ses expressions et ses animations dans Blender, puis son intégration web en 3D temps réel. Ici, elle réagit aux gestes du visiteur.</p>
+      <ul><li>Modèle et squelette écrits par script dans Blender : le manteau et les huit bras en un seul maillage, les yeux, les paupières, une bouche à sept formes, quatre couvre-chefs. Aucune image générée.</li><li>Une bibliothèque de 28 actions animées : anticipation, étirement et écrasement à volume constant, retombée amortie. Le site en sert 19, celles que son petit cerveau joue : respirer, saluer, applaudir, s&#39;abriter sous un parapluie, s&#39;endormir.</li><li>Un regard calculé dans le navigateur : ses yeux suivent le pointeur ou l&#39;objet survolé, dans les bornes fixées dans Blender.</li><li>Un saut pour entrer en scène : elle s&#39;accroupit, suit une vraie parabole, s&#39;écrase à la réception et se redresse.</li><li>La chaîne Blender → GLB → three.js : un export glTF écrit pour ce site (1,3 Mo), lu par le chargeur standard de three.js ; des sommets calculés par Blender servent de témoin, à 1 mm près.</li><li>Au téléphone, une cible de 44 px au moins. Animations coupées : une pose fixe. Sans 3D : une image, et le reste du site ne change pas.</li><li>Ce qui reste expérimental : sa marche n&#39;est pas branchée, elle ne parle pas, et un personnage stylisé ne prouve pas à lui seul un style réaliste.</li></ul>
+      <p class="fiche__technos">Blender · Python · glTF · three.js · WebGL · JavaScript</p>
+      
+      
+      <p class="fiche__rencontre"><button type="button" class="tako-bouton tako-bouton--principal" data-rencontre aria-haspopup="dialog" hidden>Rencontrer la mascotte</button></p>
+      <p class="fiche__source">Démonstration vivante sur ce site : la mini-pieuvre, sur le casier du bureau.</p>
+      <nav class="fiche__suite" aria-label="Autres fiches">
+        <a href="#creations-factarena" rel="prev"><span aria-hidden="true">← </span>FactArena</a>
         <a href="#creations">Toutes les créations</a>
         <a href="#creations-oktako-agents" rel="next">MajorTakito, organisation d&#39;agents de code<span aria-hidden="true"> →</span></a>
       </nav>
@@ -191,9 +210,10 @@ Le lieu ou le télétravail :
       <p class="fiche__technos">Rust · Python · Bash · Git · Linux · Tests de mutation</p>
       
       
+      
       <p class="fiche__source">Outil interne, en usage sur un serveur Linux personnel ; pas de démonstration publique</p>
       <nav class="fiche__suite" aria-label="Autres fiches">
-        <a href="#creations-factarena" rel="prev"><span aria-hidden="true">← </span>FactArena</a>
+        <a href="#creations-pieuvre" rel="prev"><span aria-hidden="true">← </span>La mini-pieuvre, de la création à l&#39;intégration web</a>
         <a href="#creations">Toutes les créations</a>
         <a href="#creations-moteur-commercial" rel="next">Moteur commercial de MajorTakito<span aria-hidden="true"> →</span></a>
       </nav>
@@ -204,6 +224,7 @@ Le lieu ou le télétravail :
       <p>Outil interne en Rust qui prépare devis, preuves et prospection, couvert par plus de 2 000 tests automatisés.</p>
       
       <p class="fiche__technos">Rust</p>
+      
       
       
       <p class="fiche__source">Outil interne, non public</p>
@@ -221,6 +242,7 @@ Le lieu ou le télétravail :
       <p class="fiche__technos">Rust · no_std · x86 · QEMU</p>
       
       <p class="fiche__liens"><a href="noyau/" rel="noopener">Le démarrer dans votre navigateur</a></p>
+      
       <p class="fiche__source">Démo jouable sur ce site ; démarrage revérifié le 27/10/2026</p>
       <nav class="fiche__suite" aria-label="Autres fiches">
         <a href="#creations-moteur-commercial" rel="prev"><span aria-hidden="true">← </span>Moteur commercial de MajorTakito</a>
@@ -234,6 +256,7 @@ Le lieu ou le télétravail :
       <p>Serveur HTTP/1.1 non bloquant : poll(), connexions concurrentes, CGI, upload et configuration.</p>
       
       <p class="fiche__technos">C++ · HTTP · poll()</p>
+      
       
       
       <p class="fiche__source">Projet validé à l&#39;École 42 · code non publié</p>
@@ -251,6 +274,7 @@ Le lieu ou le télétravail :
       <p class="fiche__technos">C · POSIX</p>
       
       
+      
       <p class="fiche__source">Projet validé à l&#39;École 42 · code non publié</p>
       <nav class="fiche__suite" aria-label="Autres fiches">
         <a href="#creations-webserv" rel="prev"><span aria-hidden="true">← </span>Webserv</a>
@@ -264,6 +288,7 @@ Le lieu ou le télétravail :
       <p>Infrastructure multi-conteneurs : nginx/TLS, WordPress, MariaDB et réseaux isolés.</p>
       
       <p class="fiche__technos">Docker · nginx · TLS · MariaDB</p>
+      
       
       
       <p class="fiche__source">Projet validé à l&#39;École 42 · code non publié</p>
@@ -281,6 +306,7 @@ Le lieu ou le télétravail :
       <p class="fiche__technos">Photographie · Vidéo · Rédaction</p>
       
       <p class="fiche__liens"><a href="https://studio.oktako.fr/" rel="noopener">studio.oktako.fr</a></p>
+      
       <p class="fiche__source">Offre publique en ligne sur studio.oktako.fr</p>
       <nav class="fiche__suite" aria-label="Autres fiches">
         <a href="#creations-inception" rel="prev"><span aria-hidden="true">← </span>Inception</a>
@@ -306,6 +332,7 @@ Ce qui existe déjà :
   <ul class="offres">
     <li class="offre tako-carte" id="services-stock"><h3>Le stock de votre commerce</h3><p class="offre__tarif">Sur devis</p><p>Vous voulez connaître les quantités en stock aujourd&#39;hui et vérifier qu&#39;une livraison a bien été enregistrée.</p><p><strong>Ce que vous recevez :</strong> Un projet de gestion de stock en bêta : un premier échange pour vérifier votre besoin, à partir d&#39;un prototype de réception et de suivi des lots. L&#39;adaptation aux boutiques reste à éprouver avec vous.</p><p class="offre__preuve">La preuve : <a href="stock/index.html">Essayez une réception : 4 carnets + 6 reçus = 10 en stock</a></p></li>
     <li class="offre tako-carte" id="services-site"><h3>Votre site</h3><p class="offre__tarif">Sur devis</p><p>Vous voulez un site clair, rapide et sans traceur, qui présente votre activité et se met à jour sans peine.</p><p><strong>Ce que vous recevez :</strong> Un site sur mesure, léger, hébergé simplement, lisible sans JavaScript et sur téléphone.</p><p class="offre__preuve">La preuve : <a href="exemple-sobre/index.html">Un exemple sobre : une page de moins de 6 Ko, sans script ni ressource externe</a></p></li>
+    <li class="offre tako-carte" id="services-mascotte"><h3>Mascotte et personnage 3D pour votre site</h3><p class="offre__tarif">Sur devis</p><p>Vous voulez une mascotte à votre image, qui accueille vos visiteurs et réagit à leurs gestes, sur ordinateur comme sur téléphone.</p><p><strong>Ce que vous recevez :</strong> Je modélise et j&#39;anime dans Blender son corps 3D, son squelette, ses expressions et ses gestes, puis je l&#39;intègre à votre site en 3D temps réel (glTF, three.js) : une pose fixe quand les animations sont coupées, une image quand la 3D manque.</p><p class="offre__limites">Ce qui reste à éprouver : la mini-pieuvre prouve un personnage stylisé. Un style réaliste, une charte très différente ou un personnage qui parle se développent à part ; le premier échange sert à le vérifier.</p><p class="offre__preuve">La preuve : <a href="#creations-pieuvre">La mini-pieuvre du bureau, de sa création à son intégration web</a></p></li>
     <li class="offre tako-carte" id="services-outil"><h3>Votre outil sur mesure</h3><p class="offre__tarif">Sur devis</p><p>Une tâche répétée chaque semaine, un tableur qui déborde, un suivi de clients ou de devis à remettre d&#39;aplomb.</p><p><strong>Ce que vous recevez :</strong> Un outil fait pour votre façon de travailler, couvert par des tests, que vous gardez.</p><p class="offre__preuve">La preuve : <a href="stock/index.html">Une livraison vérifiée une seule fois, un stock mis à jour</a></p></li>
     <li class="offre tako-carte" id="services-automatisation"><h3>Vos automatisations, IA comprise</h3><p class="offre__tarif">Sur devis</p><p>Trier, rechercher, résumer vos documents ou préparer des réponses, sans perdre la main.</p><p><strong>Ce que vous recevez :</strong> Une automatisation encadrée : la machine prépare, vous validez ; les réponses citent leurs sources.</p><p class="offre__preuve">La preuve : <a href="stock/index.html">Recevoir une livraison après vérification : un exemple sans IA, dont vous gardez la validation</a></p></li>
   </ul>
@@ -388,7 +415,7 @@ Ce qui existe déjà :
 <footer class="pied">
   <ul class="pied__adresses" aria-label="Écrire"><li><span class="courriel"><a class="" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-courriel-texte>contact [arobase] oktako.fr</a> <button type="button" class="tako-bouton courriel__copier" data-courriel-copier="390e061b171ef0cbfdf2d4c6c5da92a5b8" hidden>Copier</button></span></li><li><span class="courriel"><a class="" href="#contact" data-courriel="3600061b1313ebe2e1b7c5c3c1c0ddb1ae91bfb2878498d561667d" data-courriel-texte>lantenois.edouard [arobase] gmail.com</a> <button type="button" class="tako-bouton courriel__copier" data-courriel-copier="3600061b1313ebe2e1b7c5c3c1c0ddb1ae91bfb2878498d561667d" hidden>Copier</button></span></li></ul>
   <p>Edouard LANTENOIS EI · SIRET 130 811 144 00018 · <a href="mentions-legales.html">Mentions légales</a> · Aucun cookie, aucune requête vers un autre site.</p>
-  <p>Décor : création originale, modélisée et éclairée dans Blender par un script versionné, lumière précalculée. Rendu : three.js (MIT). L’atelier 3D pèse 7,1 Mo sur ordinateur, 6,0 Mo sur téléphone (taille non compressée), chargés après la page, avec une seule ambiance : celle de votre heure. Première visite, page et copie hors ligne comprises : 8,3 Mo au plus. Chacune des 3 autres ambiances (1,9 Mo au plus) ne se télécharge que si le ciel change ou si vous la choisissez ; le noyau Rouille (3,6 Mo), seulement sur votre clic ; les vidéos du tiroir des objectifs, seulement au survol de leur objectif.</p>
+  <p>Décor : création originale, modélisée et éclairée dans Blender par un script versionné, lumière précalculée. Rendu : three.js (MIT). L’atelier 3D pèse 8,4 Mo sur ordinateur, 7,3 Mo sur téléphone (taille non compressée), chargés après la page, avec une seule ambiance : celle de votre heure. Première visite, page et copie hors ligne comprises : 9,6 Mo au plus. Chacune des 3 autres ambiances (1,9 Mo au plus) ne se télécharge que si le ciel change ou si vous la choisissez ; le noyau Rouille (3,6 Mo), seulement sur votre clic ; les vidéos du tiroir des objectifs, seulement au survol de leur objectif.</p>
 </footer>
 
 <nav class="onglets" aria-label="Rubriques (mobile)"><ul><li><a href="#qui-suis-je" data-destination="qui-suis-je">Parcours</a></li><li><a href="#creations" data-destination="creations">Projets</a></li><li><a href="#services" data-destination="services">Services</a></li><li><a href="#carnet" data-destination="carnet">Carnet</a></li><li><a href="#jouer" data-destination="jouer">Rouille</a></li><li><a href="#contact" data-destination="contact">Contact</a></li></ul></nav>
@@ -401,18 +428,45 @@ Ce qui existe déjà :
   </div>
   <div class="panneau__corps" id="panneau-corps"></div>
 </aside>
-<template id="cafe-propositions" data-film="film/film.json" data-rendez-vous-libelle="Prendre rendez-vous" data-sucre-invite="Un sucre ?" data-sucre-libelle="Ajouter un sucre : affiche la proposition de pourboire"><a class="tasse__proposition" href="https://cal.com/oktako/premier-echange" rel="noopener" data-proposition="rendez-vous" hidden>Prendre un café avec moi : 15 min en visio</a><a class="tasse__proposition" href="https://ko-fi.com/majortakito" rel="noopener" data-proposition="pourboire" data-apres-sucre hidden>M&#39;offrir un café</a></template>
+<template id="cafe-propositions" data-film="film/film.json" data-film-complet="22.04" data-film-extrait="11.88" data-film-ambiances="nuit" data-rendez-vous-libelle="Prendre rendez-vous" data-sucre-invite="Un sucre ?" data-sucre-libelle="Ajouter un sucre : affiche la proposition de pourboire"><a class="tasse__proposition" href="https://cal.com/oktako/premier-echange" rel="noopener" data-proposition="rendez-vous" hidden>Prendre un café avec moi : 15 min en visio</a><a class="tasse__proposition" href="https://ko-fi.com/majortakito" rel="noopener" data-proposition="pourboire" data-apres-sucre hidden>M&#39;offrir un café</a></template>
 <template id="pied-panneau"><div class="panneau__pied"><a class="tako-bouton tako-bouton--principal" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-courriel-nom="Écrire un courriel à ">Écrire un courriel</a><a class="tako-bouton panneau__suivant" href="#contact" data-suivant>Rubrique suivante</a></div></template>
 <button type="button" class="bulle__bouton" title="Pose-moi une question" aria-label="Pose-moi une question" data-pieuvre-question aria-haspopup="dialog" hidden>?</button><aside class="bulle" id="bulle" role="dialog" aria-modal="false" aria-labelledby="bulle-titre" data-passerelle="" hidden>
   <div class="bulle__tete"><h2 class="bulle__titre" id="bulle-titre" tabindex="-1">Pose-moi une question</h2><button type="button" class="bulle__fermer" id="bulle-fermer" aria-label="Fermer la bulle"><span aria-hidden="true">×</span></button></div>
-  <p class="bulle__note">Je réponds avec des passages de ce site, mot pour mot. Rien ne sort de votre navigateur.</p>
+  <p class="bulle__note">Je réponds avec des passages de ce site, mot pour mot. Rien ne sort de votre navigateur. <a class="bulle__rencontrer" href="#creations-pieuvre" data-rencontre hidden>Rencontrer la mascotte</a></p>
   <div class="bulle__profils" role="group" aria-labelledby="bulle-profils-titre"><p class="bulle__groupe" id="bulle-profils-titre">Qui êtes-vous ?</p><div class="bulle__ligne-profils"><button type="button" class="bulle__profil" data-profil="client" aria-pressed="false">Je suis client</button><button type="button" class="bulle__profil" data-profil="investisseur" aria-pressed="false">Je suis investisseur</button><button type="button" class="bulle__profil" data-profil="recruteur" aria-pressed="false">Je recrute</button></div></div>
   <div class="bulle__suite" id="bulle-suite" hidden>
     <form class="bulle__form" id="bulle-form"><label class="bulle__etiquette" for="bulle-question">Votre question</label><div class="bulle__ligne"><input class="bulle__champ" id="bulle-question" type="text" maxlength="200" autocomplete="off" enterkeyhint="send"><button type="submit" class="tako-bouton tako-bouton--principal bulle__demander">Demander</button></div></form>
     <div class="bulle__reponse" id="bulle-reponse" role="status" aria-live="polite" data-cherche="Je fouille…" data-panne="Ma mémoire n&#39;a pas pu se charger. Édouard, lui, répond toujours." data-source="Relire sur le site :" data-autres="Autres questions"></div>
-    <div class="bulle__suggestions"><ul class="bulle__liste" data-groupe="client" hidden><li><button type="button" class="bulle__suggestion" data-bulle-question="Que faites-vous pour un indépendant ?">Que faites-vous pour un indépendant ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Combien coûte un site ?">Combien coûte un site ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Comment se passe un projet ?">Comment se passe un projet ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Faites-vous de l&#39;IA ?">Faites-vous de l&#39;IA ?</button></li></ul><ul class="bulle__liste" data-groupe="investisseur" hidden><li><button type="button" class="bulle__suggestion" data-bulle-question="Quels outils existent déjà ?">Quels outils existent déjà ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quelle est la méthode de travail ?">Quelle est la méthode de travail ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quelle offre est en ligne ?">Quelle offre est en ligne ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Comment les outils sont-ils testés ?">Comment les outils sont-ils testés ?</button></li></ul><ul class="bulle__liste" data-groupe="recruteur" hidden><li><button type="button" class="bulle__suggestion" data-bulle-question="Quelle est sa disponibilité ?">Quelle est sa disponibilité ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quels langages utilise-t-il ?">Quels langages utilise-t-il ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quel est son parcours ?">Quel est son parcours ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="A-t-il un projet d&#39;équipe ?">A-t-il un projet d&#39;équipe ?</button></li></ul></div>
+    <div class="bulle__suggestions"><ul class="bulle__liste" data-groupe="client" hidden><li><button type="button" class="bulle__suggestion" data-bulle-question="Pouvez-vous créer une mascotte 3D ?">Pouvez-vous créer une mascotte 3D ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Combien coûte un site ?">Combien coûte un site ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Comment se passe un projet ?">Comment se passe un projet ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Faites-vous de l&#39;IA ?">Faites-vous de l&#39;IA ?</button></li></ul><ul class="bulle__liste" data-groupe="investisseur" hidden><li><button type="button" class="bulle__suggestion" data-bulle-question="Quels outils existent déjà ?">Quels outils existent déjà ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quelle est la méthode de travail ?">Quelle est la méthode de travail ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quelle offre est en ligne ?">Quelle offre est en ligne ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Comment les outils sont-ils testés ?">Comment les outils sont-ils testés ?</button></li></ul><ul class="bulle__liste" data-groupe="recruteur" hidden><li><button type="button" class="bulle__suggestion" data-bulle-question="Quelle est sa disponibilité ?">Quelle est sa disponibilité ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quels langages utilise-t-il ?">Quels langages utilise-t-il ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="Quel est son parcours ?">Quel est son parcours ?</button></li><li><button type="button" class="bulle__suggestion" data-bulle-question="A-t-il un projet d&#39;équipe ?">A-t-il un projet d&#39;équipe ?</button></li></ul></div>
     <p class="bulle__ecrire"><a class="tako-bouton" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-courriel-nom="Écrire à Édouard : ">Écrire à Édouard</a><span data-groupe="recruteur" hidden> <a class="tako-bouton" href="cv.html">Voir le CV</a></span></p>
     
+  </div>
+  <div class="bulle__rencontre" id="bulle-rencontre" data-titre="Rencontrer la mascotte" data-phrase-film="Vous venez de voir son film. Ici, elle réagit en 3D à vos gestes. J&#39;ai créé son modèle, ses animations et son intégration web." hidden>
+    <p class="bulle__phrase" id="bulle-rencontre-phrase" data-phrase="Ici, elle réagit en 3D à vos gestes. J&#39;ai créé son modèle, ses animations et son intégration web.">Ici, elle réagit en 3D à vos gestes. J&#39;ai créé son modèle, ses animations et son intégration web.</p>
+    <p class="bulle__mention">Personnage créé et animé dans Blender, interactif ici en 3D.</p>
+    <figure class="bulle__repli" id="bulle-repli" hidden><img src="cadres/pieuvre.webp" alt="La mini-pieuvre rouge, coiffée de son béret, posée sur le casier du bureau." width="480" height="360" loading="lazy" decoding="async"><figcaption>La 3D n&#39;est pas disponible ici : voici la mini-pieuvre en image.</figcaption></figure>
+    <div class="bulle__actions" role="group" aria-label="Rencontrer la mascotte">
+      <button type="button" class="bulle__action" data-rencontre-action="essayer" aria-expanded="false" aria-controls="bulle-reactions">Essayer ses réactions</button>
+      <a class="bulle__action" href="#creations-pieuvre" data-rencontre-lien>Comment je l&#39;ai créée</a>
+      <button type="button" class="bulle__action" data-rencontre-action="offre" aria-expanded="false" aria-controls="bulle-offre">Une mascotte pour mon site</button>
+    </div>
+    <div class="bulle__reactions" id="bulle-reactions" hidden>
+      <p class="bulle__aide" data-tactile="Touchez-la : elle vous salue.">Bougez le pointeur : elle vous suit des yeux. Touchez-la : elle vous salue.</p>
+      <p class="bulle__mention" id="bulle-fige" hidden>Animations coupées : elle garde sa pose. Rallumez « Animations » pour la voir réagir.</p>
+      <div class="bulle__ligne-reactions"><button type="button" class="bulle__reaction" data-reaction="regard">Elle me regarde</button><button type="button" class="bulle__reaction" data-reaction="salut">Elle me salue</button><button type="button" class="bulle__reaction" data-reaction="montrer">Elle me montre où écrire</button></div>
+    </div>
+    <div class="bulle__offre" id="bulle-offre" hidden>
+      <p>Je crée des mascottes 3D comme elle, pour votre site : le modèle, les animations et l&#39;intégration web, sur devis.</p>
+      <p class="bulle__ecrire"><a class="tako-bouton" href="#services-mascotte" data-rencontre-lien>Lire l&#39;offre</a><a class="tako-bouton tako-bouton--principal" href="#contact" data-courriel="390e061b171ef0cbfdf2d4c6c5da92a5b8" data-objet="Une mascotte 3D pour mon site" data-corps="Bonjour,
+
+Ce que je veux faire : 
+Pour qui : 
+Pour quand : 
+Ce qui existe déjà : 
+
+" data-courriel-nom="Parlons de votre mascotte : ">Parlons de votre mascotte</a></p>
+    </div>
+    <div class="bulle__pied"><button type="button" class="bulle__question" data-rencontre-action="question">Poser une question sur le site</button><button type="button" class="tako-bouton bulle__accueil" id="bulle-accueil">Retour à l&#39;accueil<span class="clavier-seul">&nbsp;· Échap</span></button></div>
   </div>
   <fieldset class="bulle__chapeaux" id="bulle-chapeaux" hidden><legend>Mon couvre-chef</legend><div class="bulle__ligne-chapeaux" id="bulle-chapeaux-liste"></div></fieldset>
 </aside>

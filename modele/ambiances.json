@@ -10,72 +10,96 @@
      "ordinateur": "ambiances/jour/cuit-piece.webp",
      "telephone": "ambiances/jour/telephone/cuit-piece.webp",
      "octets": {
-      "ordinateur": 83054,
-      "telephone": 36832
+      "ordinateur": 82280,
+      "telephone": 39114
      }
     },
     "rideaux": {
      "ordinateur": "ambiances/jour/cuit-rideaux.webp",
      "telephone": "ambiances/jour/telephone/cuit-rideaux.webp",
      "octets": {
-      "ordinateur": 12552,
-      "telephone": 5304
+      "ordinateur": 12398,
+      "telephone": 5318
      }
     },
     "bureau": {
      "ordinateur": "ambiances/jour/cuit-bureau.webp",
      "telephone": "ambiances/jour/telephone/cuit-bureau.webp",
      "octets": {
-      "ordinateur": 53816,
-      "telephone": 21290
+      "ordinateur": 37582,
+      "telephone": 15196
      }
     },
     "objets": {
      "ordinateur": "ambiances/jour/cuit-objets.webp",
      "telephone": "ambiances/jour/telephone/cuit-objets.webp",
      "octets": {
-      "ordinateur": 623260,
-      "telephone": 289322
+      "ordinateur": 575170,
+      "telephone": 262848
      }
     },
     "etiquettes": {
      "ordinateur": "ambiances/jour/cuit-etiquettes.webp",
      "telephone": "ambiances/jour/telephone/cuit-etiquettes.webp",
      "octets": {
-      "ordinateur": 32764,
-      "telephone": 13502
+      "ordinateur": 32532,
+      "telephone": 13776
+     }
+    },
+    "tasse": {
+     "ordinateur": "ambiances/jour/cuit-tasse.webp",
+     "telephone": "ambiances/jour/telephone/cuit-tasse.webp",
+     "octets": {
+      "ordinateur": 13578,
+      "telephone": 6182
      }
     },
     "objectifs2": {
      "ordinateur": "ambiances/jour/cuit-objectifs2.webp",
      "telephone": "ambiances/jour/telephone/cuit-objectifs2.webp",
      "octets": {
-      "ordinateur": 23184,
-      "telephone": 8852
+      "ordinateur": 9486,
+      "telephone": 3692
      }
     },
     "secret": {
      "ordinateur": "ambiances/jour/cuit-secret.webp",
      "telephone": "ambiances/jour/telephone/cuit-secret.webp",
      "octets": {
-      "ordinateur": 6806,
-      "telephone": 2758
+      "ordinateur": 5908,
+      "telephone": 2808
      }
     },
     "objectifs": {
      "ordinateur": "ambiances/jour/cuit-objectifs.webp",
      "telephone": "ambiances/jour/telephone/cuit-objectifs.webp",
      "octets": {
-      "ordinateur": 22542,
-      "telephone": 9394
+      "ordinateur": 10604,
+      "telephone": 4304
      }
     },
     "surprise": {
      "ordinateur": "ambiances/jour/cuit-surprise.webp",
      "telephone": "ambiances/jour/telephone/cuit-surprise.webp",
      "octets": {
-      "ordinateur": 8808,
-      "telephone": 3866
+      "ordinateur": 8204,
+      "telephone": 4120
+     }
+    },
+    "radio": {
+     "ordinateur": "ambiances/jour/cuit-radio.webp",
+     "telephone": "ambiances/jour/telephone/cuit-radio.webp",
+     "octets": {
+      "ordinateur": 88620,
+      "telephone": 36842
+     }
+    },
+    "console": {
+     "ordinateur": "ambiances/jour/cuit-console.webp",
+     "telephone": "ambiances/jour/telephone/cuit-console.webp",
+     "octets": {
+      "ordinateur": 17434,
+      "telephone": 7560
      }
     }
    },
@@ -91,72 +115,96 @@
      "ordinateur": "ambiances/doree/cuit-piece.webp",
      "telephone": "ambiances/doree/telephone/cuit-piece.webp",
      "octets": {
-      "ordinateur": 85426,
-      "telephone": 37760
+      "ordinateur": 85634,
+      "telephone": 40822
      }
     },
     "rideaux": {
      "ordinateur": "ambiances/doree/cuit-rideaux.webp",
      "telephone": "ambiances/doree/telephone/cuit-rideaux.webp",
      "octets": {
-      "ordinateur": 12858,
-      "telephone": 5528
+      "ordinateur": 12644,
+      "telephone": 5652
      }
     },
     "bureau": {
      "ordinateur": "ambiances/doree/cuit-bureau.webp",
      "telephone": "ambiances/doree/telephone/cuit-bureau.webp",
      "octets": {
-      "ordinateur": 47190,
-      "telephone": 18722
+      "ordinateur": 34260,
+      "telephone": 13942
      }
     },
     "objets": {
      "ordinateur": "ambiances/doree/cuit-objets.webp",
      "telephone": "ambiances/doree/telephone/cuit-objets.webp",
      "octets": {
-      "ordinateur": 618218,
-      "telephone": 278386
+      "ordinateur": 572334,
+      "telephone": 255998
      }
     },
     "etiquettes": {
      "ordinateur": "ambiances/doree/cuit-etiquettes.webp",
      "telephone": "ambiances/doree/telephone/cuit-etiquettes.webp",
      "octets": {
-      "ordinateur": 32360,
-      "telephone": 13276
+      "ordinateur": 32272,
+      "telephone": 13404
+     }
+    },
+    "tasse": {
+     "ordinateur": "ambiances/doree/cuit-tasse.webp",
+     "telephone": "ambiances/doree/telephone/cuit-tasse.webp",
+     "octets": {
+      "ordinateur": 12794,
+      "telephone": 5740
      }
     },
     "objectifs2": {
      "ordinateur": "ambiances/doree/cuit-objectifs2.webp",
      "telephone": "ambiances/doree/telephone/cuit-objectifs2.webp",
      "octets": {
-      "ordinateur": 24462,
-      "telephone": 9056
+      "ordinateur": 9876,
+      "telephone": 3768
      }
     },
     "secret": {
      "ordinateur": "ambiances/doree/cuit-secret.webp",
      "telephone": "ambiances/doree/telephone/cuit-secret.webp",
      "octets": {
-      "ordinateur": 7026,
-      "telephone": 2874
+      "ordinateur": 6096,
+      "telephone": 2834
      }
     },
     "objectifs": {
      "ordinateur": "ambiances/doree/cuit-objectifs.webp",
      "telephone": "ambiances/doree/telephone/cuit-objectifs.webp",
      "octets": {
-      "ordinateur": 19208,
-      "telephone": 7780
+      "ordinateur": 9016,
+      "telephone": 3458
      }
     },
     "surprise": {
      "ordinateur": "ambiances/doree/cuit-surprise.webp",
      "telephone": "ambiances/doree/telephone/cuit-surprise.webp",
      "octets": {
-      "ordinateur": 7602,
-      "telephone": 3356
+      "ordinateur": 7686,
+      "telephone": 3782
+     }
+    },
+    "radio": {
+     "ordinateur": "ambiances/doree/cuit-radio.webp",
+     "telephone": "ambiances/doree/telephone/cuit-radio.webp",
+     "octets": {
+      "ordinateur": 87606,
+      "telephone": 36122
+     }
+    },
+    "console": {
+     "ordinateur": "ambiances/doree/cuit-console.webp",
+     "telephone": "ambiances/doree/telephone/cuit-console.webp",
+     "octets": {
+      "ordinateur": 17428,
+      "telephone": 7648
      }
     }
    },
@@ -172,72 +220,96 @@
      "ordinateur": "ambiances/crepuscule/cuit-piece.webp",
      "telephone": "ambiances/crepuscule/telephone/cuit-piece.webp",
      "octets": {
-      "ordinateur": 72420,
-      "telephone": 31538
+      "ordinateur": 69806,
+      "telephone": 32736
      }
     },
     "rideaux": {
      "ordinateur": "ambiances/crepuscule/cuit-rideaux.webp",
      "telephone": "ambiances/crepuscule/telephone/cuit-rideaux.webp",
      "octets": {
-      "ordinateur": 10510,
-      "telephone": 4158
+      "ordinateur": 10442,
+      "telephone": 4142
      }
     },
     "bureau": {
      "ordinateur": "ambiances/crepuscule/cuit-bureau.webp",
      "telephone": "ambiances/crepuscule/telephone/cuit-bureau.webp",
      "octets": {
-      "ordinateur": 51802,
-      "telephone": 20186
+      "ordinateur": 36456,
+      "telephone": 15140
      }
     },
     "objets": {
      "ordinateur": "ambiances/crepuscule/cuit-objets.webp",
      "telephone": "ambiances/crepuscule/telephone/cuit-objets.webp",
      "octets": {
-      "ordinateur": 595220,
-      "telephone": 268348
+      "ordinateur": 533194,
+      "telephone": 235002
      }
     },
     "etiquettes": {
      "ordinateur": "ambiances/crepuscule/cuit-etiquettes.webp",
      "telephone": "ambiances/crepuscule/telephone/cuit-etiquettes.webp",
      "octets": {
-      "ordinateur": 33274,
-      "telephone": 13730
+      "ordinateur": 33140,
+      "telephone": 13862
+     }
+    },
+    "tasse": {
+     "ordinateur": "ambiances/crepuscule/cuit-tasse.webp",
+     "telephone": "ambiances/crepuscule/telephone/cuit-tasse.webp",
+     "octets": {
+      "ordinateur": 13052,
+      "telephone": 5986
      }
     },
     "objectifs2": {
      "ordinateur": "ambiances/crepuscule/cuit-objectifs2.webp",
      "telephone": "ambiances/crepuscule/telephone/cuit-objectifs2.webp",
      "octets": {
-      "ordinateur": 27172,
-      "telephone": 10470
+      "ordinateur": 11026,
+      "telephone": 4312
      }
     },
     "secret": {
      "ordinateur": "ambiances/crepuscule/cuit-secret.webp",
      "telephone": "ambiances/crepuscule/telephone/cuit-secret.webp",
      "octets": {
-      "ordinateur": 7816,
-      "telephone": 3094
+      "ordinateur": 6638,
+      "telephone": 3084
      }
     },
     "objectifs": {
      "ordinateur": "ambiances/crepuscule/cuit-objectifs.webp",
      "telephone": "ambiances/crepuscule/telephone/cuit-objectifs.webp",
      "octets": {
-      "ordinateur": 20000,
-      "telephone": 8278
+      "ordinateur": 9256,
+      "telephone": 3500
      }
     },
     "surprise": {
      "ordinateur": "ambiances/crepuscule/cuit-surprise.webp",
      "telephone": "ambiances/crepuscule/telephone/cuit-surprise.webp",
      "octets": {
-      "ordinateur": 7802,
-      "telephone": 3500
+      "ordinateur": 7312,
+      "telephone": 3670
+     }
+    },
+    "radio": {
+     "ordinateur": "ambiances/crepuscule/cuit-radio.webp",
+     "telephone": "ambiances/crepuscule/telephone/cuit-radio.webp",
+     "octets": {
+      "ordinateur": 89754,
+      "telephone": 37624
+     }
+    },
+    "console": {
+     "ordinateur": "ambiances/crepuscule/cuit-console.webp",
+     "telephone": "ambiances/crepuscule/telephone/cuit-console.webp",
+     "octets": {
+      "ordinateur": 17246,
+      "telephone": 7248
      }
     }
    },

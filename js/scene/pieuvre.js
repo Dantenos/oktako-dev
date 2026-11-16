@@ -59,6 +59,8 @@ const FONDU_ENTREE = 0.7;
 const REBOND = new THREE.Color(0.06, 0.008, 0.005);
 // Après sa réception, le temps où elle regarde le visiteur avant de lui faire signe (s).
 const REGARD_AVANT_SALUT = 0.9;
+// Le bond de la rencontre (m) : le saut d'entrée rejoué sur place, assez bas pour rester dans le cadre du gros plan.
+const BOND_SUR_PLACE = 0.025;
 // La plus petite cible acceptable sous le doigt (pixels).
 const ZONE_MINI = 44;
 // Une couche qu'aucun lancer ne regarde.
@@ -435,8 +437,19 @@ export async function creerPieuvre({ scene, renderer, camera, base, place, email
     if (fige) cerveau.evenement('arrivee');
     apresEntree?.();
   }
+  // La rencontre : elle reconnaît le visiteur, puis le regarde. Pas de salut ici : il viendra de son appui à lui.
+  function regarderVisiteur() { vise.copy(camera.position); aCible = true; cerveau.viser(true); }
+  function finirBond() { const p = entree.bond.pose(entree.bond.duree); entree = null; poserSaut({ ...p, ombre: 1 }); regarderVisiteur(); }
   function avancerEntree(dt, anime, enVue, lampe) {
     if (entree.phase === 'essai') return;
+    // L'ombre reste pleine : sur place, elle ne quitte jamais le casier, contrairement au saut d'entrée qui part de derrière.
+    if (entree.phase === 'bond') {
+      if (!anime) { finirBond(); return; }
+      entree.t += dt;
+      const p = entree.bond.pose(entree.t);
+      if (p.fini) finirBond(); else poserSaut({ ...p, ombre: 1 });
+      return;
+    }
     if (entree.phase === 'attend') {
       if (!enVue) return;
       // L'ombre compile son programme à sa première peinture, et groupe caché ne peint rien : ce blocage tombe ici, invisible, pas au décollage.
@@ -518,6 +531,17 @@ export async function creerPieuvre({ scene, renderer, camera, base, place, email
       else if (!rayon.intersectPlane(planPointeur, vise)) return;
       aCible = true; cerveau.viser(true);
     },
+    // La rencontre (js/pieuvre-bulle.js) : un petit bond, puis le regard vers le visiteur. Faux : elle n'a pas pu (entrée en cours, cachée, ou figée en
+    // mouvement réduit, où seul le regard est permis : il ne bouge rien que ses yeux, et la pose fixe les tient).
+    sautiller() {
+      if (masquee || entree || fige) return false;
+      // Le bond prend la place du salut d'arrivée encore en attente : un geste à la réception, le regard ne serait plus libre.
+      salut = 0; cerveau.calmer();
+      const ici = { x: groupe.position.x, y: groupe.position.y, z: groupe.position.z };
+      entree = { phase: 'bond', t: 0, bond: creerSaut(ici, ici, { bond: BOND_SUR_PLACE }) };
+      demarrer(); return true;
+    },
+    regarderVisiteur() { if (masquee || entree || fige) return false; cerveau.calmer(); regarderVisiteur(); demarrer(); return true; },
     // Pendant son entrée, elle ne réagit à rien : le salut vient à la réception, et elle n'a pas à ouvrir un parapluie derrière le casier.
     evenement(ev) { if (masquee || entree) return; cerveau.evenement(ev); demarrer(); },
     // Hors de la pièce, pour un temps (le film du café) : ni corps, ni ombre, ni zone de clic, ni cerveau. La couche

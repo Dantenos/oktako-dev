@@ -126,5 +126,38 @@
    0.993,
    1.237
   ]
+ },
+ "extrait": {
+  "duree_s": 11.875,
+  "images": 285,
+  "segments": [
+   [
+    0,
+    43
+   ],
+   [
+    112,
+    295
+   ],
+   [
+    312,
+    327
+   ],
+   [
+    488,
+    528
+   ]
+  ],
+  "large": {
+   "video": "extrait-large.mp4",
+   "affiche": "affiche-large.webp"
+  },
+  "telephone": {
+   "video": "extrait-tel.mp4",
+   "affiche": "affiche-tel.webp"
+  },
+  "son": {
+   "kbps": 128
+  }
  }
 }

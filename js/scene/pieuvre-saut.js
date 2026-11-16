@@ -3,7 +3,8 @@
 //
 // Ce qui donne du poids : une vraie parabole, à gravité constante, plutôt qu'une courbe dessinée. Elle s'accroupit avant de partir,
 // s'étire quand elle va vite, et c'est la réception qui s'écrase. Les pieds restent le pivot : l'écrasement ne décolle pas du casier.
-//   depart, arrivee : { x, y, z }, positions de ses pieds.
+//   depart, arrivee : { x, y, z }, positions de ses pieds ; bond : la hauteur du sommet au-dessus de l'arrivée (m). La rencontre
+//   (js/pieuvre-bulle.js) rejoue ce saut sur place et plus bas : la même physique, sans un second modèle de mouvement à tenir.
 
 // Accroupie (s), puis l'écrasement à la réception (s) et son redressement, amorti.
 const ELAN = 0.3, IMPACT = 0.07, REDRESSE = 0.38;
@@ -16,8 +17,8 @@ const ACCROUPI = 0.76, ETIRE = 0.16, ECRASE = 0.68, PENTE = 0.22;
 const lisse = (u) => { const v = Math.min(1, Math.max(0, u)); return v * v * (3 - 2 * v); };
 const entre = (a, b, u) => a + (b - a) * u;
 
-export function creerSaut(depart, arrivee) {
-  const vitesse = Math.sqrt(2 * GRAVITE * (arrivee.y + BOND - depart.y)), vol = vitesse / GRAVITE + Math.sqrt(2 * BOND / GRAVITE);
+export function creerSaut(depart, arrivee, { bond = BOND } = {}) {
+  const vitesse = Math.sqrt(2 * GRAVITE * (arrivee.y + bond - depart.y)), vol = vitesse / GRAVITE + Math.sqrt(2 * bond / GRAVITE);
   const duree = ELAN + vol + IMPACT + REDRESSE;
   const etirement = (vy) => 1 + ETIRE * Math.abs(vy) / vitesse;
   const finVol = etirement(vitesse - GRAVITE * vol);

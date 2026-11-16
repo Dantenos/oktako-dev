@@ -27,7 +27,8 @@ const SEQUENCES = {
 };
 // Une réaction par événement de la pièce. La lettre, baignée dans la cuisson, ne peut pas être poussée : la pieuvre
 // la montre du bras, tournée vers elle (la lettre est à sa gauche, à droite de l'écran).
-const REACTIONS = { arrivee: 'accueil_coucou', caresse: 'accueil_coucou', sucre: 'reaction_applaudir', lettre: 'guide_montrer' };
+// « montrer » est le même geste, demandé par le visiteur dans la rencontre : sans le répit de la lettre, puisque c'est lui qui le veut.
+const REACTIONS = { arrivee: 'accueil_coucou', caresse: 'accueil_coucou', sucre: 'reaction_applaudir', lettre: 'guide_montrer', montrer: 'guide_montrer' };
 
 export function creerCerveau({ catalogue, jouer, hasard = Math.random }) {
   const fiche = Object.fromEntries(catalogue.actions.map((a) => [a.nom, a]));
@@ -103,6 +104,9 @@ export function creerCerveau({ catalogue, jouer, hasard = Math.random }) {
       // Au repos ou occupée, elle lâche tout ; dans une réaction ou une séquence, l'événement attend son tour.
       if (libre()) declencher(ev); else e.attente = ev;
     },
+    // La rencontre : le visiteur la sollicite, elle lâche son occupation (comme pour un événement) et revient au repos, où son
+    // regard est libre. Une réaction ou une séquence à accessoire, elles, vont à leur fin.
+    calmer() { if (e.phase === 'geste') { e.sansGeste = 0; auRepos(); } },
     // Le visiteur est là (pointeur, clavier) : il compte pour le sommeil, sans rien déclencher.
     activite() { e.sansGeste = 0; },
     ambiance(a) { e.ambiance = a; },

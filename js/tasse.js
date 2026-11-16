@@ -8,7 +8,7 @@ import { creerFinFilm } from './film-cafe-fin.js';
 import { creerBas, texteEchap } from './fermer.js';
 export function creerTasse({ scene, mouvementReduit, annoncer, son, auRetour, film = () => null }) {
   let phase = 'repos', racine = null, retour = null, liens = [], boutonSucre = null, focusAvant = null, prepare = false, sucre = false;
-  let lienCarte = null, finFilm = null;
+  let lienCarte = null, finFilm = null, offreFilm = null;
   const inerties = new Map();
   const modele = document.getElementById('cafe-propositions');
   const toutes = () => (modele ? [...modele.content.querySelectorAll('[data-proposition]')] : []);
@@ -124,28 +124,71 @@ export function creerTasse({ scene, mouvementReduit, annoncer, son, auRetour, fi
     const r = await chute;
     sucre = true; prepare = true;
     if (!r || !racine || phase !== 'arrivee') return;
-    // Le film prend la suite (site/js/film-cafe.js) : la proposition s'écrira dans la flaque de la scène finale. Sans film, s'il tarde ou si
-    // la lecture est refusée, elle s'écrit dans la mousse, comme avant.
-    const f = film();
-    if (f?.actif) {
-      // La carte de visite aussi : son lien recouvre la carte de la pièce, que le film ne montre plus.
-      const carteVue = lienCarte && !lienCarte.hidden;
-      for (const a of liens) a.hidden = true;
-      if (lienCarte) lienCarte.hidden = true;
-      if (await f.jouer({ hote: racine, direct: mouvementReduit() })) return;
-      if (!racine || phase !== 'arrivee') return;
-      for (const a of liens) a.hidden = false;
-      if (carteVue) lienCarte.hidden = false;
-    }
+    // Le sucre ne lance plus le film (lot film-a-la-demande) : la mousse écrit sa proposition, et l'offre du film paraît à côté.
     const nouvelles = toutes().slice(liens.length).map((m, k) => cloner(m, liens.length + k));
     liens.push(...nouvelles);
     for (const a of nouvelles) racine.insertBefore(a, racine.querySelector('.vue-bas'));
     placer(); for (const a of liens) a.hidden = false;
     const t = nouvelles.map(texte).join(', ');
     racine.querySelector('.tasse__aide').textContent = texteEchap('Choisissez une phrase de mousse · Échap pour revenir');
-    annoncer(`Le sucre fond dans le café. La mousse écrit aussi : ${t}.`);
+    montrerOffre();
+    annoncer(`Le sucre fond dans le café. La mousse écrit aussi : ${t}.${offreFilm ? ' Le film de la pieuvre est proposé en haut à droite.' : ''}`);
     // Le focus suit le geste : sur la nouvelle proposition si c'est un lien, sinon sur la première.
     if (avaitFocus) (nouvelles.find((a) => a.tagName === 'A') || liens.find((a) => a.tagName === 'A') || retour)?.focus({ preventScroll: true });
+  }
+  // --- Le film, à la demande : deux boutons après le sucre (l'extrait, le film entier). Rien ne se télécharge avant leur clic ;
+  // pendant le chargement, « Annuler » (ou Échap) coupe la requête et rend la mousse. ---
+  function creerOffre() {
+    const o = film()?.offre?.(); if (!o) return null;
+    const d = document.createElement('div'); d.className = 'tasse__film'; d.hidden = true;
+    const s = (x) => `${Math.round(x)} s`;
+    const bouton = (texte, aria, complet) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'tako-bouton tasse__film-bouton'; b.textContent = texte;
+      b.setAttribute('aria-label', aria); b.dataset.version = complet ? 'complet' : 'extrait';
+      b.addEventListener('click', () => voirFilm({ complet })); return b;
+    };
+    if (o.extrait) d.append(bouton(`▶ Voir le film · ${s(o.extrait)}`, `Voir le film de la pieuvre, extrait de ${s(o.extrait)}`, false));
+    if (o.complet) d.append(bouton(o.extrait ? `Film entier · ${s(o.complet)}` : `▶ Voir le film · ${s(o.complet)}`, `Voir le film entier, ${s(o.complet)}`, true));
+    const attente = document.createElement('p'); attente.className = 'tasse__film-attente'; attente.hidden = true;
+    const texteAttente = document.createElement('span'); texteAttente.textContent = 'Chargement du film…';
+    const annuler = document.createElement('button'); annuler.type = 'button'; annuler.className = 'tako-bouton tasse__film-annuler'; annuler.textContent = texteEchap('Annuler · Échap');
+    annuler.addEventListener('click', () => film()?.annuler());
+    attente.append(texteAttente, annuler); d.append(attente);
+    return d;
+  }
+  const boutonsFilm = () => (offreFilm ? [...offreFilm.querySelectorAll('.tasse__film-bouton')] : []);
+  // L'offre se montre après le sucre, dans la vue du dessus, tant qu'aucun film n'est demandé.
+  function montrerOffre() {
+    if (!offreFilm) return;
+    offreFilm.hidden = !(sucre && phase === 'arrivee');
+    for (const b of boutonsFilm()) b.hidden = false;
+  }
+  function attendre(oui) {
+    if (!offreFilm) return;
+    const zone = offreFilm.querySelector('.tasse__film-attente'); zone.hidden = !oui;
+    if (oui) { zone.querySelector('button').focus({ preventScroll: true }); annoncer('Chargement du film. Échap pour annuler.'); }
+  }
+  // Demande explicite du film (l'un des deux boutons, ou un autre lot par l'API) : la mousse, la carte et le sucre s'effacent ; le film
+  // ne part qu'une fois chargé. Annulé, absent ou refusé : tout revient comme avant la demande.
+  async function voirFilm({ complet = false } = {}) {
+    const f = film();
+    if (!f?.actif || !racine || phase !== 'arrivee' || f.phase !== 'repos') return false;
+    // La carte de visite aussi : son lien recouvre la carte de la pièce, que le film ne montre plus.
+    const carteVue = lienCarte && !lienCarte.hidden, sucreVu = boutonSucre && !boutonSucre.hidden;
+    for (const a of liens) a.hidden = true;
+    if (lienCarte) lienCarte.hidden = true;
+    if (boutonSucre) boutonSucre.hidden = true;
+    for (const b of boutonsFilm()) b.hidden = true;
+    if (await f.jouer({ hote: racine, direct: mouvementReduit(), complet, attente: attendre })) return true;
+    if (!racine || phase !== 'arrivee') return false;
+    for (const a of liens) a.hidden = false;
+    if (carteVue) lienCarte.hidden = false;
+    if (sucreVu && boutonSucre) boutonSucre.hidden = false;
+    montrerOffre();
+    // Le focus était sur « Annuler », qui disparaît : il revient sur le bouton demandé (un clic ne le lui avait pas forcément donné : Safari).
+    (boutonsFilm().find((b) => b.dataset.version === (complet ? 'complet' : 'extrait')) || retour)?.focus({ preventScroll: true });
+    annoncer(f.etat().issue === 'annule' ? 'Film annulé. La mousse est revenue.' : 'Le film ne peut pas être lu pour l’instant. La mousse est revenue.');
+    return false;
   }
   async function entrer() {
     if (phase !== 'repos' || !scene() || !(propositions().length || avecSucre())) return;
@@ -160,9 +203,10 @@ export function creerTasse({ scene, mouvementReduit, annoncer, son, auRetour, fi
     liens = propositions().map(cloner);
     boutonSucre = avecSucre() ? creerSucre() : null;
     lienCarte = creerCarte();
+    offreFilm = creerOffre();
     const aide = document.createElement('p'); aide.className = 'tasse__aide'; aide.setAttribute('aria-hidden', 'true');
     aide.textContent = texteEchap(boutonSucre ? 'Choisissez une phrase de mousse · un sucre ? · Échap pour revenir' : 'Choisissez une phrase de mousse · Échap pour revenir');
-    racine.append(titre, retour, ...liens, ...(boutonSucre ? [boutonSucre] : []), lienCarte, creerBas(aide, () => revenir()));
+    racine.append(titre, retour, ...(offreFilm ? [offreFilm] : []), ...liens, ...(boutonSucre ? [boutonSucre] : []), lienCarte, creerBas(aide, () => revenir()));
     // Les ronds suivent la souris ou le doigt, partout sur le café.
     racine.addEventListener('pointermove', (e) => scene()?.pointeurCafe(e.clientX, e.clientY), { passive: true });
     racine.addEventListener('pointerdown', (e) => scene()?.pointeurCafe(e.clientX, e.clientY), { passive: true });
@@ -182,6 +226,7 @@ export function creerTasse({ scene, mouvementReduit, annoncer, son, auRetour, fi
       if (!mouvementReduit()) { scene()?.survolSucre(true); setTimeout(() => { if (boutonSucre && !boutonSucre.matches(':hover, :focus')) scene()?.survolSucre(false); }, 700); }
     }
     lienCarte.hidden = false;
+    montrerOffre();
     const dits = liens.map(texte), sucreDit = boutonSucre ? ' Un sucre est posé à côté de la tasse.' : '';
     annoncer(dits.length > 1 ? `Deux propositions écrites dans la mousse : ${dits.join(', puis ')}.${sucreDit} Tab pour les atteindre, Échap pour revenir.`
       : dits.length ? `Une proposition écrite dans la mousse : ${dits[0]}.${sucreDit} Tab pour l'atteindre, Échap pour revenir.`
@@ -195,10 +240,11 @@ export function creerTasse({ scene, mouvementReduit, annoncer, son, auRetour, fi
     for (const a of liens) a.hidden = true;
     if (boutonSucre) boutonSucre.hidden = true;
     if (lienCarte) lienCarte.hidden = true;
+    if (offreFilm) offreFilm.hidden = true;
     survoler(null);
     // Sans contexte graphique (panne), la scène ne joue plus d'image : on ne l'attend pas.
     if (!sansTravelling) await scene()?.sortirTasse();
-    racine.remove(); racine = retour = boutonSucre = null; liens = [];
+    racine.remove(); racine = retour = boutonSucre = offreFilm = null; liens = [];
     for (const [e, inert] of inerties) e.inert = inert; inerties.clear();
     document.body.classList.remove('tasse-active'); phase = 'repos';
     // Après le sucre, la prochaine visite verse les deux propositions : la mousse se repeint quand le navigateur respire.
@@ -210,6 +256,7 @@ export function creerTasse({ scene, mouvementReduit, annoncer, son, auRetour, fi
     finFilm?.fermer();
     finFilm = creerFinFilm({ hote: racine, image: detail.image, format: detail.format, propositions: toutes(), libelleRendezVous: modele.dataset.rendezVousLibelle, immediat: detail.passe });
     racine.dataset.film = 'fin';
+    if (offreFilm) offreFilm.hidden = true;
     racine.querySelector('.tasse__aide').textContent = texteEchap('Choisissez une phrase dans la flaque · Échap pour revenir');
     // L'image décodée est déjà posée : le compositeur peut rendre la pièce derrière elle sans changer le fond final.
     scene()?.film?.cacher();
@@ -220,14 +267,15 @@ export function creerTasse({ scene, mouvementReduit, annoncer, son, auRetour, fi
     if (phase === 'repos') return;
     if (e.key === 'Escape') {
       e.preventDefault(); e.stopImmediatePropagation();
-      // Pendant le film, Échap le passe (sa dernière image) ; un second Échap revient au bureau.
+      // Pendant le chargement du film, Échap l'annule ; pendant le film, il le passe (sa dernière image) ; un second Échap revient au bureau.
       if (!film()?.presser() && !finFilm?.presser()) revenir();
       return;
     }
     if (e.key !== 'Tab') return;
     // Boucle courte dans le dialogue : retour, puis les propositions une fois écrites, puis le sucre.
     e.preventDefault();
-    const ordre = [retour, ...(finFilm?.liens || []).filter((a) => a.tagName === 'A'), ...liens.filter((a) => !a.hidden && a.tagName === 'A'), ...(boutonSucre && !boutonSucre.hidden ? [boutonSucre] : [])].filter(Boolean);
+    const filmBoutons = offreFilm && !offreFilm.hidden ? [...offreFilm.querySelectorAll('button')].filter((b) => !b.hidden && !b.closest('[hidden]')) : [];
+    const ordre = [retour, ...filmBoutons, ...(finFilm?.liens || []).filter((a) => a.tagName === 'A'), ...liens.filter((a) => !a.hidden && a.tagName === 'A'), ...(boutonSucre && !boutonSucre.hidden ? [boutonSucre] : [])].filter(Boolean);
     const j = ordre.indexOf(document.activeElement) + (e.shiftKey ? -1 : 1);
     ordre[(j + ordre.length) % ordre.length]?.focus();
   }, true);
@@ -236,10 +284,10 @@ export function creerTasse({ scene, mouvementReduit, annoncer, son, auRetour, fi
   // Mouvement réduit basculé pendant la visite : le texte des liens devient net (ou repasse sous la mousse) aussitôt.
   function reglerMouvement() { racine?.classList.toggle('tasse--net', mouvementReduit()); }
   return {
-    entrer, revenir, preparer, reglerMouvement,
+    entrer, revenir, preparer, reglerMouvement, voirFilm,
     // Sans proposition servie (rendez-vous non publié, pourboire vide), la tasse n'est qu'un objet du décor.
     get disponible() { return toutes().some((p) => p.tagName === 'A'); },
-    etat: () => ({ phase, sucre, boutonSucre: boutonSucre ? { cache: boutonSucre.hidden, rect: boutonSucre.getBoundingClientRect().toJSON() } : null,
+    etat: () => ({ phase, sucre, film: offreFilm ? { cache: offreFilm.hidden, boutons: boutonsFilm().map((b) => ({ texte: b.textContent, version: b.dataset.version, cache: b.hidden })), attente: !offreFilm.querySelector('.tasse__film-attente').hidden } : null, boutonSucre: boutonSucre ? { cache: boutonSucre.hidden, rect: boutonSucre.getBoundingClientRect().toJSON() } : null,
       liens: liens.map((a) => ({ href: a.href || null, balise: a.tagName, texte: a.textContent, cache: a.hidden, rect: a.getBoundingClientRect().toJSON() })) }),
     get active() { return phase !== 'repos'; },
   };

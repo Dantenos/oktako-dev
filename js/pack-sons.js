@@ -67,6 +67,26 @@ export function creerPack({ racine, contexte, sortie, chercher = (u) => fetch(u)
   // sans le premier pas (le lo-fi), rien ne démarre. Tout passe par le bus : le fondu du film (fondre) l'éteint où qu'il en soit,
   // même en plein boss, et reprendre() le rend, la musique ayant continué son chemin.
   let ordre = [], cycles = [], minuteurCycle = null, enCours = false, atelierPret = null;
+  // Annuler un minuteur ne retire pas son rappel déjà entré dans une attente réseau.
+  let revisionAtelier = 0;
+  // Cette observation lit l'horloge audio ; elle n'ordonne jamais la playlist.
+  const observateursRadio = new Set();
+  let veilleRadio = null, dernierRadio = '', busAudible = true;
+  function etatRadio() {
+    const ctx = contexte(), t = ctx.currentTime;
+    const cycle = [...cycles].reverse().find(c => c.voix.some(v => !v.terminee && v.debut <= t && t < v.fin));
+    return { station: cycle?.station ?? '', lecture: !!(actif && busAudible && cycle && (!ctx.state || ctx.state === 'running')) };
+  }
+  function publierRadio() {
+    if (!observateursRadio.size) return;
+    const etat = etatRadio(), cle = JSON.stringify(etat);
+    if (cle !== dernierRadio) {
+      dernierRadio = cle;
+      for (const observer of observateursRadio) observer({ ...etat });
+    }
+    if (veilleRadio !== null) minuteur.annuler(veilleRadio);
+    veilleRadio = enCours ? minuteur.apres(() => { veilleRadio = null; publierRadio(); }, 100) : null;
+  }
   const pasPresents = () => ordre.filter((n) => tampons.has(n));
   function programmer(nom, { quand, decalage = 0, entree = 0, sortie: sortieS = 0 }) {
     const tampon = tampons.get(nom), ctx = contexte();
@@ -77,7 +97,9 @@ export function creerPack({ racine, contexte, sortie, chercher = (u) => fetch(u)
     if (entree > 0) g.gain.setValueCurveAtTime(courbeFondu(0, plein), quand, entree); else g.gain.setValueAtTime(plein, quand);
     if (sortieS > 0) g.gain.setValueCurveAtTime(courbeFondu(plein, 0), fin - sortieS, sortieS);
     s.connect(g).connect(busGain()); s.start(quand, decalage);
-    return { nom, source: s, gain: g, debut: quand, fin, decalage };
+    const voix = { nom, source: s, gain: g, debut: quand, fin, decalage, terminee: false };
+    s.onended = () => { voix.terminee = true; publierRadio(); };
+    return voix;
   }
   // Pose un cycle dont le premier pas commence (ou aurait commencé) à `t0`. `premier` : pas de fondu d'entrée sur le tout premier cycle.
   function lancerCycle(t0, { premier = false } = {}) {
@@ -94,22 +116,25 @@ export function creerPack({ racine, contexte, sortie, chercher = (u) => fetch(u)
       }));
       t = fin;
     });
-    cycles.push({ t0, fin: t, voix }); if (cycles.length > 3) cycles.shift();
+    cycles.push({ t0, fin: t, voix, station: courante }); if (cycles.length > 3) cycles.shift();
     // Le morceau suivant de la playlist entre FONDU_PLAYLIST avant la fin réelle de celui-ci. Il est chargé d'avance ; s'il n'est pas prêt à l'heure, il part dès qu'il l'est.
     const suiv = suivanteDe(courante);
     if (suiv) {
+      const revision = revisionAtelier;
       const pret = (manifeste ? chargerStation(suiv, manifeste) : Promise.resolve()).catch(() => {});
       const quand = t - FONDU_PLAYLIST;
       minuteurCycle = minuteur.apres(async () => {
         await pret;
-        if (!enCours) return;
+        if (!enCours || revision !== revisionAtelier) return;
         courante = suiv.id; ordre = pistesDe(suiv);
         lancerCycle(Math.max(quand, contexte().currentTime));
       }, Math.max(0, (quand - ctx.currentTime - 3) * 1000));
     }
+    publierRadio();
   }
   // `fondu` : secondes pour éteindre ce qui joue (0,05 = quasi sec, pour couper() ; 0,6 quand la radio change de station).
   const arreterAtelier = (fondu = 0.05) => {
+    revisionAtelier++;
     enCours = false; if (minuteurCycle != null) minuteur.annuler(minuteurCycle); minuteurCycle = null;
     const ctx = contexte(), t = ctx.currentTime;
     for (const c of cycles) for (const v of c.voix) {
@@ -119,7 +144,7 @@ export function creerPack({ racine, contexte, sortie, chercher = (u) => fetch(u)
         v.source.stop(t + fondu);
       } catch (e) { /* déjà fini */ }
     }
-    cycles = [];
+    cycles = []; publierRadio();
   };
   // --- La radio du bureau : un clic change de station (lo-fi d'atelier, piano 1 et 2, boss 1 et 2). Les stations viennent du manifeste. ---
   const GRESILLEMENT = 'radio-ancienne-gresillement';
@@ -159,15 +184,33 @@ export function creerPack({ racine, contexte, sortie, chercher = (u) => fetch(u)
 
   return {
     get actif() { return actif; },
+    observerRadio(observer) {
+      observateursRadio.add(observer);
+      observer(etatRadio()); dernierRadio = JSON.stringify(etatRadio());
+      publierRadio();
+      return () => {
+        observateursRadio.delete(observer);
+        if (!observateursRadio.size && veilleRadio !== null) { minuteur.annuler(veilleRadio); veilleRadio = null; }
+      };
+    },
     get octetsCharges() { return octets; },
     // Un seul chargement, partagé : activer deux fois ne redemande rien.
-    activer() { actif = true; return (charge ??= chargerTout().catch((e) => { charge = null; throw e; })); },
+    activer() {
+      if (!actif) {
+        busAudible = true;
+        // Couper pendant le film laisse son bus à zéro : le geste de réactivation doit le rendre audible.
+        if (bus) { const t = contexte().currentTime; bus.gain.cancelScheduledValues(t); bus.gain.setValueAtTime(1, t); }
+      }
+      actif = true;
+      return (charge ??= chargerTout().catch((e) => { charge = null; throw e; }));
+    },
     // La musique (permise pour le site seulement) : jamais chargée par activer(), seulement sur demande explicite et si le son est activé.
     chargerMusique() { if (!actif) return Promise.resolve({ sons: 0, octets: 0 }); return (musique ??= lireManifeste().then((m) => chargerGroupe(m.musique || [])).catch((e) => { musique = null; throw e; })); },
     // FONDU de tout le pack (musique, ambiances, effets) vers `vers` (0 = silence, 1 = plein) en `duree` secondes.
     // Rend une promesse résolue À LA FIN du fondu : le film du café l'attend avant de lancer l'image. Rien (promesse déjà
     // résolue, aucune automation) quand le son est coupé ou que rien n'a encore sonné. Un fondu en cours est repris de son niveau courant.
     fondre({ duree = DUREE_FONDU_FILM, vers = 0 } = {}) {
+      busAudible = vers > 0; publierRadio();
       if (!actif || !bus) return Promise.resolve();
       const g = bus.gain, t = contexte().currentTime;
       const de = g.value;
@@ -196,11 +239,13 @@ export function creerPack({ racine, contexte, sortie, chercher = (u) => fetch(u)
       // Passe à la station suivante de la tracklist (en boucle : lo-fi, piano 1, piano 2, boss 1, boss 2, lo-fi…). Charge ses morceaux au besoin. Rend { id, nom }, ou null si le son est coupé.
       async changer() {
         if (!actif) return null;
+        const revision = revisionAtelier;
         const m = await lireManifeste();
         if (!stations.length) initStations(m);
         const suivante = suivanteDe(courante);
         if (!suivante) return null;
         await chargerStation(suivante, m);
+        if (!actif || revision !== revisionAtelier) return null;
         accorder(suivante);
         return { id: suivante.id, nom: suivante.nom };
       },
@@ -227,6 +272,7 @@ export function creerPack({ racine, contexte, sortie, chercher = (u) => fetch(u)
       },
       arreter: () => arreterAtelier(),
       get enCours() { return enCours; },
+      get enLecture() { return etatRadio().lecture; },
       // Où en est la musique : { nom, secondes } (secondes écoulées dans le pas courant), pour l'affichage et l'essai.
       etat() {
         const ctx = contexte(), t = ctx.currentTime;

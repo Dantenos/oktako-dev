@@ -12,10 +12,10 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 // haut en paysage, le bord de la tasse ne cache pas son dessus. Sur un téléphone en portrait, la vue du dessus
 // s'élargit juste assez pour le montrer entier (scene.js, poseTasse) ; tests/sucre.mjs le vérifie à plusieurs formats.
 export const SUCRE = { largeur: 0.0125, hauteur: 0.0096, profondeur: 0.012, decalage: [-0.055, 0.05], lacet: 0.1,
-  // La chute : 1 s, un arc qui passe 2,5 cm au-dessus du bord ; le point de chute reste à 45 % du rayon du café,
-  // pour que les éclaboussures retombent dans la tasse. Plus vive, le sucre (proche de l'œil au sommet de l'arc)
-  // changerait trop de pixels d'une image à l'autre : 1,4 % de l'écran au pire, pour un seuil de 2 %.
-  duree: 1, survolBord: 0.025, rayonChute: 0.45 };
+  // La chute freinée limite la surface claire qui change entre deux images, même au pas maximal de 50 ms.
+  // La goutte initiale peut encore voler quand le visiteur ajoute le sucre. L'arc passe 2,5 cm au-dessus du bord et le point de chute reste
+  // à 45 % du rayon du café, pour que les éclaboussures retombent dans la tasse.
+  duree: 2, survolBord: 0.025, rayonChute: 0.45 };
 // Point de chute par défaut (unités du disque de café, y vers le fond de l'établi) : en bas à gauche, côté sucre.
 // À gauche du texte de la mousse, côté sucre : il ne tombe pas dans les lettres.
 export const CHUTE = [-0.41, -0.18];

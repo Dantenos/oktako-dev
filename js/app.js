@@ -49,6 +49,24 @@ const bulle = creerBulle({ annoncer: annonce, surLien: (declencheur) => { if (de
   eloigner: () => {
     document.body.classList.remove('pieuvre-proche');
     if ((scene?.etatPieuvreZoom?.() ?? 'repos') !== 'repos') scene.sortirTiroir().then(() => cadrerScene());
+  },
+  // La rencontre (lot mascotte-offre-demo) : une seule entrée d'historique, comme la tasse ; Précédent la referme et rend l'accueil.
+  rencontre: {
+    avant: () => {
+      psst.retirer();
+      // Depuis la fiche du cas d'étude : le panneau se ferme, sans laisser son ancre derrière lui.
+      if (etat.vue === 'panneau') { history.replaceState(null, '', location.pathname + location.search); fermerPanneau({ focus: false }); }
+      if (!history.state?.mtRencontre) history.pushState({ mtRencontre: true }, '');
+    },
+    quitter: ({ accueil, historique }) => {
+      if (!historique && history.state?.mtRencontre) {
+        // Rendre l'accueil retire l'entrée ; un lien vers une rubrique la remplace, et la rubrique pousse la sienne.
+        if (accueil) { ignorerPop = true; history.back(); } else history.replaceState(null, '', location.pathname + location.search);
+      }
+      if (accueil && etat.vue !== 'accueil') { etat.vue = 'accueil'; etat.objet = null; appliquer(); }
+    },
+    filmVu: () => filmCafe.etat().vu === true,
+    mouvementReduit: () => etat.mouvementReduit,
   } });
 // Au téléphone debout, elle est sous la carte d'accueil : le Psst attend qu'elle soit là pour de bon, sinon il appellerait dans le vide.
 const psst = creerPsst({ bouton: $('#pieuvre-psst'), rect: () => { const r = scene?.rectPieuvre?.(); return r && !sousAccueil((r.gauche + r.droite) / 2, (r.haut + r.bas) / 2) ? r : null; }, ouvrir: () => scene?.pieuvre?.()?.clic(),
@@ -74,10 +92,11 @@ const tasse = creerTasse({ scene: () => scene, mouvementReduit: () => etat.mouve
   // ne tombe pas ensuite sur une étape morte. Sortie par « Retour » : l'entrée est déjà consommée.
   auRetour: () => { if (history.state?.mtTasse) { ignorerPop = true; history.back(); } etat.vue = etat.scene === 'prete' ? 'exploration' : 'accueil'; appliquer(); cadrerScene(); },
   film: () => filmCafe });
-// Le sucre déclenche le chargement ; l'adaptateur sonore est appelé plus tard, après l'initialisation du son.
-const filmCafe = creerFilmCafe({ adresse: document.getElementById('cafe-propositions')?.dataset.film, scene: () => scene, mouvementReduit: () => etat.mouvementReduit,
+// Le film ne se charge qu'à la demande explicite du visiteur (js/tasse.js) ; le gabarit du café en annonce les durées sans rien télécharger.
+// L'adaptateur sonore est appelé plus tard, après l'initialisation du son.
+const filmCafe = creerFilmCafe({ adresse: document.getElementById('cafe-propositions')?.dataset.film, annonce: document.getElementById('cafe-propositions')?.dataset,
+  scene: () => scene, mouvementReduit: () => etat.mouvementReduit,
   annoncer: annonce, sons: { couper: () => sonsFilm.couper(), rendre: () => sonsFilm.rendre(), autorise: () => etat.son } });
-document.addEventListener('mt:sucre', () => { filmCafe.charger(); });
 let ignorerPop = false;
 const tiroir = creerTiroir({ scene: () => scene, lire: (id) => window.__MT_CONTENU?.[id === 'tiroir:objectifs2' ? 'objectifs2' : 'objectifs'] || [], mouvementReduit: () => etat.mouvementReduit, annoncer: annonce, son: () => (etat.son ? son : null),
   auRetour: () => { etat.vue = etat.scene === 'prete' ? 'exploration' : 'accueil'; appliquer(); cadrerScene(); } });
@@ -104,7 +123,7 @@ const ACTIONS = {
     const dire = (station) => { const texte = station ? 'Radio : ' + station.nom + '.' : 'La radio ne capte rien pour l\u2019instant.'; clin(texte); annonce(texte); };
     try {
       if (!etat.son) {
-        etat.son = true; son ??= creerSon(); son.activer(); appliquer();
+        etat.son = true; son ??= creerSon({ observerRadio: observerLecteurRadio }); son.activer(); appliquer();
         dire(await son.stationDeDepart());
         await son.prete;
       } else {
@@ -269,6 +288,7 @@ function revenir() {
 }
 window.addEventListener('popstate', (e) => {
   if (ignorerPop) { ignorerPop = false; return; }
+  if (bulle.enRencontre) { bulle.fermer({ accueil: true, historique: true }); return; }
   if(plongee.active){plongee.revenir();return;}
   if (tasse.active) { tasse.revenir(); return; }
   if (tiroir.active) { tiroir.revenir(); return; }
@@ -354,6 +374,10 @@ document.addEventListener('keydown', (e) => {
     etat.vue = 'accueil'; appliquer(); $('#explorer').focus();
   }
 });
+// Le dernier état survit au chargement de la scène et aux pauses de sa boucle.
+let instantRadio = { station: '', lecture: false }, filmRadio = false;
+function publierRadio() { scene?.observerRadio({ ...instantRadio, film: filmRadio, visible: !document.hidden }); }
+function observerLecteurRadio(etat) { instantRadio = etat; publierRadio(); }
 // Son : coupé par défaut ; le moteur audio n'existe qu'après ce clic explicite.
 let son = null;
 // Le contrat du lecteur du film du café (claude-19, creerFilmCafe({ ..., sons })) : `couper()` rend une promesse, attendue avant la
@@ -361,11 +385,11 @@ let son = null;
 // et la pluie (puissance constante, sans clic). Son coupé par le visiteur : couper() est déjà résolue et rendre() ne fait rien.
 // (Le nom `couper` n'est pas celui de `son.couper()`, qui coupe tout : d'où cet adaptateur plutôt qu'un alias.)
 export const sonsFilm = {
-  couper: () => (etat.son && son ? son.fondre() : Promise.resolve()),
-  rendre: () => { if (etat.son && son) son.reprendre(); },
+  couper: () => { filmRadio = true; publierRadio(); return etat.son && son ? son.fondre() : Promise.resolve(); },
+  rendre: () => { filmRadio = false; publierRadio(); if (etat.son && son) son.reprendre(); },
 };
 $$('.reglage[data-reglage]').forEach((b) => b.addEventListener('click', () => {
-  if (b.dataset.reglage === 'son') { etat.son = !etat.son; son ??= creerSon(); if (etat.son) son.activer(); else son.couper(); filmCafe.reglerSon(); appliquer(); annonce(etat.son ? 'Son d\'ambiance activé.' : 'Son coupé.'); return; }
+  if (b.dataset.reglage === 'son') { etat.son = !etat.son; son ??= creerSon({ observerRadio: observerLecteurRadio }); if (etat.son) son.activer(); else son.couper(); filmCafe.reglerSon(); appliquer(); annonce(etat.son ? 'Son d\'ambiance activé.' : 'Son coupé.'); return; }
   if (b.dataset.reglage === 'mouvement') etat.mouvementReduit = !etat.mouvementReduit; else etat.effets = !etat.effets;
   appliquer(); scene?.reglages({ mouvementReduit: etat.mouvementReduit, effets: etat.effets }); tasse.reglerMouvement();
 }));
@@ -487,10 +511,10 @@ function orienterEtiquettes(liste) {
 }
 let derniereDisposition = '';
 function replierEtiquettes(liste) {
-  // Au clavier, l'étiquette de la console visée doit passer avant ses voisines au téléphone.
-  const consoleVisee = document.activeElement === points.console;
-  const ordre = consoleVisee ? [...liste].sort((a, b) => Number(b.id === 'console') - Number(a.id === 'console')) : liste;
-  const cle = String(consoleVisee) + liste.map((p) => `${Math.round(p.x / 6)},${Math.round(p.y / 6)},${p.visible}`).join(';') + cleObstacles + boitesZones.map((z) => Math.round(z.h / 6)).join();
+  // Au clavier, l'étiquette de l'objet périphérique visé passe avant ses voisines au téléphone.
+  const objetVise = ['console', 'radio'].find(id => document.activeElement === points[id]);
+  const ordre = objetVise ? [...liste].sort((a, b) => Number(b.id === objetVise) - Number(a.id === objetVise)) : liste;
+  const cle = String(objetVise) + liste.map((p) => `${Math.round(p.x / 6)},${Math.round(p.y / 6)},${p.visible}`).join(';') + cleObstacles + boitesZones.map((z) => Math.round(z.h / 6)).join();
   if (cle === derniereDisposition) return;
   derniereDisposition = cle;
   // Les libellés et les commandes passent avant : une étiquette qui les toucherait se replie, son point reste.
@@ -571,6 +595,7 @@ async function demarrerScene() {
         retabli: () => { html.classList.remove('sans-scene'); html.classList.add('scene-prete'); etat.scene = 'prete'; window.__atelier = { etat, scene, plongee, tasse, ambiance }; cadrerScene(); },
       },
     });
+    publierRadio();
     scene.reglages({ mouvementReduit: etat.mouvementReduit, effets: etat.effets });
     if (!tasse.disponible) scene.tasseInerte();
     etat.scene = 'prete';
@@ -633,7 +658,7 @@ function panne(raison) {
 }
 
 // Onglet caché : le son se suspend aussi (le réglage choisi est conservé).
-document.addEventListener('visibilitychange', () => son?.suspendre(document.hidden));
+document.addEventListener('visibilitychange', () => { publierRadio(); son?.suspendre(document.hidden); });
 
 $$('main [data-notes]').forEach((d) => monterNotes(d));
 appliquer();

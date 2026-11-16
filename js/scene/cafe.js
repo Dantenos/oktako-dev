@@ -231,11 +231,12 @@ export function creerCafe({ renderer, scene, centre, rayon, posLampe, cafe, crem
         u.uFondu.value = anime ? Math.max(u.uFondu.value, f) : 1;
         if (u.uFondu.value >= 1) etat.fondu = null;
       }
-      // La goutte tombe de 14 cm en 0,5 s (ralentie : à la vraie vitesse, l'œil ne la verrait pas), puis les ronds.
+      // Le départ reste à 10 cm du café : à 14 cm, la goutte passait très près de l'œil dans la vue d'arrivée.
+      // Une horloge du café retardée par la faible cadence peut encore la montrer pendant la chute du sucre.
       if (etat.chute != null) {
         const c = (etat.t - etat.chute) / 0.5;
         if (c < 0) goutte.scale.setScalar(1e-5);
-        else if (c < 1) { goutte.position.set(centre.x + 0.006, centre.y + 0.14 * (1 - c * c), centre.z - 0.004); goutte.scale.set(0.0022, 0.0022 * (1.2 + 0.4 * c), 0.0022); }
+        else if (c < 1) { goutte.position.set(centre.x + 0.006, centre.y + 0.10 * (1 - c * c), centre.z - 0.004); goutte.scale.set(0.0022, 0.0022 * (1.2 + 0.4 * c), 0.0022); }
         else { goutte.scale.setScalar(1e-5); onde(0.17, 0.11, 0.0065); etat.chute = null; }
       }
       if (etat.verse != null && etat.page) {

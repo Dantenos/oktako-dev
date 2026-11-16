@@ -463,7 +463,8 @@ html:not(.sans-js):not(.sans-scene) :is(.barre__nav, .barre__ecrire, .barre__reg
   html:not(.sans-js):not(.sans-scene) .barre__nom { display: none; }
   html:not(.sans-js):not(.sans-scene) .barre__nav a { min-height: 36px; padding: 0 10px; border: 0; font-size: var(--tako-texte-xs); letter-spacing: .18em; opacity: .74; }
   html:not(.sans-js):not(.sans-scene) .barre__nav a:hover, html:not(.sans-js):not(.sans-scene) .barre__nav a[aria-current="true"] { opacity: 1; background: none; text-decoration: underline; text-underline-offset: .5em; }
-  html:not(.sans-js):not(.sans-scene) .barre__ecrire { font-size: var(--tako-texte-xs); letter-spacing: .18em; text-transform: uppercase; opacity: .74; padding: 0 10px; background: none; border: 0; box-shadow: none; color: inherit; }
+  /* Le bois éclairé de jour exige le texte plein pour garder le contraste de la commande. */
+  html:not(.sans-js):not(.sans-scene) .barre__ecrire { font-size: var(--tako-texte-xs); letter-spacing: .18em; text-transform: uppercase; opacity: 1; padding: 0 10px; background: none; border: 0; box-shadow: none; color: inherit; }
   html:not(.sans-js):not(.sans-scene) .barre__ecrire:hover { opacity: 1; }
   html:not(.sans-js):not(.sans-scene) .barre__reglages { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: 14px; gap: 0; }
   html:not(.sans-js):not(.sans-scene) .reglage { min-height: 32px; padding: 0 9px; background: none; border: 0; font-size: 11px; opacity: .58; text-shadow: 0 1px 8px var(--mt-scene-nuit); }
@@ -575,6 +576,12 @@ body.tasse-active .points, body.tasse-active .piece__aide, body.tasse-active .pi
 .tasse:not([data-phase="arrivee"]) .tasse__aide { opacity: 0; }
 html.mouvement-reduit .tasse__aide { transition: none; }
 @media (max-width: 760px) { .tasse__retour { min-height: 44px; } .tasse__aide { display: none; } }
+/* Le film, à la demande : en haut à droite, en miroir du retour. Rien ne se télécharge avant un clic ; « Annuler » coupe l'attente. */
+.tasse__film { position: absolute; z-index: 2; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); display: flex; gap: 8px; align-items: center; }
+.tasse__film[hidden], .tasse__film [hidden] { display: none; }
+.tasse__film-bouton, .tasse__film-annuler { background: #10242ee8; color: #f2e5d1; border: 1px solid #9da9a0; box-shadow: 0 4px 24px #0006; font: 12px/1.4 var(--mt-police-ui); }
+.tasse__film-attente { display: flex; gap: 10px; align-items: center; margin: 0; padding: 4px 4px 4px 12px; border-radius: 999px; background: #030608c8; color: #d4d7d0; font: 12px/1.4 var(--mt-police-ui); }
+@media (max-width: 760px) { .tasse__film { flex-direction: column; align-items: flex-end; } .tasse__film-bouton, .tasse__film-annuler { min-height: 44px; } }
 /* Couleurs forcées : le texte des liens reprend la couleur système, la mousse peinte n'a plus à le porter seule. */
 @media (forced-colors: active) { .tasse__proposition { color: LinkText; background: Canvas; } }
 
@@ -904,3 +911,48 @@ html.mouvement-reduit .tk-ecran, html.mouvement-reduit .tk-ecran * { animation: 
 .film-fin__ecriture--prete { animation: none; }
 @keyframes film-ecriture { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
 @media (prefers-reduced-motion: reduce) { .film-fin__ecriture { animation: none; } }
+
+/* --- La rencontre de la mascotte (lot mascotte-offre-demo) : la phrase d'entrée de l'accueil, puis la même bulle sur un autre contenu. --- */
+/* La phrase se lit en dix secondes, sous l'accroche ; son bouton est un lien de texte, la carte d'accueil ne s'en trouve pas alourdie. */
+/* Une seule ligne au pointeur fin : la carte ne grandit presque pas, et les étiquettes voisines (le terminal à 1920 px) n'ont pas à
+   glisser pour l'éviter. Au doigt, le bouton garde ses 48 px. */
+.intro__mascotte { margin: 8px 0 0; font: 400 var(--tako-texte-xs)/1.5 var(--mt-police-ui); }
+html:not(.sans-js):not(.sans-scene) .intro__mascotte { color: var(--mt-scene-papier); }
+.intro__rencontre { min-height: 0; padding: 0; border: 0; background: transparent; color: var(--tako-lien); font: 600 var(--tako-texte-xs)/1.5 var(--mt-police-ui); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+@media (pointer: coarse) { .intro__rencontre { min-height: 48px; padding: 4px 0; } }
+html:not(.sans-js):not(.sans-scene) .intro__rencontre { color: var(--mt-scene-lampe); }
+.intro__rencontre:focus-visible { outline: 2px solid var(--tako-lien); outline-offset: 1px; }
+/* Sans JavaScript, le bouton ne ferait rien : le lien vers le cas d'étude le remplace. */
+html:not(.sans-js) .intro__rencontre-lien { display: none; }
+@media (max-width: 760px) { .intro__mascotte { margin-top: 4px; } }
+.offre__limites { font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.fiche__rencontre { margin: 12px 0; }
+/* Un contenu à la fois : la rencontre, ou la question (note, profils, champ, couvre-chefs). */
+.bulle[data-mode="rencontre"] > :is(.bulle__note, .bulle__profils, .bulle__suite, .bulle__chapeaux) { display: none; }
+/* Le petit accès à la rencontre, au bout de l'introduction de la question (lot mascotte-entree-bulle) : un lien de texte, dans la
+   ligne. Au doigt, sa cible de 44 px vient d'un rembourrage vertical, qui n'agrandit pas la ligne : la bulle ne grandit pas d'autant,
+   et au téléphone elle ne monte pas sur la pieuvre (tests/pieuvre-visible.mjs). */
+.bulle a.bulle__rencontrer { font-weight: 600; color: var(--tako-lien); text-underline-offset: 3px; }
+.bulle__rencontrer:hover { text-decoration-thickness: 2px; }
+.bulle__rencontrer:focus-visible { outline: 2px solid var(--tako-lien); outline-offset: 1px; }
+@media (pointer: coarse) { .bulle__rencontrer { padding: 16px 0; } }
+.bulle__rencontre[hidden], .bulle__reactions[hidden], .bulle__offre[hidden], .bulle__repli[hidden], .bulle [hidden] { display: none; }
+.bulle__phrase { margin: 6px 0 4px; font: var(--tako-texte-sm)/1.5 var(--mt-police-prose); }
+.bulle__repli { margin: 8px 0; }
+.bulle__repli img { display: block; width: 100%; height: auto; border-radius: var(--tako-rayon-petit); }
+.bulle__repli figcaption { margin-top: 4px; color: var(--tako-texte-secondaire); font-size: var(--tako-texte-xs); }
+.bulle__actions { display: grid; gap: 6px; margin-top: 8px; }
+.bulle__action { display: flex; align-items: center; box-sizing: border-box; width: 100%; min-height: var(--tako-cible); padding: 6px 12px; border: 1px solid var(--tako-bord); border-radius: var(--tako-rayon-petit); background: transparent; color: var(--tako-texte); font: 600 var(--tako-texte-xs)/1.3 var(--mt-police-ui); text-align: left; text-decoration: none; cursor: pointer; }
+.bulle a.bulle__action { color: var(--tako-texte); }
+.bulle__action:hover, .bulle__reaction:hover, .bulle__question:hover { background: var(--tako-survol); }
+.bulle__action[aria-expanded="true"] { border-color: var(--tako-lien); color: var(--tako-lien); }
+.bulle__reactions, .bulle__offre { margin-top: 8px; padding: 8px 0 0; border-top: 1px solid var(--tako-bord-doux); }
+.bulle__reactions p, .bulle__offre p { margin: 0 0 6px; }
+.bulle__aide { color: var(--tako-texte-secondaire); font-size: var(--tako-texte-xs); }
+.bulle__ligne-reactions { display: flex; flex-wrap: wrap; gap: 6px; }
+.bulle__reaction { min-height: var(--tako-cible); padding: 4px 10px; border: 1px solid var(--tako-bord-doux); border-radius: var(--tako-rayon-pilule); background: transparent; color: var(--tako-texte); font: var(--tako-texte-xs)/1.2 var(--mt-police-ui); cursor: pointer; }
+/* La question discrète et le retour partagent une ligne quand la place le permet : au téléphone, la feuille reste sous la pieuvre. */
+.bulle__pied { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 8px; }
+.bulle__question { min-height: var(--tako-cible); padding: 4px 0; border: 0; background: transparent; color: var(--tako-lien); font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); text-decoration: underline; cursor: pointer; }
+.bulle__accueil { flex: 1 0 auto; justify-content: center; }
+.bulle__action:focus-visible, .bulle__reaction:focus-visible, .bulle__question:focus-visible, .bulle__accueil:focus-visible { outline: 2px solid var(--tako-lien); outline-offset: 1px; }
