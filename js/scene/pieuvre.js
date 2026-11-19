@@ -71,6 +71,49 @@ function lireChapeau() {
 function ecrireChapeau(n) { try { localStorage.setItem(CLE_CHAPEAU, n); } catch { /* le choix vaut pour cette visite */ } }
 // Vitesse à laquelle les yeux rejoignent ou quittent leur cible : assez vive pour paraître une attention.
 const VIF_REGARD = 9;
+// La toute petite tasse du pourboire (lot pourboire-mini-pieuvre, 16 novembre 2026) : tenue au bout du bras que tend `guide_montrer`.
+// Le geste existait dans la bibliothèque Blender ; l'objet est modelé ici, par révolution d'un profil, sans réexport du GLB : il ne
+// touche ni au squelette ni aux actions, et sa matière est celle de la pieuvre (la lumière lue dans l'émail de la vraie tasse).
+// Cotes en mètres, à l'échelle de la pieuvre : 1 cm de haut, de quoi rester une tasse de poupée à côté de celle de 9,3 cm.
+const TASSE = {
+  os: 'bras_1.G', // le bras qui se tend (AVANT_G dans actions.py)
+  // Entre l'avant-dernière et la dernière articulation, et posée au-dessus du bras : la pointe, libre, s'enroule.
+  le_long: 0.55, au_dessus: 0.0022,
+  // Quand elle paraît et repart, en secondes de l'action (24 i/s) : le bras est tendu de l'image 20 à l'image 64.
+  parait: [0.5, 0.82], repart: [2.42, 2.66],
+  // Les couleurs portent le linéaire du glTF (COLOR_0) : un émail à peine crème, et le café.
+  email: [0.86, 0.82, 0.74], cafe: [0.045, 0.018, 0.007],
+};
+// Un profil tourné, et une anse : un seul maillage, non indexé, couleur par sommet. L'alpha (l'épaisseur du trait) reste nul : la
+// coque n'en dessine pas, à cette taille elle ne ferait qu'un liseré qui crépite.
+function geometrieTasse() {
+  const P = (x, y) => new THREE.Vector2(x, y);
+  const corps = new THREE.LatheGeometry([P(0, 0), P(0.0040, 0), P(0.0046, 0.0007), P(0.0058, 0.0080), P(0.0061, 0.0100), P(0.0055, 0.0100), P(0.0052, 0.0080)], 20);
+  const cafe = new THREE.CircleGeometry(0.0052, 20).rotateX(-Math.PI / 2).translate(0, 0.0080, 0);
+  const anse = new THREE.TorusGeometry(0.0024, 0.0007, 6, 10, Math.PI * 1.25).rotateZ(-Math.PI * 0.625).translate(0.0062, 0.0052, 0);
+  const pos = [], nor = [], col = [];
+  for (const [g, c] of [[corps, TASSE.email], [anse, TASSE.email], [cafe, TASSE.cafe]]) {
+    const n = g.index ? g.toNonIndexed() : g;
+    pos.push(...n.attributes.position.array); nor.push(...n.attributes.normal.array);
+    for (let i = 0; i < n.attributes.position.count; i++) col.push(...c, 0);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+  // Quatre composantes : la matière lit color.a (le trait), et three.js ne déclare vec4 que pour un attribut à quatre.
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 4));
+  return geo;
+}
+// Elle paraît d'un petit rebond (dépasse puis revient) et repart en douceur : une taille qui change, jamais une lumière qui clignote.
+const rebondir = (u) => 1 + 2.2 * (u - 1) ** 3 + 1.2 * (u - 1) ** 2;
+const lisser = (u) => u * u * (3 - 2 * u);
+function tailleTasse(t) {
+  const [a0, a1] = TASSE.parait, [r0, r1] = TASSE.repart;
+  if (t <= a0 || t >= r1) return 0;
+  if (t < a1) return rebondir((t - a0) / (a1 - a0));
+  if (t > r0) return 1 - lisser((t - r0) / (r1 - r0));
+  return 1;
+}
 
 const SOMMET = `
   #include <common>
@@ -410,6 +453,27 @@ export async function creerPieuvre({ scene, renderer, camera, base, place, email
   const zone = new THREE.Mesh(new THREE.BoxGeometry(...PIEUVRE.boite), new THREE.MeshBasicMaterial({ visible: false }));
   zone.position.y = PIEUVRE.boite[1] / 2; zone.userData.objet = 'pieuvre'; zone.name = 'pieuvre-zone'; groupe.add(zone);
 
+  // La tasse du pourboire : dans le groupe dès le chargement, réduite à rien. Elle se compile donc avec le reste (aucun programme au
+  // premier clic), disparaît avec la pieuvre (film, cachée) et porte son ombre.
+  const tasse = new THREE.Mesh(geometrieTasse(), peau); tasse.name = 'pieuvre-tasse'; tasse.frustumCulled = false;
+  tasse.scale.setScalar(RANGE); groupe.add(tasse);
+  const osTasse = [6, 7].map((j) => os[nomOs(`${TASSE.os}.${j}`)]);
+  const pTasse = new THREE.Vector3(), p2Tasse = new THREE.Vector3(), lacetTasse = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), PIEUVRE.lacet);
+  let tailleT = 0;
+  // Au bout du bras tendu, droite dans le monde quelle que soit la pente du bras, l'anse du côté de la pieuvre où elle regarde.
+  function poserTasse(dt) {
+    const tient = !fige && cerveau.tient() === 'tasse' && cerveau.action() === 'guide_montrer';
+    // Un geste coupé (masquée, figée, autre réaction) : elle range la tasse vite, sans la laisser flotter.
+    tailleT = tient ? tailleTasse(actions.guide_montrer?.time ?? 0) : Math.max(0, tailleT - dt * 6);
+    tasse.visible = tailleT > 0;
+    if (!tasse.visible) { tasse.scale.setScalar(RANGE); return; }
+    osTasse[0].getWorldPosition(pTasse); osTasse[1].getWorldPosition(p2Tasse);
+    pTasse.lerp(p2Tasse, TASSE.le_long); pTasse.y += TASSE.au_dessus * groupe.scale.y;
+    tasse.position.copy(groupe.worldToLocal(pTasse));
+    tasse.quaternion.copy(groupe.quaternion).invert().multiply(lacetTasse);
+    tasse.scale.setScalar(Math.max(RANGE, tailleT));
+  }
+
   // Les programmes se compilent avant d'entrer en scène : pas d'à-coup la première fois qu'elle paraît.
   await renderer.compileAsync(groupe, camera, scene);
   // Le flash : elle entrait en scène d'un coup, à sa place, sur une pièce déjà immobile. Elle y entre désormais cachée, et n'en sort que par son entrée.
@@ -500,7 +564,7 @@ export async function creerPieuvre({ scene, renderer, camera, base, place, email
       tailleChapeau += ((!fige && sansChapeau.has(cerveau.action()) ? 0 : 1) - tailleChapeau) * (anime ? Math.min(1, dt * VIF_CHAPEAU) : 1);
       osChapeau.scale.setScalar(Math.max(RANGE, tailleChapeau));
       if (entree) { avancerEntree(dt, anime, enVue, lampe); demarrer(); if (entree?.phase === 'attend') return; }
-      if (fige) { if (ombreSale) { groupe.updateMatrixWorld(true); peindreOmbre(lampe); ombreSale = false; } return; }
+      if (fige) { if (tasse.visible) { tailleT = 0; tasse.visible = false; ombreSale = true; } if (ombreSale) { groupe.updateMatrixWorld(true); peindreOmbre(lampe); ombreSale = false; } return; }
       if (!enVue) return;
       images++;
       retablir();
@@ -518,6 +582,8 @@ export async function creerPieuvre({ scene, renderer, camera, base, place, email
       const libre = cerveau.regardLibre() && aCible;
       poidsRegard += ((libre ? 1 : 0) - poidsRegard) * Math.min(1, dt * VIF_REGARD);
       if (poidsRegard > 1e-3) { groupe.updateMatrixWorld(true); for (const y of yeux) regarder(y); }
+      // Après l'onde : la tasse suit le bras tel qu'on le voit, pas tel que le mixeur l'a laissé.
+      if (tasse.visible || cerveau.tient()) { groupe.updateMatrixWorld(true); poserTasse(dt); }
       if (images % 2 === 0 || ombreSale) { groupe.updateMatrixWorld(true); peindreOmbre(lampe); ombreSale = false; }
     },
     // Le pointeur a bougé : ses yeux vont à l'objet survolé, sinon là où pointe le visiteur. Le sommeil compte ce geste.
@@ -582,6 +648,8 @@ export async function creerPieuvre({ scene, renderer, camera, base, place, email
         zone.scale.set(sx, sy, sx); zone.position.y = PIEUVRE.boite[1] * sy / 2; zone.updateMatrixWorld(true);
       }
     },
+    // Pour les essais : la tasse du pourboire à l'écran, null tant qu'elle est rangée.
+    rectTasse(cam, L, H) { if (!tasse.visible) return null; tasse.updateMatrixWorld(true); return this.rectangle(cam, L, H, new THREE.Box3().setFromObject(tasse)); },
     // Pour les essais : ce qui joue, et la zone de clic à l'écran.
     // Sa silhouette à l'écran, pas sa cible : au doigt, la cible déborde exprès, et rien ne doit s'écarter de ce débord.
     silhouette(cam, L, H) {
@@ -625,6 +693,6 @@ export async function creerPieuvre({ scene, renderer, camera, base, place, email
     // Pour les essais : une pose du saut, tenue ; null la relâche, à sa place.
     tenirSaut(t) { if (t === null) { finirEntree({ saluer: false }); return; } entree = { phase: 'essai', t }; poserSaut(saut.pose(t)); cacher(false); peindreOmbre(1); demarrer(); },
     get dureeSaut() { return saut.duree; },
-    etat() { return { ...cerveau.etat(), entree: entree?.phase ?? null, apparition: uCommun.uApparition.value, chapeau, fige, images, poidsRegard: +poidsRegard.toFixed(3), onde: +temps.toFixed(3) }; },
+    etat() { return { ...cerveau.etat(), tasse: +tailleT.toFixed(3), entree: entree?.phase ?? null, apparition: uCommun.uApparition.value, chapeau, fige, images, poidsRegard: +poidsRegard.toFixed(3), onde: +temps.toFixed(3) }; },
   };
 }

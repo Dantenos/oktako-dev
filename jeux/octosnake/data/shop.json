@@ -1,0 +1,112 @@
+{
+  "_doc": "Boutique de jetons : UNIQUEMENT des cosmétiques (aucun effet en jeu, vérifié par test/store.js). Prix affichés, achat direct, aucun tirage au sort. Vitrine du jour déterministe (même pour tous).",
+  "items": [
+    {
+      "id": "body:corail",
+      "cat": "body",
+      "cos": "corail",
+      "price": 120,
+      "name": "Corail"
+    },
+    {
+      "id": "body:abysse",
+      "cat": "body",
+      "cos": "abysse",
+      "price": 120,
+      "name": "Abysse"
+    },
+    {
+      "id": "body:menthe",
+      "cat": "body",
+      "cos": "menthe",
+      "price": 120,
+      "name": "Menthe"
+    },
+    {
+      "id": "body:nacre-rose",
+      "cat": "body",
+      "cos": "nacre-rose",
+      "price": 150,
+      "name": "Nacre rose"
+    },
+    {
+      "id": "hat:couronne_or",
+      "cat": "hat",
+      "cos": "couronne_or",
+      "price": 300,
+      "name": "Couronne de corail doré"
+    },
+    {
+      "id": "hat:bicorne",
+      "cat": "hat",
+      "cos": "bicorne",
+      "price": 200,
+      "name": "Bicorne d'amiral"
+    },
+    {
+      "id": "hat:bonnet-arc",
+      "cat": "hat",
+      "cos": "bonnet-arc",
+      "price": 150,
+      "name": "Bonnet arc-en-ciel"
+    },
+    {
+      "id": "eyes:etoiles-or",
+      "cat": "eyes",
+      "cos": "etoiles-or",
+      "price": 150,
+      "name": "Étoiles d'or"
+    },
+    {
+      "id": "pattern:nacre",
+      "cat": "pattern",
+      "cos": "nacre",
+      "price": 200,
+      "name": "Nacre"
+    },
+    {
+      "id": "pattern:circuit-neon",
+      "cat": "pattern",
+      "cos": "circuit-neon",
+      "price": 180,
+      "name": "Circuit néon"
+    },
+    {
+      "id": "ink:galaxie",
+      "cat": "ink",
+      "cos": "galaxie",
+      "price": 250,
+      "name": "Galaxie"
+    },
+    {
+      "id": "ink:aurore",
+      "cat": "ink",
+      "cos": "aurore",
+      "price": 250,
+      "name": "Aurore"
+    },
+    {
+      "id": "tag:etoile",
+      "cat": "tag",
+      "cos": "etoile",
+      "price": 120,
+      "name": "Étoile"
+    }
+  ],
+  "featuredPerDay": 3,
+  "bundles": [
+    {
+      "id": "bundle_amiral",
+      "name": {
+        "fr": "Tenue de l'amiral",
+        "en": "Admiral outfit"
+      },
+      "items": [
+        "hat:bicorne",
+        "body:abysse",
+        "tag:etoile"
+      ],
+      "price": 360
+    }
+  ]
+}

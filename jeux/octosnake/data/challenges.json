@@ -1,0 +1,21 @@
+{
+  "_doc": "Défis du jour (tirés au sort selon la date) et objectifs de partie. stat ∈ eaten, grabs, kills, inks, pearls, reef, tentacles. {n} = objectif.",
+  "xp": { "eaten": 1, "grabs": 10, "kills": 25, "inks": 2, "pearls": 5, "reef": 2, "objective": 50, "daily": 300, "win": 150 },
+  "daily": [
+    { "id": "eat", "text": "Mange {n} perles", "stat": "eaten", "n": [150, 200, 250] },
+    { "id": "grab", "text": "Attrape {n} rivaux", "stat": "grabs", "n": [3, 5, 8] },
+    { "id": "kill", "text": "Fais tomber {n} pieuvres", "stat": "kills", "n": [2, 3, 5] },
+    { "id": "pearl", "text": "Ramasse {n} perles nacrées", "stat": "pearls", "n": [10, 15, 25] },
+    { "id": "ink", "text": "Lance {n} jets d'encre", "stat": "inks", "n": [15, 25, 40] },
+    { "id": "reef", "text": "Tiens le récif {n} secondes", "stat": "reef", "n": [30, 60, 90] }
+  ],
+  "objectives": [
+    { "text": "Mange {n} perles", "stat": "eaten", "n": [20, 35, 50] },
+    { "text": "Attrape {n} rival(s)", "stat": "grabs", "n": [1, 2] },
+    { "text": "Utilise l'encre {n} fois", "stat": "inks", "n": [2, 3] },
+    { "text": "Fais pousser {n} tentacules", "stat": "tentacles", "n": [3, 4], "absolute": true },
+    { "text": "Fais tomber {n} pieuvre", "stat": "kills", "n": [1] },
+    { "text": "Ramasse {n} perles nacrées", "stat": "pearls", "n": [2, 4] },
+    { "text": "Tiens le récif {n} s", "stat": "reef", "n": [10, 20], "modes": ["reef"] }
+  ]
+}

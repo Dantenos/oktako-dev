@@ -3,12 +3,14 @@
 import { creerPlongee } from './plongee.js';
 import { creerTasse } from './tasse.js';
 import { creerFilmCafe } from './film-cafe.js';
+import { prechargerFlaque } from './flaque.js';
 import { creerTiroir } from './tiroir.js';
 import { creerGrandAngle } from './grand-angle.js';
 import { creerConsolePoche } from './console.js';
 import { creerSon } from './son.js';
 import { monterNotes, viderEnAttente } from './notes.js';
 import { creerAmbiance } from './ambiance.js';
+import { preparerAffiche } from './affiche.js';
 import { creerBulle } from './pieuvre-bulle.js';
 import { creerPsst } from './pieuvre-psst.js';
 const $ = (s, r = document) => r.querySelector(s);
@@ -40,11 +42,11 @@ const annonce = (t) => { $('#annonce').textContent = t; };
 // La bulle de la mini-pieuvre : un lien de réponse ouvre sa rubrique, et le retour du panneau rend le focus à ce qui l'avait ouverte.
 const bulle = creerBulle({ annoncer: annonce, surLien: (declencheur) => { if (declencheur?.isConnected) retourFocus = declencheur; }, vue: () => scene?.vueCourante?.(),
   // Vers elle depuis l'accueil et l'atelier ; depuis une rubrique, la question s'ouvre sans quitter la lecture.
-  approcher: () => {
+  approcher: (options) => {
     psst.retirer();
     if (etat.vue === 'panneau') return null;
     document.body.classList.add('pieuvre-proche');
-    return scene?.entrerPieuvre?.();
+    return scene?.entrerPieuvre?.(options);
   },
   eloigner: () => {
     document.body.classList.remove('pieuvre-proche');
@@ -76,6 +78,23 @@ const psst = creerPsst({ bouton: $('#pieuvre-psst'), rect: () => { const r = sce
     if (b.gauche < 4 || b.droite > document.documentElement.clientWidth - 4 || b.haut < 4) return toutes;
     return toutes.filter((e) => { const r = e.getBoundingClientRect(); return r.width && r.left < b.droite + 2 && b.gauche < r.right + 2 && r.top < b.bas + 2 && b.haut < r.bottom + 2; }).map((e) => e.closest('.point') || e);
   } });
+// La pieuvre au clavier (lot pourboire-mini-pieuvre) : une cible posée sur sa silhouette, dans le groupe des objets du bureau. Entrée ou Espace
+// valent un clic sur elle : la bulle s'ouvre sur le pourboire et elle tend sa tasse. La souris, elle, passe au travers jusqu'à la scène.
+const cible = $('#pieuvre-cible');
+cible?.addEventListener('click', () => scene?.pieuvre?.()?.clic());
+// Au focus clavier, Chrome fait défiler la pièce (overflow caché) pour « montrer » la cible : toute la scène glissait de 800 px de côté.
+// La pièce ne défile jamais : on la rend à zéro, la cible est déjà à l'écran, posée sur elle.
+const piece = cible?.closest('.piece');
+piece?.addEventListener('scroll', () => { if (piece.scrollLeft || piece.scrollTop) piece.scrollLeft = piece.scrollTop = 0; });
+function placerCible() {
+  if (!cible || cible.hidden) return;
+  const r = scene?.rectPieuvre?.(), vue = r && !sousAccueil((r.gauche + r.droite) / 2, (r.haut + r.bas) / 2);
+  if (cible.dataset.cache !== String(!vue)) { cible.dataset.cache = String(!vue); cible.tabIndex = vue ? 0 : -1; }
+  if (!vue) return;
+  const l = Math.max(44, r.droite - r.gauche), h = Math.max(44, r.bas - r.haut);
+  cible.style.width = `${l.toFixed(0)}px`; cible.style.height = `${h.toFixed(0)}px`;
+  cible.style.transform = `translate3d(${((r.gauche + r.droite - l) / 2).toFixed(1)}px, ${((r.haut + r.bas - h) / 2).toFixed(1)}px, 0)`;
+}
 const estTelephone = () => matchMedia('(max-width: 760px)').matches;
 const plongee = creerPlongee({scene:()=>scene,mouvementReduit:()=>etat.mouvementReduit,annoncer:annonce,
   auRetour:()=>{history.replaceState(null,'',location.pathname+location.search);etat.vue=etat.scene==='prete'?'exploration':'accueil';etat.objet=null;etat.destination=null;appliquer();cadrerScene();}});
@@ -94,7 +113,9 @@ const tasse = creerTasse({ scene: () => scene, mouvementReduit: () => etat.mouve
   film: () => filmCafe });
 // Le film ne se charge qu'à la demande explicite du visiteur (js/tasse.js) ; le gabarit du café en annonce les durées sans rien télécharger.
 // L'adaptateur sonore est appelé plus tard, après l'initialisation du son.
+// Dès que le film est prêt à partir, le masque de la flaque vivante (quelques dizaines de Ko) se télécharge : la fin le trouve là.
 const filmCafe = creerFilmCafe({ adresse: document.getElementById('cafe-propositions')?.dataset.film, annonce: document.getElementById('cafe-propositions')?.dataset,
+  surPret: ({ format }) => prechargerFlaque(filmCafe.fichier('flaque.json'), format),
   scene: () => scene, mouvementReduit: () => etat.mouvementReduit,
   annoncer: annonce, sons: { couper: () => sonsFilm.couper(), rendre: () => sonsFilm.rendre(), autorise: () => etat.son } });
 let ignorerPop = false;
@@ -154,6 +175,7 @@ const ACTIONS = {
 // Le ciel derrière la fenêtre : heure, météo, dates (js/ambiance.js). Calculé avant la scène : elle ne charge que
 // le jeu de textures de l'ambiance du moment.
 const ambiance = creerAmbiance({ annoncer: annonce, son: () => (etat.son ? son : null), mouvementReduit: () => etat.mouvementReduit });
+preparerAffiche(ambiance.etat().ambiance);
 function entrerTasse() {
   if (etat.scene !== 'prete' || plongee.active || tasse.active || !tasse.disponible) return;
   if (etat.vue === 'panneau') fermerPanneau({ focus: false });
@@ -588,8 +610,8 @@ async function demarrerScene() {
           // Un panneau ouvert depuis le menu garde son focus ; sinon, on revient là d'où l'on est descendu.
           if (!oui && etat.vue !== 'panneau') { annonce('Retour au bureau.'); points.caisson?.focus({ preventScroll: true }); }
         },
-        pieuvre: (p) => { bulle.brancher(p); p.surEntree(() => psst.montrer()); },
-        imagePieuvre: () => psst.placer(),
+        pieuvre: (p) => { bulle.brancher(p); p.surEntree(() => { psst.montrer(); if (cible) { cible.hidden = false; placerCible(); } }); },
+        imagePieuvre: () => { psst.placer(); placerCible(); },
         recentre,
         panne: (raison) => panne(raison),
         retabli: () => { html.classList.remove('sans-scene'); html.classList.add('scene-prete'); etat.scene = 'prete'; window.__atelier = { etat, scene, plongee, tasse, ambiance }; cadrerScene(); },
@@ -598,9 +620,15 @@ async function demarrerScene() {
     publierRadio();
     scene.reglages({ mouvementReduit: etat.mouvementReduit, effets: etat.effets });
     if (!tasse.disponible) scene.tasseInerte();
+    await document.fonts.ready;
     etat.scene = 'prete';
-    html.classList.add('scene-prete');
     cadrerScene();
+    // La première image doit déjà porter le décalage de l'invitation au téléphone.
+    // Deux rappels laissent le compositeur peindre avant de retirer la photo qui couvre le canevas.
+    scene.poserAccueil();
+    await new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(ok)));
+    html.classList.add('scene-prete');
+    setTimeout(() => scene.libererEntree(), etat.mouvementReduit ? 0 : 320);
     setTimeout(vague, 400);
     window.__atelier = { etat, scene, plongee, tasse, tiroir, grandAngle, consolePoche, ambiance, journalVague, bulle, filmCafe }; // point d'accès pour les essais automatisés
     // Le tonnerre suit l'éclair, seulement si le son est activé.
@@ -609,11 +637,12 @@ async function demarrerScene() {
     // La mousse se peint dès que le navigateur respire, jamais au moment du clic.
     (window.requestIdleCallback || ((f) => setTimeout(f, 200)))(() => tasse.preparer());
     if (new URLSearchParams(location.search).has('ips')) monterCompteur();
-    // Rendu en pause quand l'onglet est caché ou que l'accueil n'est plus visible (lecture de la présentation).
+    // Rendu en pause quand l'onglet est caché, que l'accueil n'est plus visible (lecture de la présentation), ou qu'un jeu
+    // tourne dans la console (il a l'écran pour lui).
     let visible = true;
-    document.addEventListener('visibilitychange', () => scene.pause(document.hidden || !visible || plongee.etat().phase==='dedans'));
-    new IntersectionObserver(([e]) => { visible = e.isIntersecting; scene.pause(document.hidden || !visible || plongee.etat().phase==='dedans'); }).observe($('#accueil'));
-    addEventListener('resize', () => { if (etat.vue === 'panneau') cadrerScene(); });
+    document.addEventListener('visibilitychange', () => scene.pause(document.hidden || !visible || plongee.etat().phase==='dedans' || consolePoche.enJeu));
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; scene.pause(document.hidden || !visible || plongee.etat().phase==='dedans' || consolePoche.enJeu); }).observe($('#accueil'));
+    addEventListener('resize', () => { if (etat.vue === 'panneau' || etat.vue === 'accueil') cadrerScene(); });
     syncAdresse();
   } catch (err) {
     console.warn('Scène indisponible :', err);

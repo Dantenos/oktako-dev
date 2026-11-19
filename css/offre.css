@@ -1,0 +1,56 @@
+/* Page de l'offre du Studio (offre.html, lot offre-studio). Elle se lit seule, sans 3D : un prospect qui reçoit le lien
+   doit voir en un coup d'œil le prix, le délai et l'acompte de chaque formule, puis un seul bouton. */
+.page-offre main { max-width: 1080px; margin: 0 auto; padding-bottom: 48px; }
+.page-offre h1 { margin: 0 0 14px; font: 400 var(--tako-texte-chiffre)/1.1 var(--mt-police-prose); color: var(--mt-texte); }
+.offre-page__chapo { max-width: 60ch; font-size: var(--tako-texte-lg, 1.125rem); }
+
+/* Les formules côte à côte sur ordinateur, empilées au téléphone ; la conseillée porte le liseré de la marque. */
+.formules { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 8px 0 36px; }
+.formule { display: flex; flex-direction: column; position: relative; }
+.formule--conseillee { border: 2px solid var(--mt-marque-rouge); }
+.formule__badge { align-self: flex-start; margin: 0 0 8px; padding: 2px 10px; border-radius: 999px; font: 700 var(--tako-texte-xs)/1.6 var(--mt-police-ui); letter-spacing: .08em; text-transform: uppercase; background: var(--mt-marque-rouge); color: var(--mt-marque-creme); }
+.formule h2 { margin: 0 0 6px; font: 400 var(--tako-texte-xl)/1.2 var(--mt-police-prose); letter-spacing: 0; text-transform: none; color: var(--mt-texte); }
+.formule h3 { margin: 14px 0 6px; font: 700 var(--tako-texte-xs)/1.4 var(--mt-police-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--mt-texte-discret); }
+.formule__prix { margin: 0 0 10px; font: var(--tako-texte-sm)/1.3 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.formule__prix strong { display: block; font: 400 var(--tako-texte-chiffre)/1.1 var(--mt-police-prose); color: var(--mt-accent); }
+.formule__pour { margin: 0; }
+.formule ul { margin: 0; padding-left: 18px; flex: 1; }
+.formule li { margin-bottom: 6px; }
+.formule__termes { display: grid; gap: 6px; margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--mt-bord-doux); }
+.formule__termes div { display: flex; justify-content: space-between; gap: 12px; }
+.formule__termes dt { font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.formule__termes dd { margin: 0; font: 700 var(--tako-texte-sm)/1.5 var(--mt-police-ui); text-align: right; }
+.option .formule__termes dd { white-space: nowrap; }
+
+.offre-page__conditions ul { padding-left: 20px; }
+.offre-page__conditions li { margin-bottom: 6px; }
+
+/* Les preuves : ce que le visiteur vient de voir dans l'atelier, en vignettes. */
+.preuves { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.preuve img { display: block; width: 100%; height: 180px; object-fit: cover; object-position: 50% 20%; margin: 0 0 10px; border-radius: calc(var(--tako-rayon-carte) / 2); background: var(--mt-surface); }
+.preuve h3 { margin: 0 0 4px; font: 400 var(--tako-texte-lg, 1.125rem)/1.25 var(--mt-police-prose); text-transform: none; letter-spacing: 0; color: var(--mt-texte); }
+.preuve p { margin: 0 0 8px; }
+
+.offre-page__appel { margin-top: 36px; padding: 24px; border: 1px solid var(--mt-bord-doux); border-radius: var(--tako-rayon-carte); text-align: center; }
+.offre-page__appel .prose { margin-left: auto; margin-right: auto; }
+.offre-page__appel .tako-bouton--principal { min-height: var(--tako-cible, 44px); padding-left: 22px; padding-right: 22px; font-weight: 700; }
+
+/* L'option assistant : sous les formules, en pleine largeur, pour qu'elle se lise comme un ajout et non comme une quatrième formule. */
+.option { margin: 0 0 36px; border-style: dashed; }
+.option h2 { margin: 0 0 8px; font: 400 var(--tako-texte-xl)/1.2 var(--mt-police-prose); letter-spacing: 0; text-transform: none; color: var(--mt-texte); }
+.option p { max-width: 70ch; }
+.option .formule__termes { max-width: 640px; margin-bottom: 12px; }
+.option__note { font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.option ul { margin: 0; padding-left: 20px; }
+.option li { margin-bottom: 6px; }
+
+/* Offre « client fondateur » : le prix normal reste lisible, barré, au-dessus du prix fondateur ; le bandeau dit tout en clair,
+   sans minuterie. [hidden] doit gagner sur les display des classes : le script de fin s'en sert pour rendre les prix normaux. */
+.page-offre [hidden] { display: none !important; }
+.fondateur { margin: 0 0 20px; border: 2px solid var(--mt-marque-rouge); }
+.fondateur h2 { margin: 0 0 8px; font: 400 var(--tako-texte-xl)/1.2 var(--mt-police-prose); letter-spacing: 0; text-transform: none; color: var(--mt-accent); }
+.fondateur p { margin: 0 0 8px; max-width: 80ch; }
+.fondateur__places strong { color: var(--mt-texte); }
+.fondateur__conditions, .fondateur__loyaute { font: var(--tako-texte-sm)/1.55 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.formule__normal { display: block; margin-bottom: 2px; font: var(--tako-texte-sm)/1.4 var(--mt-police-ui); color: var(--mt-texte-doux); }
+.formule__normal s { text-decoration-thickness: 2px; }

@@ -78,14 +78,8 @@ test('seul un écran tactile sans survol affiche les touches : un PC à écran t
  assert.deepEqual(vus,['(pointer: coarse) and (hover: none)']);
  h.ui.detruire();
 });
-test('le bouton affiche ou masque les touches à la main et retient le choix',()=>{
- const h=hote(); // ordinateur : rien d’affiché
- assert.equal(h.parent.hidden,true); assert.equal(h.bouton.hidden,false); assert.equal(h.bouton.attrs['aria-pressed'],'false');
- h.bouton.clic(); assert.equal(h.parent.hidden,false); assert.equal(h.etat().cree,1); assert.equal(h.mem['doont-touches'],'oui'); assert.equal(h.bouton.attrs['aria-pressed'],'true');
- h.bouton.clic(); assert.equal(h.parent.hidden,true); assert.equal(h.etat().detruit,1); assert.equal(h.mem['doont-touches'],'non');
- h.ui.detruire();
- const h2=hote({choix:'oui'}); assert.equal(h2.parent.hidden,false); h2.ui.detruire(); // choix retenu à la visite suivante
- const h3=hote({choix:'non',tactile:true}); assert.equal(h3.parent.hidden,true); h3.ui.detruire(); // un téléphone peut masquer
+test('un choix ancien ne peut afficher les joysticks sur un écran sans toucher',()=>{
+ const h=hote({choix:'oui'}); assert.equal(h.parent.hidden,true); assert.equal(h.bouton.hidden,true);h.ui.detruire();
 });
 
 // --- Disposition de type FPS mobile : logique pure du module ---
@@ -114,4 +108,25 @@ test('les réglages : sensibilité bornée, second tir actif par défaut et dés
  assert.deepEqual(Fps.reglages(null),{sensibilite:1,tir2:true});
  assert.deepEqual(Fps.reglages(JSON.stringify({sensibilite:9,tir2:false})),{sensibilite:2.5,tir2:false});
  assert.deepEqual(Fps.reglages('x'),{sensibilite:1,tir2:true});
+});
+
+test('le joystick droit poursuit la visée à pouce tenu et possède une zone morte',()=>{
+ assert.deepEqual(Fps.vitesseVisee(0,0),{x:0,y:0});
+ assert.ok(Fps.vitesseVisee(45,-30).x>0); assert.ok(Fps.vitesseVisee(45,-30).y<0);
+});
+test('une cible reste entière dans les bords sûrs, même après un réglage extrême',()=>{
+ assert.equal(Fps.centreAccessible(0,320,88,20),64);
+ assert.equal(Fps.centreAccessible(1,320,88,20),256);
+});
+test('deux doigts indépendants : marche, visée continue, tir et annulation sans appui coincé',()=>{
+ const h=require('./doont-dom-essai.cjs').hote(),actions=[],angles=[];
+ const ui=Fps.creer({parent:h.parent,envoyer:(a,b)=>actions.push([a,b]),viser:x=>angles.push(x),vibrer:false});
+ const g=h.trouver('fps-zone-g'),d=h.trouver('fps-zone-d');
+ g.fire('pointerdown',{clientX:90,clientY:280});g.fire('pointermove',{clientX:90,clientY:230});
+ d.fire('pointerdown',{pointerId:2,clientX:290,clientY:290});d.fire('pointermove',{pointerId:2,clientX:335,clientY:290});
+ h.image(16);h.image(32);assert.ok(angles.length>=2);assert.ok(angles.every(x=>x>0));assert.deepEqual(actions,[['avancer',true]]);
+ const tir=h.tous().find(e=>e.dataset?.bouton==='tir');tir.fire('pointerdown',{pointerId:3});tir.fire('pointercancel',{pointerId:3});
+ assert.deepEqual(actions.slice(-2),[['tirer',true],['tirer',false]]);
+ g.fire('pointercancel');d.fire('lostpointercapture',{pointerId:2});const n=angles.length;h.image(48);assert.equal(angles.length,n);
+ assert.deepEqual(actions.at(-1),['avancer',false]);ui.detruire();assert.equal(h.parent.children.length,0);
 });

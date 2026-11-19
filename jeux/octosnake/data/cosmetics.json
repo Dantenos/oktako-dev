@@ -1,0 +1,439 @@
+{
+  "_doc": "Cosmétiques (data-driven). level = niveau requis. Les couleurs \"$primary\", \"$secondary\", \"$ink\"… sont résolues avec config/brand.json (marque blanche). Les objets marqués « shop » (prix en jetons) sont purement cosmétiques et s'obtiennent dans la boutique (data/shop.json) ; tout le reste se débloque en jouant.",
+  "defaults": {
+    "body": "auto",
+    "hat": "beret",
+    "eyes": "classique",
+    "pattern": "ventouses",
+    "ink": "marine",
+    "tag": "simple"
+  },
+  "categories": [
+    {
+      "id": "body",
+      "label": "Couleur",
+      "items": [
+        {
+          "id": "auto",
+          "name": "Automatique",
+          "color": null,
+          "level": 1
+        },
+        {
+          "id": "rouge",
+          "name": "Rouge corail",
+          "color": "$primary",
+          "level": 1
+        },
+        {
+          "id": "bleu",
+          "name": "Bleu lagon",
+          "color": "#2E86DE",
+          "level": 1
+        },
+        {
+          "id": "orange",
+          "name": "Orange clown",
+          "color": "#F39C12",
+          "level": 2
+        },
+        {
+          "id": "vert",
+          "name": "Vert algue",
+          "color": "#27AE60",
+          "level": 2
+        },
+        {
+          "id": "rose",
+          "name": "Rose bonbon",
+          "color": "#E84393",
+          "level": 3
+        },
+        {
+          "id": "violet",
+          "name": "Violet abysses",
+          "color": "#8E44AD",
+          "level": 3
+        },
+        {
+          "id": "turquoise",
+          "name": "Turquoise",
+          "color": "#16A085",
+          "level": 4
+        },
+        {
+          "id": "nuit",
+          "name": "Bleu nuit",
+          "color": "#34495E",
+          "level": 6
+        },
+        {
+          "id": "or",
+          "name": "Or massif",
+          "color": "#D4A21F",
+          "level": 8
+        },
+        {
+          "id": "corail",
+          "name": "Corail",
+          "color": "#FF7F50",
+          "level": 1,
+          "shop": 120
+        },
+        {
+          "id": "abysse",
+          "name": "Abysse",
+          "color": "#14215C",
+          "level": 1,
+          "shop": 120
+        },
+        {
+          "id": "menthe",
+          "name": "Menthe",
+          "color": "#7CF2C9",
+          "level": 1,
+          "shop": 120
+        },
+        {
+          "id": "nacre-rose",
+          "name": "Nacre rose",
+          "color": "#F8BBD0",
+          "level": 1,
+          "shop": 150
+        }
+      ]
+    },
+    {
+      "id": "hat",
+      "label": "Chapeau",
+      "items": [
+        {
+          "id": "beret",
+          "name": "Béret",
+          "style": "beret",
+          "color": "$secondary",
+          "level": 1
+        },
+        {
+          "id": "aucun",
+          "name": "Aucun",
+          "style": "none",
+          "level": 1
+        },
+        {
+          "id": "beret-rouge",
+          "name": "Béret rouge",
+          "style": "beret",
+          "color": "$primary",
+          "level": 2
+        },
+        {
+          "id": "casquette",
+          "name": "Casquette",
+          "style": "cap",
+          "color": "#2E86DE",
+          "level": 2
+        },
+        {
+          "id": "bonnet",
+          "name": "Bonnet marin",
+          "style": "beanie",
+          "color": "#E8E8E8",
+          "level": 3
+        },
+        {
+          "id": "pirate",
+          "name": "Pirate",
+          "style": "pirate",
+          "color": "#222222",
+          "level": 4
+        },
+        {
+          "id": "haut-de-forme",
+          "name": "Haut-de-forme",
+          "style": "tophat",
+          "color": "#1E1E1E",
+          "level": 5
+        },
+        {
+          "id": "couronne",
+          "name": "Couronne",
+          "style": "crown",
+          "color": "#F5C518",
+          "level": 7
+        },
+        {
+          "id": "couronne_or",
+          "name": "Couronne de corail doré",
+          "style": "crown",
+          "color": "#FFB300",
+          "level": 1,
+          "shop": 300
+        },
+        {
+          "id": "bicorne",
+          "name": "Bicorne d'amiral",
+          "style": "pirate",
+          "color": "#1B2A4A",
+          "level": 1,
+          "shop": 200
+        },
+        {
+          "id": "bonnet-arc",
+          "name": "Bonnet arc-en-ciel",
+          "style": "beanie",
+          "color": "#E84393",
+          "level": 1,
+          "shop": 150
+        }
+      ]
+    },
+    {
+      "id": "eyes",
+      "label": "Yeux",
+      "items": [
+        {
+          "id": "classique",
+          "name": "Classiques",
+          "style": "round",
+          "level": 1
+        },
+        {
+          "id": "endormis",
+          "name": "Endormis",
+          "style": "sleepy",
+          "level": 2
+        },
+        {
+          "id": "etoiles",
+          "name": "Étoiles",
+          "style": "stars",
+          "level": 3
+        },
+        {
+          "id": "lunettes",
+          "name": "Lunettes de soleil",
+          "style": "shades",
+          "level": 4
+        },
+        {
+          "id": "coeurs",
+          "name": "Cœurs",
+          "style": "hearts",
+          "level": 5
+        },
+        {
+          "id": "cyclope",
+          "name": "Cyclope",
+          "style": "cyclops",
+          "level": 6
+        },
+        {
+          "id": "etoiles-or",
+          "name": "Étoiles d'or",
+          "style": "stars",
+          "level": 1,
+          "shop": 150
+        }
+      ]
+    },
+    {
+      "id": "pattern",
+      "label": "Tentacules",
+      "items": [
+        {
+          "id": "ventouses",
+          "name": "Ventouses",
+          "style": "suckers",
+          "level": 1
+        },
+        {
+          "id": "uni",
+          "name": "Uni",
+          "style": "plain",
+          "level": 1
+        },
+        {
+          "id": "rayures",
+          "name": "Rayures",
+          "style": "stripes",
+          "level": 2
+        },
+        {
+          "id": "pois",
+          "name": "Pois",
+          "style": "dots",
+          "level": 3
+        },
+        {
+          "id": "circuit",
+          "name": "Circuit",
+          "style": "circuit",
+          "level": 4
+        },
+        {
+          "id": "degrade",
+          "name": "Dégradé",
+          "style": "gradient",
+          "level": 5
+        },
+        {
+          "id": "nacre",
+          "name": "Nacre",
+          "style": "gradient",
+          "level": 1,
+          "shop": 200
+        },
+        {
+          "id": "circuit-neon",
+          "name": "Circuit néon",
+          "style": "circuit",
+          "level": 1,
+          "shop": 180
+        }
+      ]
+    },
+    {
+      "id": "ink",
+      "label": "Encre",
+      "items": [
+        {
+          "id": "marine",
+          "name": "Marine",
+          "color": "$ink",
+          "effect": "none",
+          "level": 1
+        },
+        {
+          "id": "violet",
+          "name": "Violette",
+          "color": "#5B2C6F",
+          "effect": "none",
+          "level": 2
+        },
+        {
+          "id": "sepia",
+          "name": "Sépia",
+          "color": "#5D4037",
+          "effect": "none",
+          "level": 3
+        },
+        {
+          "id": "paillettes",
+          "name": "Paillettes",
+          "color": "#1B2A4A",
+          "effect": "sparkle",
+          "level": 5
+        },
+        {
+          "id": "arc-en-ciel",
+          "name": "Arc-en-ciel",
+          "color": "#6C5CE7",
+          "effect": "rainbow",
+          "level": 6
+        },
+        {
+          "id": "galaxie",
+          "name": "Galaxie",
+          "color": "#311B92",
+          "effect": "sparkle",
+          "level": 1,
+          "shop": 250
+        },
+        {
+          "id": "aurore",
+          "name": "Aurore",
+          "color": "#00897B",
+          "effect": "rainbow",
+          "level": 1,
+          "shop": 250
+        }
+      ]
+    },
+    {
+      "id": "tag",
+      "label": "Badge",
+      "items": [
+        {
+          "id": "simple",
+          "name": "Simple",
+          "style": "plain",
+          "level": 1
+        },
+        {
+          "id": "pastille",
+          "name": "Pastille",
+          "style": "pill",
+          "level": 2
+        },
+        {
+          "id": "flamme",
+          "name": "Flamme",
+          "style": "plain",
+          "prefix": "🔥",
+          "level": 4
+        },
+        {
+          "id": "dore",
+          "name": "Doré",
+          "style": "gold",
+          "level": 5
+        },
+        {
+          "id": "royal",
+          "name": "Royal",
+          "style": "gold",
+          "prefix": "👑",
+          "level": 8
+        },
+        {
+          "id": "etoile",
+          "name": "Étoile",
+          "style": "gold",
+          "prefix": "⭐",
+          "level": 1,
+          "shop": 120
+        }
+      ]
+    }
+  ],
+  "tankSkins": {
+    "_doc": "Tenue exclusive du tank (Argominator). Purement visuelle : remplace le chapeau, garde la teinte du corps visible. cracks = seuils de PV (fraction) des états de dégâts.",
+    "default": "argo-mk1",
+    "items": [
+      {
+        "id": "argo-mk1",
+        "name": "Cuirasse Mk I",
+        "name_en": "Mk I Plating",
+        "scale": 1.4,
+        "tint": 0.55,
+        "plate": "#8A96A3",
+        "plateDark": "#3C4652",
+        "plateShine": "#E3EAF1",
+        "rivet": "#F2F5F8",
+        "visor": "#FF1F3D",
+        "glow": "#FF6B6B",
+        "tips": {
+          "style": "spiked",
+          "spikes": 4,
+          "size": 11,
+          "color": "#5B6672"
+        },
+        "aura": {
+          "color": "#1B1B2F",
+          "rate": 28,
+          "size": 7,
+          "life": 0.9
+        },
+        "shockwave": {
+          "color": "#FF1F3D",
+          "radius": 120
+        },
+        "cracks": [
+          0.66,
+          0.33
+        ]
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 // Quand afficher les touches tactiles de DOONT : seulement sur un écran tactile sans souris ni survol (téléphone, tablette),
-// ou si le visiteur le demande à la main. La disposition elle-même vit dans doont-fps.js.
+// Le réglage manuel peut les masquer sur téléphone. La disposition vit dans doont-fps.js.
 (function (racine) {
   'use strict';
   // Un PC dont Windows signale un écran tactile garde souris et clavier : `any-pointer` l'aurait pris pour un
@@ -7,24 +7,24 @@
   const REQUETE = '(pointer: coarse) and (hover: none)';
   const tactileSeul = mm => mm(REQUETE).matches;
   const STOCK = 'doont-touches';
-  function monter({ parent, clavier, actif = () => true, surface, viser = () => {}, bouton = null, stockage = null }) {
+  function monter({ parent, clavier, actif = () => true, surface, viser = () => {}, bouton = null, stockage = null, pause = null }) {
     const doc = parent.ownerDocument, win = doc.defaultView;
     const media = win.matchMedia(REQUETE);
     try { stockage = stockage || win.localStorage; } catch (_) { stockage = null; }
-    // Le choix manuel (oui / non) l'emporte sur la détection ; absent, c'est la détection qui décide.
+    // Un ancien choix manuel ne doit jamais transformer une souris en écran tactile.
     let choix = null;
     try { choix = stockage?.getItem(STOCK) || null; } catch (_) { /* stockage refusé : le choix ne vaut que pour cette visite */ }
-    const voulu = () => choix === 'oui' ? true : choix === 'non' ? false : media.matches;
+    const voulu = () => media.matches && choix !== 'non';
     let fps = null;
     function actualiser() {
       const visible = voulu() && actif();
-      if (bouton) { bouton.hidden = !actif(); bouton.setAttribute('aria-pressed', String(voulu())); }
+      if (bouton) { bouton.hidden = !actif() || !media.matches; bouton.setAttribute('aria-pressed', String(voulu())); }
       parent.hidden = !visible;
       doc.body.classList.toggle('doont-mobile', visible);
       if (visible && !fps) {
         fps = racine.DoontFps.creer({
           parent, surface, stockage, viser,
-          envoyer: (action, bas) => clavier.tactile(action, bas),
+          envoyer: (action, bas) => { if (action === 'menu' && pause) { if (bas) pause(); } else clavier.tactile(action, bas); },
           regard: (haut, bas) => { clavier.tactile('regardHaut', haut); clavier.tactile('regardBas', bas); },
         });
       } else if (!visible && fps) { fps.detruire(); fps = null; }
@@ -43,7 +43,7 @@
     };
     bouton?.addEventListener('click', basculer);
     actualiser();
-    return { actualiser, detruire() {
+    return { actualiser, relacher: fin, detruire() {
       fin();
       win.removeEventListener?.('blur', fin); win.removeEventListener?.('pagehide', fin);
       doc.removeEventListener?.('visibilitychange', cacher);

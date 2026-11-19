@@ -23,7 +23,10 @@ export const DESSINS = {
 // pas dans le navigateur ouvre une fiche (citation de sa source, capture, lien), jamais un écran vide.
 // medias : sous site/console/ ; lien : 'noyau/' (Rouille), une adresse publique vérifiée, ou une destination du site (#…).
 export const APPLIS = [
-  { id: 'octosnake', nom: 'OctoSnake', icone: 'pieuvre', statut: 'Navigateur et Android · fiche',
+  // OctoSnake se joue ici (lot octosnake-portfolio, 16/11/2026) : sa version web statique (jeux/octosnake/, parties solo contre des
+  // bots sur le serveur embarqué dans la page) se lance depuis l'icône. Ses captures restent pour la fiche de secours et la Galerie.
+  { id: 'octosnake', nom: 'OctoSnake', icone: 'pieuvre', statut: 'Jeu en test · bêta',
+    jeu: { src: 'jeux/octosnake/', titre: 'OctoSnake, jeu en test (bêta)' },
     citation: 'Jeu multijoueur en ligne temps réel, dans le navigateur et sur Android.',
     texte: ['Chaque joueur est une pieuvre qui avance en continu comme un serpent ; ses tentacules grandissent quand elle mange.', 'Le même moteur sert aussi L’Argonaute, une aventure solo et coopérative, et Encre & Sang, un jeu de cartes tactiques.'],
     medias: [{ src: 'octosnake-accueil.webp', alt: 'OctoSnake au téléphone : l’écran d’accueil du jeu' }, { src: 'argonaute-accueil.webp', alt: 'L’Argonaute, écran d’accueil' }, { src: 'encre-et-sang-accueil.webp', alt: 'Encre & Sang, écran d’accueil' }] },

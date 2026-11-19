@@ -28,15 +28,20 @@ const SEQUENCES = {
 // Une réaction par événement de la pièce. La lettre, baignée dans la cuisson, ne peut pas être poussée : la pieuvre
 // la montre du bras, tournée vers elle (la lettre est à sa gauche, à droite de l'écran).
 // « montrer » est le même geste, demandé par le visiteur dans la rencontre : sans le répit de la lettre, puisque c'est lui qui le veut.
-const REACTIONS = { arrivee: 'accueil_coucou', caresse: 'accueil_coucou', sucre: 'reaction_applaudir', lettre: 'guide_montrer', montrer: 'guide_montrer' };
+// « pourboire » aussi (lot pourboire-mini-pieuvre) : le bras tendu tout droit, mais une toute petite tasse au bout. Le geste
+// existait dans la bibliothèque ; seul l'objet tenu change, et c'est le lecteur qui le pose (tient()).
+const REACTIONS = { arrivee: 'accueil_coucou', caresse: 'accueil_coucou', sucre: 'reaction_applaudir', lettre: 'guide_montrer', montrer: 'guide_montrer', pourboire: 'guide_montrer' };
+// Ce que la réaction met au bout du bras : rien, sauf la tasse du pourboire.
+const TENU = { pourboire: 'tasse' };
 
 export function creerCerveau({ catalogue, jouer, hasard = Math.random }) {
   const fiche = Object.fromEntries(catalogue.actions.map((a) => [a.nom, a]));
-  const e = { phase: 'repos', action: null, reste: 0, calme: 0, sequence: null, tenue: 0, attente: null, sansGeste: 0, ambiance: null, salue: false, derniere: null, regard: 0, lettre: 0 };
+  const e = { phase: 'repos', action: null, reste: 0, calme: 0, sequence: null, tenue: 0, attente: null, sansGeste: 0, ambiance: null, salue: false, derniere: null, regard: 0, lettre: 0, tient: null };
 
   const aleatoire = (a, b) => a + (b - a) * hasard();
   function lancer(nom, phase, fondu = FONDU, reste = fiche[nom].secondes) {
-    e.action = nom; e.phase = phase; e.reste = reste;
+    // Toute action neuve lâche l'objet : la tasse ne passe jamais dans un autre geste.
+    e.action = nom; e.phase = phase; e.reste = reste; e.tient = null;
     jouer(nom, { boucle: fiche[nom].boucle, fondu });
   }
   function auRepos() { e.sequence = null; lancer(REPOS, 'repos', FONDU, Infinity); e.calme = aleatoire(...CALME); }
@@ -58,6 +63,7 @@ export function creerCerveau({ catalogue, jouer, hasard = Math.random }) {
     if (ev === 'doont') { entrer('casque', true); return; }
     if (ev === 'tonnerre') { entrer('pluie'); return; }
     lancer(REACTIONS[ev], 'reaction', FONDU_VIF);
+    e.tient = TENU[ev] ?? null;
   }
   const libre = () => e.phase === 'repos' || e.phase === 'geste';
 
@@ -112,12 +118,13 @@ export function creerCerveau({ catalogue, jouer, hasard = Math.random }) {
     ambiance(a) { e.ambiance = a; },
     viser(oui) { e.regard = oui ? FIN_REGARD : 0; },
     figer(oui) {
-      if (oui) { e.phase = 'fige'; e.action = null; e.sequence = null; e.attente = null; }
+      if (oui) { e.phase = 'fige'; e.action = null; e.sequence = null; e.attente = null; e.tient = null; }
       else if (e.phase === 'fige') auRepos();
     },
     // Lus à chaque image par le lecteur : sans objet à allouer.
     action() { return e.action; },
+    tient() { return e.tient; },
     regardLibre() { return e.regard > 0 && e.phase === 'repos'; },
-    etat() { return { phase: e.phase, action: e.action, regardLibre: e.regard > 0 && e.phase === 'repos', sequence: e.sequence?.boucle ?? null, attente: e.attente }; },
+    etat() { return { phase: e.phase, action: e.action, regardLibre: e.regard > 0 && e.phase === 'repos', sequence: e.sequence?.boucle ?? null, attente: e.attente, tient: e.tient }; },
   };
 }

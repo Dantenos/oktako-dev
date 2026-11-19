@@ -2,17 +2,18 @@
 // site incrusté à son départ) et joué DANS la scène : scene.film.montrer() le fait passer par le même halo, la même sortie et la même
 // finition que la pièce cuite. Son image 0 est la vue du dessus du site : rien ne saute au départ.
 //
-// À LA DEMANDE (lot film-a-la-demande, 14/11) : rien ne se télécharge, ni film.json ni vidéo, avant que le visiteur ait demandé à le voir.
-// Le sucre ne vaut plus accord pour 10 Mo : il fait seulement paraître l'offre (js/tasse.js). Deux versions : l'extrait (8 à 12 s, le
-// défaut) et le film entier (22 s), toutes deux dans le seul format de l'écran (ordinateur ou téléphone). L'attente est annulable et
-// l'annulation coupe le téléchargement. Son refusé : la MÊME vidéo repart muette, sans second téléchargement.
+// AU SUCRE, POUR TOUS (décision de l'utilisateur du 16/11, 15 h 50 et 15 h 52, « coûte que coûte », « pour tout le monde ») : quand le
+// sucre fond, le FILM ENTIER part tout seul, dans le seul format de l'écran, mouvement réduit compris. Rien ne se télécharge avant le
+// geste du sucre (la première visite ne s'alourdit pas) ; le téléchargement part au geste, le film à l'impact, son image 0 étant la vue
+// du dessus à cet instant. Pendant le chargement comme pendant la lecture, on peut toujours passer (bouton « Passer », Échap, un clic
+// sur le film) : la scène finale paraît, sa dernière image et le lien dans la flaque, sans attendre la vidéo. Son refusé : la MÊME
+// vidéo repart muette, sans second téléchargement. Photosensibilité : tests/film-photosensibilite.mjs (au plus 3 éclairs par seconde).
 //
-// Le film n'est jamais un passage obligé : s'il manque, échoue, ou si la lecture est refusée, jouer() rend false et la mousse garde ses
-// propositions. Un clic ou Échap le passe ; en mouvement réduit, il ne se propose pas. À la fin, sa dernière image reste à l'écran et
-// `mt:film-fin` passe la main à la scène finale : cette même image et les liens dans la flaque. L'extrait finit sur la même image.
+// Le film n'est jamais un passage obligé : s'il manque ou échoue, jouer() rend false et la mousse garde ses propositions. À la fin, sa
+// dernière image reste à l'écran et `mt:film-fin` passe la main à la scène finale : cette même image et le lien dans la flaque.
 //
 // Le son : la musique du site et les sons de la scène s'éteignent en fondu AVANT que l'image parte (sons.couper, une promesse),
-// et reviennent au retour vers la scène (sons.rendre). Son coupé : aucune attente.
+// et reviennent au retour vers la scène (sons.rendre), seulement s'ils ont été coupés. Son coupé : aucune attente.
 
 export function distanceDepart(depart) {
   const [a, b] = [depart.position, depart.vise]; return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
@@ -24,10 +25,11 @@ export function lireAnnonce(d = {}) {
   return { extrait: s(d.filmExtrait), complet: s(d.filmComplet), ambiances: d.filmAmbiances ? d.filmAmbiances.split(' ') : null };
 }
 
-export function creerFilmCafe({ adresse, annonce = {}, scene, mouvementReduit, annoncer, sons = {} }) {
+// surPret({ format }) : le film est chargé et va partir ; la fin peut précharger ce qui lui sert (le masque de la flaque, js/flaque.js).
+export function creerFilmCafe({ adresse, annonce = {}, scene, annoncer, sons = {}, surPret = null }) {
   const a = lireAnnonce(annonce);
   let meta = null, metaCharge = null, video = null, image = null, format = null, cle = null, version = null;
-  let phase = 'repos', jeton = 0, finir = null, passe = false, issue = null;
+  let phase = 'repos', jeton = 0, finir = null, passe = false, issue = null, saute = false, sonCoupe = false;
 
   const base = () => new URL(adresse, document.baseURI);
   // film.json une fois par visite ; une panne réseau laisse réessayer à la demande suivante.
@@ -41,16 +43,19 @@ export function creerFilmCafe({ adresse, annonce = {}, scene, mouvementReduit, a
     if (!video) return;
     video.pause(); video.removeAttribute('src'); video.load(); video = null;
   }
-  // Le seul moment où une vidéo se télécharge : après la demande, un fichier, celui de l'écran et de la version demandée.
+  // Le format de l'écran et la version (le film entier ; l'extrait partage sa fin, son écriture et son cadre).
+  function choisir(m, complet) {
+    cle = innerHeight > innerWidth && m.telephone ? 'telephone' : 'large';
+    const extrait = !complet && m.extrait?.[cle]?.video;
+    format = { ...m[cle], video: extrait || m[cle].video };
+    version = extrait ? 'extrait' : 'complet';
+  }
+  // Le seul moment où une vidéo se télécharge : au geste du sucre, un fichier, celui de l'écran.
   async function charger(complet, j) {
     const m = await lireMeta();
     if (j !== jeton) return false;
     if (m.ambiances && !m.ambiances.includes(scene()?.etatDuCiel?.().ambiance)) return false;
-    cle = innerHeight > innerWidth && m.telephone ? 'telephone' : 'large';
-    const extrait = !complet && m.extrait?.[cle]?.video;
-    // L'extrait partage la fin, l'écriture et le cadre du film entier : seul le fichier vidéo change.
-    format = { ...m[cle], video: extrait || m[cle].video };
-    version = extrait ? 'extrait' : 'complet';
+    choisir(m, complet);
     if (video?.dataset.version !== `${cle}:${version}`) {
       lacher();
       const v = document.createElement('video');
@@ -79,42 +84,61 @@ export function creerFilmCafe({ adresse, annonce = {}, scene, mouvementReduit, a
       if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(() => ok()); else v.addEventListener('playing', () => ok(), { once: true });
     });
   }
-  // Passer : la dernière image, tout de suite (clic ou Échap pendant le film). Elle est posée en image fixe à la sortie de jouer().
+  // Passer : pendant le film, la dernière image tout de suite ; pendant le chargement ou le fondu du son, la scène finale sans la vidéo.
   function passer() {
+    if (phase === 'attente' || phase === 'fondu') { saute = true; const f = finir; finir = null; f?.(); return true; }
     if (phase !== 'film' || !video) return false;
     passe = true; const f = finir; finir = null; video.pause(); f?.(); return true;
   }
-  // Annuler l'attente : la requête vidéo est abandonnée, jouer() rend false, la mousse revient.
-  function annuler() {
-    if (phase !== 'attente') return false;
-    ++jeton; lacher(); phase = 'repos'; issue = 'annule'; finir?.(); finir = null; return true;
+  // La scène finale sans le film (passé avant sa première image) : le téléchargement de la vidéo est abandonné ; il ne faut que
+  // film.json et l'image finale (quelques dizaines de Ko). En panne, jouer() rend false et la mousse revient.
+  async function finSansFilm(j, complet) {
+    lacher();
+    try {
+      const m = meta || await lireMeta();
+      if (j !== jeton) return false;
+      if (!format) choisir(m, complet);
+      if (!image) {
+        const img = new Image(); img.decoding = 'async'; img.src = new URL(format.image, base()).href; await img.decode();
+        if (j !== jeton) return false;
+        image = img;
+      }
+      meta = m;
+    } catch { if (j === jeton) { phase = 'repos'; issue = 'panne'; } return false; }
+    try { surPret?.({ format: cle }); } catch { /* un préchargement raté laisse la fin à son repli */ }
+    phase = 'fin'; passe = true; issue = 'passe';
+    document.dispatchEvent(new CustomEvent('mt:film-fin', { detail: { fin: meta.fin, image, format, passe: true, version } }));
+    return true;
   }
   function surClic(e) { if (phase === 'film') { e.preventDefault(); e.stopPropagation(); passer(); } }
 
   return {
     get actif() { return !!adresse; },
     get phase() { return phase; },
-    // Ce que l'on peut proposer maintenant, sans aucun téléchargement : null si rien (film absent, mouvement réduit, autre ambiance).
-    offre() {
-      if (!adresse || mouvementReduit() || !a.extrait && !a.complet) return null;
-      if (a.ambiances && !a.ambiances.includes(scene()?.etatDuCiel?.().ambiance)) return null;
-      return { extrait: a.extrait, complet: a.complet };
-    },
-    // Sur demande explicite. false : rien n'est pris, la tasse continue comme avant (film absent, refusé, annulé).
-    // attente(true|false) : le chargement commence, ou se termine (film prêt, panne ou annulation).
-    async jouer({ hote, direct, complet = false, attente } = {}) {
-      if (!adresse || direct || mouvementReduit() || phase !== 'repos') return false;
-      const j = ++jeton; phase = 'attente'; issue = null; attente?.(true);
+    // Une adresse voisine de film.json (le masque de la flaque, flaque.json) ; null sans film publié.
+    fichier(nom) { return adresse ? new URL(nom, base()).href : null; },
+    // Le film peut-il partir au sucre ? Sans rien télécharger : publié, et dans son ambiance (le gabarit du build l'annonce).
+    disponible() { return !!adresse && (!a.ambiances || a.ambiances.includes(scene()?.etatDuCiel?.().ambiance)); },
+    // Au geste du sucre, pour tous. depart : la promesse de l'impact (le film raccorde à la vue du dessus à cet instant).
+    // attente(true|false) : le chargement commence, ou se termine. false : film absent ou en panne, la mousse garde ses propositions.
+    async jouer({ hote, complet = true, attente, depart = null } = {}) {
+      if (!adresse || phase !== 'repos') return false;
+      const j = ++jeton; phase = 'attente'; issue = null; saute = false; attente?.(true);
       let pret = false;
-      try { pret = await Promise.race([charger(complet, j), new Promise((ok) => { finir = () => ok(false); })]); } catch { pret = false; }
+      // Le téléchargement part tout de suite ; le film attend en plus l'impact du sucre. « Passer » libère l'attente (finir).
+      try { pret = await Promise.race([Promise.all([charger(complet, j), depart]).then(([p]) => p), new Promise((ok) => { finir = () => ok(false); })]); } catch { pret = false; }
       finir = null; attente?.(false);
+      if (j !== jeton) return false;
+      if (saute) return finSansFilm(j, complet);
       const s = scene();
-      if (!pret || j !== jeton || !s?.film) { if (j === jeton) { phase = 'repos'; issue = 'panne'; lacher(); } return false; }
-      // L'arrêt doit rendre le son même si le visiteur repart avant la première image.
+      if (!pret || !s?.film) { phase = 'repos'; issue = 'panne'; lacher(); return false; }
+      try { surPret?.({ format: cle }); } catch { /* un préchargement raté laisse la fin à son repli */ }
       phase = 'fondu';
-      // Le son s'éteint d'abord ; l'image ne part qu'ensuite.
+      // Le son s'éteint d'abord ; l'image ne part qu'ensuite. L'arrêt le rend même si le visiteur repart avant la première image.
+      sonCoupe = true;
       try { await (sons.couper?.() ?? null); } catch { /* un fondu raté ne bloque pas le film */ }
       if (j !== jeton) return false;
+      if (saute) return finSansFilm(j, complet);
       // La fin de la vidéo peut arriver pendant les attentes qui suivent (décodage qui lâche : 4 s « lues » en 100 ms sous SwiftShader, contrôle 12a) :
       // on l'écoute AVANT de lancer la lecture, sinon « ended » part sans témoin, le film ne finit jamais et sa texture reste noire.
       let terminee = false; const finVideo = () => { terminee = true; const f = finir; finir = null; f?.(); };
@@ -124,7 +148,7 @@ export function creerFilmCafe({ adresse, annonce = {}, scene, mouvementReduit, a
         video.currentTime = 0; video.muted = !sons.autorise?.(); await video.play();
       } catch {
         if (j !== jeton) return false;
-        // Le son refusé : le même fichier, muet (aucun second téléchargement). Une lecture refusée même muette garde l'image et les liens.
+        // Le son refusé : le même fichier, muet (aucun second téléchargement). Une lecture refusée même muette garde l'image et le lien.
         video.muted = true;
         try { await video.play(); } catch { terminee = true; }
       }
@@ -135,13 +159,15 @@ export function creerFilmCafe({ adresse, annonce = {}, scene, mouvementReduit, a
         finir = null;
       }
       if (j !== jeton) { video?.pause(); return false; }
+      // Passé avant la première image (phase « fondu ») : la scène finale, sans montrer le film.
+      if (saute) { video.pause(); return finSansFilm(j, complet); }
       const d = meta.depart;
       // La teinte de l'ambiance (film.json, mesurée au raccord) et le fondu enchaîné sur l'image fixe du départ.
       const teinte = meta.teinte?.[s.etatDuCiel?.().ambiance] || meta.teinte?.defaut || [1, 1, 1];
-      if (!s.film.montrer(video, { distance: distanceDepart(d), champ: d.champ, rapport: format.largeur / format.hauteur, teinte, fondu: meta.fondu ?? 8 / 24 })) { video.pause(); phase = 'repos'; sons.rendre?.(); return false; }
+      if (!s.film.montrer(video, { distance: distanceDepart(d), champ: d.champ, rapport: format.largeur / format.hauteur, teinte, fondu: meta.fondu ?? 8 / 24 })) { video.pause(); phase = 'repos'; if (sonCoupe) { sonCoupe = false; sons.rendre?.(); } return false; }
       phase = 'film';
       hote?.addEventListener('pointerdown', surClic, true);
-      annoncer?.(`${version === 'extrait' ? 'Extrait du film' : 'Le film'} : la pieuvre renverse le café. Échap ou un clic pour passer.`);
+      annoncer?.('Le film : la pieuvre renverse le café. « Passer », Échap ou un clic pour passer.');
       await new Promise((ok) => { if (terminee || video.ended || video.error) return ok(); finir = ok; });
       finir = null; hote?.removeEventListener('pointerdown', surClic, true);
       if (j !== jeton) return true;
@@ -151,16 +177,17 @@ export function creerFilmCafe({ adresse, annonce = {}, scene, mouvementReduit, a
       document.dispatchEvent(new CustomEvent('mt:film-fin', { detail: { fin: meta.fin, image, format, passe, version } }));
       return true;
     },
-    annuler,
-    // Échap : pendant l'attente, il l'annule ; pendant le film, il le passe (true : la touche est prise) ; ensuite, il laisse revenir au bureau.
-    presser() { return annuler() || passer(); },
+    passer,
+    // Échap : pendant le chargement ou le film, il le passe (true : la touche est prise) ; ensuite, il laisse revenir au bureau.
+    presser() { return passer(); },
     reglerSon() { if (video) video.muted = !sons.autorise?.(); },
     // Retour au bureau, Échap final, panne : tout s'arrête, la pièce revient, le son aussi ; une attente en cours lâche son téléchargement.
     arreter() {
       const enAttente = phase === 'attente';
       ++jeton; finir?.(); finir = null;
       if (enAttente) lacher(); else video?.pause();
-      if (phase !== 'repos' && !enAttente) { scene()?.film?.cacher(); sons.rendre?.(); }
+      if (phase !== 'repos' && !enAttente) scene()?.film?.cacher();
+      if (sonCoupe) { sonCoupe = false; sons.rendre?.(); }
       phase = 'repos';
     },
     // Pour les essais.

@@ -78,7 +78,13 @@ html.sans-js .barre__reglages { display: none; }
 /* Le doigt qui glisse à la verticale fait défiler la page (jamais tourner la caméra) ; à l'horizontale, il regarde. */
 .piece__scene canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
 .piece__alt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-html.scene-prete .piece__repli { opacity: 0; transition: opacity .9s ease; }
+html.scene-prete .piece__repli { opacity: 0; transition: opacity .32s ease; }
+html.mouvement-reduit .piece__repli { transition: none; }
+/* La photo couvre aussi un canevas créé mais pas encore peint ; les liens restent au-dessus. */
+.piece__repli { z-index: 1; pointer-events: none; overflow: hidden; }
+.piece__photo { position: absolute; max-width: none; display: block; }
+.piece__repli[data-affiche]::after { content: ""; position: absolute; inset: 0; mix-blend-mode: multiply;
+  background: radial-gradient(ellipse 50% 50% at center, #fff 0%, #fcfbfa 25%, #f2eee9 50%, #e2dad0 75%, #ccbfaf 100%, #af9d88 125%, #998771 141.42%); }
 /* Repli sans JS ni WebGL : un tableau CSS de la même pièce, pour que l'accueil ne soit jamais vide. */
 .piece__repli { position: absolute; inset: 0; background: radial-gradient(ellipse 45% 40% at 22% 78%, color-mix(in srgb, var(--mt-scene-lampe) 45%, transparent), transparent 70%), linear-gradient(to bottom, var(--mt-scene-nuit), var(--mt-scene-mur)); }
 .repli__fenetre { position: absolute; left: 18%; right: 18%; top: 12%; height: 52%; border: 14px solid color-mix(in srgb, var(--mt-scene-papier) 70%, var(--mt-scene-nuit)); border-radius: 2px;
@@ -220,11 +226,16 @@ main:focus { outline: none; }
 .courriel__copier[hidden] { display: none; }
 .contact__principal { display: flex; flex-wrap: wrap; gap: 10px; }
 .contact__principal .tako-bouton { font: var(--tako-texte-md)/1 var(--mt-police-ui); }
+/* La précision du rendez-vous (« 15 min en visio ») : une petite ligne discrète sous son bouton. */
+.contact__rdv { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; }
+.contact__precision { font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); color: var(--mt-texte-doux); }
 .contact__liens { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 18px 0 0; padding: 0; list-style: none; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); }
 .contact__liens a { display: inline-flex; align-items: center; min-height: var(--tako-cible); }
 .pied { padding: 28px 20px calc(40px + env(safe-area-inset-bottom)); border-top: 1px solid var(--mt-bord-doux); text-align: center; font: var(--tako-texte-xs)/1.8 var(--mt-police-ui); color: var(--mt-texte-doux); }
 .pied p { margin: 0; }
 .pied a { display: inline-block; min-height: 24px; }
+/* Le pourboire sans 3D (lot pourboire-mini-pieuvre) : avec elle, c'est la mini-pieuvre qui le propose ; il n'y a jamais deux liens à la fois. */
+html:not(.sans-js):not(.sans-scene) .pied__pourboire { display: none; }
 .annonce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .onglets { display: none; }
 
@@ -534,6 +545,10 @@ html:not(.sans-js):not(.sans-scene) .intro__voyant { background: #98bb6c; box-sh
 .offre__tarif { font: 700 var(--tako-texte-xs)/1.4 var(--mt-police-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--tako-attente); }
 .offre__preuve { font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
 .offre__preuve a { display: inline; }
+.offre__plus-loin { font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); }
+.offre__plus-loin a { display: inline; }
+/* La mention d'un jeu en test : écrite, encadrée en pointillés (jamais la seule couleur). */
+.offre__mention { display: inline-block; padding: 0 6px; border: 1px dashed currentColor; border-radius: 999px; color: var(--tako-attente); white-space: nowrap; }
 .etapes { margin: 0 0 22px; padding-left: 22px; }
 .etapes li { margin-bottom: 6px; }
 .services__devis .note { margin: 0; }
@@ -576,12 +591,13 @@ body.tasse-active .points, body.tasse-active .piece__aide, body.tasse-active .pi
 .tasse:not([data-phase="arrivee"]) .tasse__aide { opacity: 0; }
 html.mouvement-reduit .tasse__aide { transition: none; }
 @media (max-width: 760px) { .tasse__retour { min-height: 44px; } .tasse__aide { display: none; } }
-/* Le film, à la demande : en haut à droite, en miroir du retour. Rien ne se télécharge avant un clic ; « Annuler » coupe l'attente. */
+/* Le film part au sucre : en haut à droite, en miroir du retour, « Passer · Échap » reste en vue du geste du sucre à la scène finale. */
 .tasse__film { position: absolute; z-index: 2; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); display: flex; gap: 8px; align-items: center; }
 .tasse__film[hidden], .tasse__film [hidden] { display: none; }
-.tasse__film-bouton, .tasse__film-annuler { background: #10242ee8; color: #f2e5d1; border: 1px solid #9da9a0; box-shadow: 0 4px 24px #0006; font: 12px/1.4 var(--mt-police-ui); }
-.tasse__film-attente { display: flex; gap: 10px; align-items: center; margin: 0; padding: 4px 4px 4px 12px; border-radius: 999px; background: #030608c8; color: #d4d7d0; font: 12px/1.4 var(--mt-police-ui); }
-@media (max-width: 760px) { .tasse__film { flex-direction: column; align-items: flex-end; } .tasse__film-bouton, .tasse__film-annuler { min-height: 44px; } }
+.tasse__film-passer { min-height: 44px; background: #10242ee8; color: #f2e5d1; border: 1px solid #9da9a0; box-shadow: 0 4px 24px #0006; font: 12px/1.4 var(--mt-police-ui); }
+.tasse__film-attente { display: flex; gap: 10px; align-items: center; margin: 0; padding: 6px 12px; border-radius: 999px; background: #030608c8; color: #d4d7d0; font: 12px/1.4 var(--mt-police-ui); }
+/* Écran étroit : « Passer » en haut, à droite du retour ; l'étiquette du chargement dessous, sans chevaucher le retour. */
+@media (max-width: 760px) { .tasse__film { flex-direction: column; align-items: flex-end; } .tasse__film-attente { order: 1; } }
 /* Couleurs forcées : le texte des liens reprend la couleur système, la mousse peinte n'a plus à le porter seule. */
 @media (forced-colors: active) { .tasse__proposition { color: LinkText; background: Canvas; } }
 
@@ -600,7 +616,8 @@ html.mouvement-reduit .tasse__aide { transition: none; }
 @media (hover: none) { .tasse[data-phase="arrivee"] .tasse__sucre-bulle { opacity: .85; transform: translate(-50%, 0); } }
 html.mouvement-reduit .tasse__sucre-bulle { transition: none; }
 /* « Merci ! » n'est pas un lien : en mouvement réduit, il se lit sans soulignement ni fond de bouton. */
-.tasse__merci { cursor: default; }
+/* Un paragraphe, pas un lien : sa marge par défaut (1 em) le décalait de sa phrase de mousse, en position absolue. */
+.tasse__merci { margin: 0; cursor: default; }
 .tasse--net .tasse__merci { text-decoration: none; background: transparent; box-shadow: none; }
 @media (forced-colors: active) { .tasse__sucre:focus-visible { outline-color: Highlight; } .tasse__merci { color: CanvasText; } }
 
@@ -685,6 +702,12 @@ body.vue-caisson .point .point__etiquette span, .point--vague .point__etiquette 
 body.vue-caisson .point[data-objet^="tiroir:"][data-cache="false"] .point__etiquette { opacity: 1; transform: translate(calc(-50% + var(--decalage, 0px)), 0); }
 .piece__remonter { position: absolute; z-index: 10; left: 50%; top: calc(var(--barre-hauteur, 64px) + 14px); transform: translateX(-50%); font: var(--tako-texte-sm)/1 var(--mt-police-ui); background: color-mix(in srgb, var(--tako-surface) 86%, transparent); }
 .piece__remonter[hidden] { display: none; }
+/* La pieuvre au clavier : une cible posée sur elle, invisible à la souris (la scène reçoit le clic), qui ne se montre qu'au focus. */
+.pieuvre-cible { position: absolute; left: 0; top: 0; z-index: 9; min-width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 12px; background: transparent; pointer-events: none; }
+.pieuvre-cible[hidden], .pieuvre-cible[data-cache="true"] { display: none; }
+/* L'anneau des points (la lampe entre deux liserés sombres, 3:1 sur tout fond) ; le contour transparent reste pour les couleurs forcées. */
+.pieuvre-cible:focus-visible { outline: 2px solid transparent; box-shadow: 0 0 0 3px var(--mt-focus-lisere), inset 0 0 0 2px var(--mt-focus-scene), inset 0 0 0 4px var(--mt-focus-lisere); }
+@media (forced-colors: active) { .pieuvre-cible:focus-visible { outline-color: Highlight; } }
 /* Le Psst : une petite bulle posée sur elle, pas un panneau. Il suit sa place à l'écran (js/pieuvre-psst.js). */
 .pieuvre-psst { position: absolute; z-index: 9; left: 0; top: 0; min-width: 44px; min-height: 32px; padding: 4px 10px; border: 1px solid color-mix(in srgb, var(--mt-scene-papier) 40%, transparent); border-radius: 10px; background: var(--tako-surface); color: var(--tako-texte); font: var(--tako-texte-sm)/1.2 var(--mt-police-prose); cursor: pointer; animation: psst .32s ease-out both; }
 .pieuvre-psst[hidden] { display: none; }
@@ -784,6 +807,9 @@ html.mouvement-reduit .bulle { animation: none; }
 .bulle__titre { margin: 0; font: 600 var(--tako-texte-md)/1.3 var(--mt-police-ui); outline: none; }
 .bulle__fermer { flex: none; width: var(--tako-cible); height: var(--tako-cible); margin: -8px -10px -8px 0; padding: 0; border: 0; border-radius: var(--tako-rayon-petit); background: transparent; color: var(--tako-texte); font-size: 22px; line-height: 1; cursor: pointer; }
 .bulle__fermer:hover, .bulle__chapeau:hover, .bulle__suggestion:hover { background: var(--tako-survol); }
+/* Le pourboire : sa phrase à elle, en tête de la bulle, quand on l'a touchée. Un lien, rien qui bouge ni ne clignote. */
+.bulle__pourboire { margin: 2px 0 8px; font: var(--tako-texte-sm)/1.4 var(--mt-police-prose); }
+.bulle__pourboire a { display: inline-block; min-height: 24px; }
 .bulle__note, .bulle__mention { margin: 4px 0 10px; color: var(--tako-texte-secondaire); font-size: var(--tako-texte-xs); }
 .bulle__etiquette { display: block; margin-bottom: 4px; font-weight: 600; }
 .bulle__ligne { display: flex; gap: 8px; }
@@ -818,7 +844,7 @@ html.mouvement-reduit .bulle { animation: none; }
 .bulle__ligne-chapeaux { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
 .bulle__chapeau { min-height: 36px; padding: 4px 10px; border: 1px solid var(--tako-bord-doux); border-radius: var(--tako-rayon-pilule); background: transparent; color: var(--tako-texte); font: var(--tako-texte-xs)/1.2 var(--mt-police-ui); cursor: pointer; }
 .bulle__chapeau[aria-pressed="true"] { border-color: var(--tako-lien); color: var(--tako-lien); }
-.bulle__fermer:focus-visible, .bulle__profil:focus-visible, .bulle__autres:focus-visible, .bulle__suggestion:focus-visible, .bulle__chapeau:focus-visible, .bulle__champ:focus-visible, .intro__lien:focus-visible { outline: 2px solid var(--tako-lien); outline-offset: 1px; }
+.bulle__pourboire a:focus-visible, .bulle__fermer:focus-visible, .bulle__profil:focus-visible, .bulle__autres:focus-visible, .bulle__suggestion:focus-visible, .bulle__chapeau:focus-visible, .bulle__champ:focus-visible, .intro__lien:focus-visible { outline: 2px solid var(--tako-lien); outline-offset: 1px; }
 .intro__lien { min-height: 48px; min-width: 48px; padding: 4px 0; border: 0; background: transparent; color: inherit; font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); text-decoration: underline; cursor: pointer; }
 /* Les deux portes restent égales : la disponibilité ne doit pas dominer la proposition client par son seul gras. */
 .intro :is(.intro__dispo, .intro__accroche),
@@ -878,6 +904,11 @@ html:not(.sans-js):not(.sans-scene) .intro :is(.intro__dispo, .intro__accroche) 
 .tk-dock { margin: auto 14px 26px; background: color-mix(in srgb, var(--tk-pale) 55%, transparent); border-radius: 18px; display: grid; grid-template-columns: repeat(3, 1fr); padding: 6px; }
 .tk-geste { position: absolute; bottom: 8px; left: 50%; width: 100px; height: 5px; margin-left: -50px; border-radius: 3px; background: var(--tk-encre); border: 0; padding: 0; cursor: pointer; }
 .tk-appli-ouverte { background: var(--tk-fond); overflow: auto; }
+/* Le jeu lancé depuis la console : posé sur l'écran au pixel réel, montré une fois sa page lue. */
+.tk-jeu { position: fixed; z-index: 2; border: 0; margin: 0; padding: 0; border-radius: 10px; background: var(--tk-fond); opacity: 0; }
+.tk-jeu[data-pret="oui"] { opacity: 1; }
+.console-poche[data-plein="oui"] .tk-jeu { border-radius: 0; }
+.tk-chargement { font-weight: 700; color: var(--tk-vif); }
 .tk-appli-ouverte.tk-ouvre { animation: tk-ouvre .32s cubic-bezier(.2, .8, .2, 1); }
 .tk-appli-ouverte.tk-ferme { animation: tk-ferme .24s cubic-bezier(.4, 0, .8, .4) reverse forwards; }
 @keyframes tk-ouvre { from { transform: scale(.18); opacity: 0; border-radius: 40px; } to { transform: none; opacity: 1; } }
@@ -911,6 +942,21 @@ html.mouvement-reduit .tk-ecran, html.mouvement-reduit .tk-ecran * { animation: 
 .film-fin__ecriture--prete { animation: none; }
 @keyframes film-ecriture { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
 @media (prefers-reduced-motion: reduce) { .film-fin__ecriture { animation: none; } }
+/* La flaque vivante (js/flaque.js) : le canevas ne dessine que dans le café ; l'écriture HTML attend la flaque, invisible et sans animation
+   (retirer la classe relance l'animation du repli depuis son début). Peints, les liens sont transparents, posés sur leur phrase. */
+.film-fin__ecriture--attente { visibility: hidden; animation: none; }
+.film-fin__flaque { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.film-fin__lien--peint { position: absolute; flex: none; box-sizing: border-box; padding: 0; color: transparent; text-shadow: none; font-size: 16px; line-height: 1.2;
+  border-radius: 12px; cursor: pointer; -webkit-tap-highlight-color: transparent; overflow: hidden; }
+.film-fin__lien--peint:hover { color: transparent; }
+.film-fin__lien--peint:focus-visible { outline: 3px solid #fff4dc; outline-offset: 3px; box-shadow: 0 0 0 7px #211306b0; }
+@media (forced-colors: active) { .film-fin__lien--peint { color: LinkText; background: Canvas; } }
+/* Le repli à plat (la flaque tarde, son masque est là) : l'écriture HTML visible dans les boîtes mêmes du texte peint, que la flaque
+   remplacera sans déplacer les liens (js/film-cafe-fin.js). La taille de police suit la boîte (en ligne, posée par le script). */
+.film-fin--plat .film-fin__lien--peint { color: #ead9b8; text-shadow: 0 2px 3px #211306; white-space: nowrap; overflow: visible; animation: film-fin-plat .4s ease-out both; }
+.film-fin--plat .film-fin__lien--peint:hover { color: #fff4dc; }
+@keyframes film-fin-plat { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .film-fin--plat .film-fin__lien--peint { animation: none; } }
 
 /* --- La rencontre de la mascotte (lot mascotte-offre-demo) : la phrase d'entrée de l'accueil, puis la même bulle sur un autre contenu. --- */
 /* La phrase se lit en dix secondes, sous l'accroche ; son bouton est un lien de texte, la carte d'accueil ne s'en trouve pas alourdie. */
@@ -928,7 +974,7 @@ html:not(.sans-js) .intro__rencontre-lien { display: none; }
 .offre__limites { font: var(--tako-texte-sm)/1.5 var(--mt-police-ui); color: var(--mt-texte-doux); }
 .fiche__rencontre { margin: 12px 0; }
 /* Un contenu à la fois : la rencontre, ou la question (note, profils, champ, couvre-chefs). */
-.bulle[data-mode="rencontre"] > :is(.bulle__note, .bulle__profils, .bulle__suite, .bulle__chapeaux) { display: none; }
+.bulle[data-mode="rencontre"] > :is(.bulle__pourboire, .bulle__note, .bulle__profils, .bulle__suite, .bulle__chapeaux) { display: none; }
 /* Le petit accès à la rencontre, au bout de l'introduction de la question (lot mascotte-entree-bulle) : un lien de texte, dans la
    ligne. Au doigt, sa cible de 44 px vient d'un rembourrage vertical, qui n'agrandit pas la ligne : la bulle ne grandit pas d'autant,
    et au téléphone elle ne monte pas sur la pieuvre (tests/pieuvre-visible.mjs). */

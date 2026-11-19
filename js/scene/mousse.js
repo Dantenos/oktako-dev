@@ -87,7 +87,7 @@ function glyphe(car) {
 }
 // Ce que la police ne sait pas dessiner : la config est vérifiée par l'essai plutôt qu'à l'écran.
 export const manquants = (texte) => [...new Set([...texte].filter((c) => !glyphe(c)))];
-const largeur = (mot) => [...mot].reduce((s, c) => s + (glyphe(c)?.[0] ?? 0.5), 0);
+export const largeur = (mot) => [...mot].reduce((s, c) => s + (glyphe(c)?.[0] ?? 0.5), 0);
 
 // Mise en page dans le disque de café (rayon 1, y vers le haut) : les propositions l'une sous l'autre, chacune
 // coupée en lignes qui tiennent dans la corde du cercle à leur hauteur. On cherche la plus grande taille qui tient.

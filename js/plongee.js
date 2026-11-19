@@ -136,6 +136,10 @@ export function creerPlongee({ scene, mouvementReduit, auRetour, annoncer }) {
     document.body.classList.remove('plongee-active');phase='repos';emuPause=false;
     auRetour();focusAvant?.focus({preventScroll:true});annoncer('Retour au bureau. Rouille arrêté, mémoire libérée.');
   }
+  // Seule l'iframe de jeu de cette origine peut demander le retour après une victoire.
+  addEventListener('message',e=>{
+    if(e.origin===location.origin && e.source===cadre?.contentWindow && e.data?.type==='doont-retour')revenir();
+  });
   document.addEventListener('keydown',e=>{
     if(phase==='repos')return;
     if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();revenir();}

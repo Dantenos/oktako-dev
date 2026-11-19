@@ -27,6 +27,7 @@
   let paquets = null;
   let clavierJeu = null;
   let mobileJeu = null;
+  let partie = null, ligneSerie = "", tailleJeu = null;
   const bascule = document.querySelector('[data-bascule-touches]');
   let minuteur = 0;
   let serie = '';
@@ -144,7 +145,7 @@
     const actuel=++generation;
     bouton.disabled = true;
     fermer.hidden = false;
-    serie = '';
+    serie = ''; ligneSerie = '';
     souris.sure = false; souris.boutons = [false, false, false];
     sonde.etat = 'chargement'; sonde.erreur = ''; sonde.serie = '';
     dire('Chargement du moteur et du noyau…');
@@ -176,20 +177,36 @@
       clavierJeu = window.DoontClavier.monter({
         conteneur: $('[data-touches]'),
         envoyer: codes => instance.keyboard_send_scancodes(codes),
-        actif: () => !ecran.hidden && [320, 640].includes(ecran.querySelector('canvas').width),
+        actif: () => !partie?.bloque() && !ecran.hidden && [320, 640].includes(ecran.querySelector('canvas').width),
         suspendre: () => { souris.boutons = [false, false, false]; instance.bus.send('mouse-click', souris.boutons); instance.stop(); },
-        reprendre: () => { if (emu === instance && !document.hidden) instance.run(); },
+        reprendre: () => { if (emu === instance && !document.hidden && !partie?.bloque()) instance.run(); },
       });
       // La bascule des touches tactiles vit dans le panneau des touches : un bouton posé sur l'écran du jeu avalerait la souris qui
       // vise ce coin (tests/plongee.mjs, tests/souris.mjs). Le panneau est refait à chaque lancement, on y remet donc le bouton.
       const panneauTouches = document.querySelector('[data-touches] details');
       if (panneauTouches && bascule) panneauTouches.append(bascule);
+      partie = window.DoontPartie.monter({
+        parent: document.getElementById('jeu'),
+        tactile: () => window.DoontMobile.tactileSeul(matchMedia),
+        relacher: () => { clavierJeu?.clavier.relacher(); mobileJeu?.relacher(); souris.boutons=[false,false,false];instance.bus.send('mouse-click',souris.boutons); },
+        suspendre: () => instance.stop(),
+        reprendre: () => { if(emu===instance && !document.hidden && !clavierJeu?.reglageOuvert()){sonde.etat='pret';souris.sure=false;instance.run();} },
+        retour: async () => {
+          await arreter('Merci d’avoir joué.');
+          if(window.parent!==window)window.parent.postMessage({type:'doont-retour'},location.origin);
+          else location.assign('../#jouer');
+        },
+      });
+      document.getElementById('jeu').prepend(document.querySelector('.doont-partie'));
       mobileJeu = window.DoontMobile.monter({
+        pause: () => partie?.pauser(),
         surface: ecran.querySelector('canvas'),
         viser: dx => instance.bus.send('mouse-delta', [Math.max(-40, Math.min(40, Math.round(dx))), 0]),
         parent: document.getElementById('mobile-pad'), bouton: bascule, clavier: clavierJeu.clavier,
-        actif: () => !clavierJeu.reglageOuvert(),
+        actif: () => !clavierJeu.reglageOuvert() && [320,640].includes(ecran.querySelector('canvas').width),
       });
+      tailleJeu = new MutationObserver(() => mobileJeu?.actualiser());
+      tailleJeu.observe(ecran.querySelector('canvas'), {attributes:true,attributeFilter:['width','height']});
       emu.add_listener('emulator-ready', () => {
         if (actuel !== generation) return;
         try {
@@ -202,7 +219,10 @@
       if (qualif().essai) sonde.emu = emu;
       emu.add_listener('download-error', (e) => echec('téléchargement impossible : ' + ((e && e.file_name) || 'fichier')));
       emu.add_listener('serial0-output-byte', (b) => {
-        serie += String.fromCharCode(b);
+        const caractere = String.fromCharCode(b);
+        if(caractere==='\n') { partie?.recevoir(ligneSerie.trim());ligneSerie=''; }
+        else { ligneSerie=(ligneSerie+caractere).slice(-256); }
+        serie += caractere;
         if (serie.length > 4096) serie = serie.slice(-4096);
         sonde.serie = serie;
         if (sonde.etat !== 'pret' && serie.includes('ROUILLE_READY')) {
@@ -276,6 +296,8 @@
     ralentiActif = false;
     clearTimeout(minuteur);
     const e = emu;
+    tailleJeu?.disconnect(); tailleJeu = null;
+    partie?.detruire(); partie = null;
     mobileJeu?.detruire(); mobileJeu = null;
     if (clavierJeu) clavierJeu.detruire();
     clavierJeu = null;
@@ -311,7 +333,7 @@
     if (document.hidden) {
       if (telephone()) arreter('Arrêté : la page est passée en arrière-plan sur un téléphone. Relancez quand vous voulez.');
       else { try { emu.stop(); } catch (x) { /* rien */ } sonde.etat = sonde.etat === 'pret' ? 'pause' : sonde.etat; }
-    } else if (sonde.etat === 'pause' && !clavierJeu?.reglageOuvert()) {
+    } else if (sonde.etat === 'pause' && !clavierJeu?.reglageOuvert() && !partie?.bloque()) {
       try { emu.run(); } catch (x) { /* rien */ }
       souris.sure = false;
       sonde.etat = 'pret';

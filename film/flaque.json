@@ -1,0 +1,41 @@
+{
+ "_doc": "Écrit par tools/flaque-masque.py, ne pas éditer à la main. La flaque vivante de la fin du film (site/js/flaque.js) : masque (R couverture, V profondeur jusqu’à rampe px), zone d’écriture [x0, y0, x1, y1], hauteur d’x minimale lisible (taille_min : 13 px CSS à 1280×720, 12,5 px à 360×800) et lanterne, en pixels de l’image ; image_sha256 : l’image de fin d’où le masque est tiré.",
+ "large": {
+  "image": "fin-large.webp",
+  "image_sha256": "289791456b562a47729d0d0206cdcbf17b9c55e48da2042fcbc882737365454e",
+  "masque": "flaque-large.png",
+  "largeur": 1920,
+  "hauteur": 800,
+  "rampe": 24,
+  "ecriture": [
+   925,
+   344,
+   1366,
+   501
+  ],
+  "taille_min": 16,
+  "lampe": [
+   1625,
+   490
+  ]
+ },
+ "telephone": {
+  "image": "fin-tel.webp",
+  "image_sha256": "c213084cd007c974a161f8c9dd98a064bf7cf24c68de80fdff741939960ef48a",
+  "masque": "flaque-tel.png",
+  "largeur": 540,
+  "hauteur": 960,
+  "rampe": 28.799999999999997,
+  "ecriture": [
+   303,
+   412,
+   448,
+   557
+  ],
+  "taille_min": 15,
+  "lampe": [
+   1143.6,
+   588.0
+  ]
+ }
+}

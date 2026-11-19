@@ -3,6 +3,10 @@
 // visiteur DEVIENT celui de la console. L'interface est la maquette choisie par l'utilisateur (13 h 07), thème ambre : écran de
 // verrouillage, accueil (barre d'état, grille, dock, barre de geste), applis qui s'ouvrent depuis leur icône. Chaque appli est un
 // de ses jeux (console-donnees.js) ; celle qui ne tourne pas dans le navigateur ouvre une fiche, jamais un écran vide.
+// Un jeu jouable ici (champ jeu, lot octosnake-portfolio du 16/11/2026) se lance pour de vrai : sa page statique, servie par le
+// site, s'ouvre dans un cadre posé sur l'écran de la console, au pixel réel (hors de l'interface mise à l'échelle : le jeu voit
+// un écran de téléphone, pas 264 px agrandis). La scène 3D se met en pause tant qu'il tourne ; Échap revient au bureau de la
+// console et le cadre est retiré (le jeu s'arrête, son et calcul compris).
 // Clavier : Entrée ouvre, flèches dans la grille, Échap revient d'un cran (appli, puis console reposée). Mouvement réduit : rien
 // ne s'anime. Lecteurs d'écran : un dialogue nommé, des boutons nommés, chaque changement annoncé.
 import { APPLIS, DOCK, DESSINS, ECRAN } from './console-donnees.js';
@@ -30,7 +34,7 @@ function corps(a) {
 }
 
 export function creerConsolePoche({ scene, mouvementReduit, annoncer, telephone, auRetour }) {
-  let phase = 'repos', racine = null, ui = null, ouverte = null, depuis = null, focusAvant = null, minuteur = null, y0 = null;
+  let phase = 'repos', racine = null, ui = null, ouverte = null, depuis = null, focusAvant = null, minuteur = null, y0 = null, jeu = null;
   const inerties = new Map();
   const $ = (s) => racine.querySelector(s);
 
@@ -83,11 +87,18 @@ export function creerConsolePoche({ scene, mouvementReduit, annoncer, telephone,
       // Sous la bande du bouton « Reposer » (BANDE px), tout l'écran du visiteur.
       const k = innerWidth / LARGEUR_UI;
       Object.assign(ui.style, { left: '0px', top: `${BANDE}px`, width: `${LARGEUR_UI}px`, height: `${(innerHeight - BANDE) / k}px`, transform: `scale(${k})` });
-      racine.dataset.plein = 'oui'; return;
+      racine.dataset.plein = 'oui'; poserJeu(); return;
     }
     const r = scene().rectangleConsole(), k = r.l / LARGEUR_UI;
     Object.assign(ui.style, { left: `${r.x}px`, top: `${r.y}px`, width: `${LARGEUR_UI}px`, height: `${r.h / k}px`, transform: `scale(${k})` });
     racine.dataset.plein = 'non';
+    poserJeu();
+  }
+  // Le cadre du jeu : exactement le rectangle affiché de l'écran, en pixels réels.
+  function poserJeu() {
+    if (!jeu || !ui) return;
+    const r = ui.getBoundingClientRect();
+    Object.assign(jeu.cadre.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
   }
 
   // Au redimensionnement, la scène recadre d'abord sa caméra (format, pose d'arrivée) : l'interface se repose à l'image suivante.
@@ -99,6 +110,7 @@ export function creerConsolePoche({ scene, mouvementReduit, annoncer, telephone,
 
   function ouvrir(id, source) {
     const a = [...APPLIS, ...DOCK].find((x) => x.id === id); if (!a) return;
+    if (a.jeu) return lancer(a, source);
     ouverte = a; depuis = source;
     // L'appli grandit depuis son icône : l'origine de l'animation est le centre de l'icône, dans le repère de l'interface.
     const e = ui.getBoundingClientRect(), r = source.getBoundingClientRect(), k = echelle(), vue = $('.tk-appli-ouverte');
@@ -107,8 +119,50 @@ export function creerConsolePoche({ scene, mouvementReduit, annoncer, telephone,
     montrer('appli'); vue.classList.remove('tk-ferme'); if (!mouvementReduit()) vue.classList.add('tk-ouvre');
     $('#tk-titre-appli').focus({ preventScroll: true }); annoncer(`${a.nom} ouvert.`);
   }
+  // Le jeu : l'écran de l'appli annonce le chargement, le cadre se charge par-dessus et ne se montre qu'une fois la page du jeu
+  // lue (son menu présent). Une page absente, coupée ou trop lente rend la fiche du jeu avec la raison : jamais un écran vide.
+  function lancer(a, source) {
+    ouverte = a; depuis = source;
+    const vue = $('.tk-appli-ouverte'); vue.classList.remove('tk-ouvre', 'tk-ferme'); vue.scrollTop = 0;
+    $('#tk-titre-appli').textContent = a.nom;
+    $('.tk-corps').innerHTML = `<p class="tk-statut">${esc(a.statut)}</p><p class="tk-chargement" role="status">Chargement de ${esc(a.nom)}…</p>`;
+    montrer('appli');
+    const cadre = document.createElement('iframe'), jeton = {};
+    cadre.className = 'tk-jeu'; cadre.title = a.jeu.titre; cadre.allow = 'autoplay; fullscreen';
+    jeu = { cadre, jeton, pret: false, delai: setTimeout(() => { if (jeu?.jeton === jeton && !jeu.pret) echec(a, `${a.nom} ne répond pas.`); }, 30000) };
+    cadre.addEventListener('load', () => {
+      if (jeu?.jeton !== jeton) return;
+      try {
+        const w = cadre.contentWindow;
+        if (!w.document.getElementById('menu')) throw new Error('page du jeu absente');
+        // Échap tombe dans le document du jeu, qui a le focus : il revient au bureau de la console. Une répétition d'Échap
+        // tenu n'y fait rien d'autre, pour ne pas reposer aussi la console.
+        w.document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); if (!e.repeat) fermer(); } }, true);
+        clearTimeout(jeu.delai); jeu.pret = true; cadre.dataset.pret = 'oui';
+        cadre.focus({ preventScroll: true }); w.focus();
+        annoncer(`${a.nom} lancé. Échap pour revenir au bureau de la console.`);
+      } catch { echec(a, `${a.nom} n’a pas pu se charger.`); }
+    }, { once: true });
+    cadre.src = a.jeu.src + (mouvementReduit() ? '?reduit=1' : '');
+    racine.append(cadre); poserJeu();
+    $('.tk-reposer').textContent = texteEchap('← Quitter le jeu · Échap');
+    scene()?.pause(true);
+    annoncer(`Lancement de ${a.nom}…`);
+  }
+  function arreterJeu() {
+    if (!jeu) return;
+    clearTimeout(jeu.delai); jeu.cadre.remove(); jeu = null;
+    $('.tk-reposer').textContent = texteEchap('← Reposer la console · Échap');
+    scene()?.pause(false);
+  }
+  function echec(a, raison) {
+    arreterJeu();
+    $('.tk-corps').innerHTML = `<p class="tk-chargement" role="alert">${esc(raison)} Vérifiez la connexion, puis relancez-le depuis le bureau.</p>${corps(a)}`;
+    annoncer(raison);
+  }
   function fermer(sansFocus) {
     if (!ouverte) return;
+    arreterJeu();
     const vue = $('.tk-appli-ouverte'), nom = ouverte.nom, source = depuis; ouverte = null;
     const fin = () => { vue.classList.remove('tk-ouvre', 'tk-ferme'); if (!ouverte) { montrer('accueil'); if (!sansFocus) source?.focus({ preventScroll: true }); } };
     annoncer(`${nom} fermé.`);
@@ -117,7 +171,7 @@ export function creerConsolePoche({ scene, mouvementReduit, annoncer, telephone,
 
   function clic(e) {
     const b = e.target.closest('button, a'); if (!b || !racine.contains(b)) return;
-    if (b.matches('.tk-reposer')) return revenir();
+    if (b.matches('.tk-reposer')) return jeu ? fermer() : revenir();
     if (b.matches('.tk-deverrouiller')) return deverrouiller();
     if (b.matches('.tk-retour')) return fermer();
     if (b.dataset.geste) return b.dataset.geste === 'verrou' ? verrouiller() : fermer();
@@ -144,6 +198,7 @@ export function creerConsolePoche({ scene, mouvementReduit, annoncer, telephone,
   }
   async function revenir({ sansTravelling = false } = {}) {
     if (phase === 'repos' || phase === 'retour') return;
+    arreterJeu();
     phase = 'retour'; racine.dataset.phase = phase; removeEventListener('resize', poserApres); clearInterval(minuteur);
     scene()?.relaisConsole(1);
     if (!sansTravelling) await scene()?.sortirTiroir();
@@ -166,5 +221,5 @@ export function creerConsolePoche({ scene, mouvementReduit, annoncer, telephone,
     if (!ordre.length) return; e.preventDefault();
     const j = ordre.indexOf(document.activeElement) + (e.shiftKey ? -1 : 1); ordre[(j + ordre.length) % ordre.length].focus({ preventScroll: true });
   }, true);
-  return { entrer, revenir, get active() { return phase !== 'repos'; }, etat: () => ({ phase, vue: racine ? [...racine.querySelectorAll('.tk-vue')].filter((v) => !v.hidden).map((v) => v.dataset.vue) : [], appli: ouverte?.id || null, plein: racine?.dataset.plein || null, rect: ui ? (({ x, y, width, height }) => ({ x, y, l: width, h: height }))(ui.getBoundingClientRect()) : null }) };
+  return { entrer, revenir, get active() { return phase !== 'repos'; }, get enJeu() { return !!jeu; }, etat: () => ({ phase, vue: racine ? [...racine.querySelectorAll('.tk-vue')].filter((v) => !v.hidden).map((v) => v.dataset.vue) : [], appli: ouverte?.id || null, jeu: jeu ? (jeu.pret ? 'pret' : 'charge') : null, plein: racine?.dataset.plein || null, rect: ui ? (({ x, y, width, height }) => ({ x, y, l: width, h: height }))(ui.getBoundingClientRect()) : null }) };
 }

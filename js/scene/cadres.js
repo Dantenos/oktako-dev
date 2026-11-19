@@ -66,7 +66,7 @@ export function peindreCadre(cadre, repere, img, l = 512) {
 // groupes : les maillages par objet (« cadre:<id> ») ; reperes : centre, axes et taille de chaque feuille, exportés par
 // Blender ; cadres : le contenu, un par id ; base : l'adresse du site. demarrer : redemande une image après un chargement.
 export function creerCadres({ groupes, reperes, cadres, base, demarrer, telephone }) {
-  const etat = {};
+  const etat = {}, attentes = [];
   for (const cadre of cadres) {
     const r = reperes[cadre.id], g = groupes['cadre:' + cadre.id]; if (!r || !g) continue;
     const c = new THREE.Vector3().fromArray(r.centre), dx = new THREE.Vector3().fromArray(r.droite), dy = new THREE.Vector3().fromArray(r.haut);
@@ -94,11 +94,12 @@ export function creerCadres({ groupes, reperes, cadres, base, demarrer, telephon
     etat[cadre.id] = { image: cadre.image || null, chargee: false, legende: (cadre.payant ? 'Publicité · ' : '') + (cadre.legende || ''), lien: cadre.lien || null, tex };
     if (cadre.image) {
       const img = new Image();
-      img.onload = () => { tex.image = peindreCadre(cadre, r, img, taille); tex.needsUpdate = true; etat[cadre.id].chargee = true; demarrer(); };
+      let terminer; attentes.push(new Promise((ok) => { terminer = ok; }));
+      img.onload = () => { tex.image = peindreCadre(cadre, r, img, taille); tex.needsUpdate = true; etat[cadre.id].chargee = true; terminer(); demarrer(); };
       // Une image absente ne casse rien : la feuille reste blanche, avec sa légende.
-      img.onerror = () => { etat[cadre.id].erreur = true; };
+      img.onerror = () => { etat[cadre.id].erreur = true; terminer(); };
       img.src = new URL(cadre.image, base).href;
     }
   }
-  return { etat: () => Object.fromEntries(Object.entries(etat).map(([k, v]) => { const { tex, ...reste } = v; return [k, reste]; })) };
+  return { pretes: Promise.all(attentes), etat: () => Object.fromEntries(Object.entries(etat).map(([k, v]) => { const { tex, ...reste } = v; return [k, reste]; })) };
 }

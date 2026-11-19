@@ -35,6 +35,9 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
   const aide = reactions.querySelector('.bulle__aide'), fige = $('#bulle-fige'), ligneReactions = reactions.querySelector('.bulle__ligne-reactions'), offre = $('#bulle-offre');
   const essayer = el.querySelector('[data-rencontre-action="essayer"]'), boutonOffre = el.querySelector('[data-rencontre-action="offre"]');
   const titreQuestion = titre.textContent, aideSouris = aide.textContent;
+  // Le pourboire (lot pourboire-mini-pieuvre) : le seul lien Ko-fi du site, et il ne se montre que lorsqu'on l'a touchée, elle. Absent du
+  // gabarit si l'adresse est vide.
+  const pourboire = $('#bulle-pourboire');
   let memoire = null, retour = null, tour = 0, demande = 0, iaSondee = false, pieuvre = null, profil = null;
   // La rencontre dure jusqu'à la fermeture, même si le visiteur passe à sa question : Échap rend alors l'accueil, d'une seule touche.
   let enRencontre = false;
@@ -172,6 +175,7 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
   // Deux contenus pour une bulle : la rencontre, ou la question (profils, champ, couvre-chefs). Le titre suit.
   function montrerMode(m) {
     el.dataset.mode = m; blocRencontre.hidden = m !== 'rencontre';
+    if (m === 'rencontre' && pourboire) pourboire.hidden = true;
     titre.textContent = m === 'rencontre' ? blocRencontre.dataset.titre : titreQuestion;
   }
   // Vivante : la pièce et son personnage sont là. Sinon (ni WebGL, ni modèle, ou pas encore chargée), une image et les mêmes suites.
@@ -205,7 +209,7 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
   // À l'arrivée, elle reconnaît le visiteur : un petit bond, puis elle le regarde. En mouvement réduit, rien ne bouge : sa pose fixe reste.
   function reconnaitre() { if (vivante() && !page.mouvementReduit?.()) pieuvre.sautiller?.() || pieuvre.regarderVisiteur?.(); }
   // Une réaction : toujours causée par un geste, et dite au lecteur d'écran, qui ne la voit pas.
-  const DIT = { regard: 'Elle vous regarde.', salut: 'Elle vous salue.', montrer: 'Elle vous montre où écrire à Édouard.' };
+  const DIT = { regard: 'Elle vous regarde.', salut: 'Elle vous salue.', montrer: 'Elle vous montre où écrire à Édouard.', tasse: pourboire?.dataset.geste };
   function reagir(r) {
     if (!vivante() || page.mouvementReduit?.()) return;
     if (r === 'regard') pieuvre.sautiller?.() || pieuvre.regarderVisiteur?.();
@@ -231,6 +235,7 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
     // Encore en approche : la rencontre s'arrête là, et rencontrer() n'ouvrira rien.
     if (!estOuverte()) { if (enRencontre) { enRencontre = false; montrerMode('question'); eloigner?.(); page.quitter?.({ accueil, historique }); } return; }
     el.hidden = true;
+    if (pourboire) pourboire.hidden = true;
     const etaitRencontre = enRencontre; enRencontre = false; montrerMode('question');
     eloigner?.();
     for (const b of declencheurs()) b.setAttribute('aria-expanded', 'false');
@@ -238,12 +243,25 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
     if (focus) (retour?.isConnected && retour.offsetParent !== null ? retour : $(etaitRencontre ? '.intro__rencontre' : '#pieuvre-question'))?.focus({ preventScroll: true });
   }
   // La vue s'approche d'abord, la bulle s'ouvre à l'arrivée : ancrée sur elle, elle ne saute pas. Le focus d'avant se relève ici, avant que le travelling ne le perde.
-  async function aller() {
+  async function aller(options) {
     const ici = document.activeElement;
-    await approcher?.();
+    await approcher?.(options);
     ouvrir(ici);
   }
   const basculer = () => (estOuverte() ? fermer() : aller());
+  // Toucher la pieuvre : la bulle s'ouvre avec, en tête, « M'offrir un café ? ☕ », et elle tend une toute petite tasse une fois la vue
+  // arrivée (pendant le travelling, on ne la verrait pas). Le geste vient du visiteur, jamais d'elle seule ; en mouvement réduit, la
+  // ligne paraît sans le geste.
+  async function offrir() {
+    // Sans adresse de pourboire, le toucher reste ce qu'il était : un salut, et la bulle.
+    if (!pourboire) { pieuvre?.evenement('caresse'); return aller(); }
+    pourboire.hidden = false;
+    // Le cadrage large : au téléphone debout, le bras tendu et sa tasse tiennent dans l'image.
+    await aller({ large: true });
+    if (!estOuverte() || el.dataset.mode === 'rencontre' || !vivante() || page.mouvementReduit?.()) return;
+    pieuvre.evenement('pourboire');
+    if (DIT.tasse) annoncer(DIT.tasse);
+  }
 
   document.addEventListener('click', (e) => {
     if (e.target.closest?.('[data-rencontre]')) { e.preventDefault(); rencontrer(e.target.closest('[data-rencontre]')); return; }
@@ -290,7 +308,12 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
     brancher(p) {
       pieuvre = p;
       // Pendant la rencontre, la toucher est l'une de ses réactions : elle salue, et la bulle reste.
-      p.clic = () => { p.evenement('caresse'); if (enRencontre && estOuverte()) { annoncer(DIT.salut); return; } basculer(); };
+      // Bulle ouverte : un dernier signe, et elle se ferme. Fermée : elle s'ouvre sur le pourboire, et la pieuvre tend sa tasse.
+      p.clic = () => {
+        if (enRencontre && estOuverte()) { p.evenement('caresse'); annoncer(DIT.salut); return; }
+        if (estOuverte()) { p.evenement('caresse'); fermer(); return; }
+        offrir();
+      };
       if (!p.chapeaux || !p.choisirChapeau) return;
       listeChapeaux.replaceChildren(...p.chapeaux.map(({ id, court }) => {
         const b = texte('button', 'bulle__chapeau', court);

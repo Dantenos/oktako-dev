@@ -72,6 +72,9 @@ const ECHELLE_TEL_PIEUVRE = 1.35;
 // Sa hauteur (m) et l'approche : distance à elle, hausse du regard, et de quelle part de l'image elle s'écarte du centre pour laisser la place à la bulle.
 const PIEUVRE_HAUT = 0.09;
 const PIEUVRE_ZOOM = { distance: 0.36, debout: 0.62, hausse: 0.2, vers_la_gauche: 0.2, vers_le_haut: 0.28, echelle: (d) => (d === 'portrait' ? ECHELLE_TEL_PIEUVRE : 1) };
+// Le gros plan du pourboire, au téléphone debout (décision D4 du lot pourboire-mini-pieuvre, 16/11) : le bras qu'elle tend sort du cadre
+// serré à droite, et la tasse avec. On recule un peu et on la décale vers la gauche de l'image, pour que la tasse y tienne entière.
+const PIEUVRE_ZOOM_TASSE = { debout: 0.74, vers_la_gauche: 0.1 };
 // Une butée arrête l'élan du glisser : sinon la vitesse restante continue de pousser contre la borne et une flèche vers
 // le centre semble sans effet le temps que l'inertie s'éteigne.
 const borner = (r) => {
@@ -328,9 +331,9 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   composer.addPass(new OutputPass());
   const finition = new ShaderPass({
     uniforms: { tDiffuse: { value: null }, uTemps: { value: 0 }, uGrain: { value: GRAIN }, uVignette: { value: 0.8 }, tProfondeur: { value: null }, uFocus: { value: 1.6 }, uOuverture: { value: 0.0018 }, uImmersion: { value: 0 }, uAspect: { value: 1 },
-      uVoile: { value: 0.13 }, uVoileCouleur: { value: couleur('--mt-scene-voile') }, uEclair: { value: 0 }, uFilm: { value: 0 } },
+      uVoile: { value: 0.13 }, uVoileCouleur: { value: couleur('--mt-scene-voile') }, uEclair: { value: 0 }, uFilm: { value: 0 }, uPhoto: { value: 0 } },
     vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
-    fragmentShader: `uniform sampler2D tDiffuse, tProfondeur; uniform float uTemps, uGrain, uVignette, uFocus, uOuverture, uImmersion, uAspect, uVoile, uEclair, uFilm; uniform vec3 uVoileCouleur; varying vec2 vUv;
+    fragmentShader: `uniform sampler2D tDiffuse, tProfondeur; uniform float uTemps, uGrain, uVignette, uFocus, uOuverture, uImmersion, uAspect, uVoile, uEclair, uFilm, uPhoto; uniform vec3 uVoileCouleur; varying vec2 vUv;
       float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
       float lin(float z){ return .01 * 60. / (60. - z * (60. - .01)); }
       void main(){ vec2 c = vUv - 0.5; vec3 col;
@@ -364,7 +367,7 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
         // Un éclair dehors : la pièce bleuit un instant, en voile (jamais un blanc plein écran).
         col += vec3(.62, .68, .85) * uEclair * .55 * (1. - col);
         // Vignette de pellicule, qui brunit les bords au lieu de les noircir.
-        float v = dot(c, c);
+        float v = dot(c, c) * (1. - uPhoto);
         col *= mix(vec3(1.), vec3(1., .88, .74), clamp(v * 2.2, 0., 1.));
         col *= (1.0 - v * (uVignette + uImmersion * 1.2)) * (1. - uImmersion);
         // Grain filmique : en grappes d'un pixel et demi, distribution triangulaire, plus fort dans les demi-teintes
@@ -808,17 +811,20 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   // La vue vers la mini-pieuvre : le travelling de la tasse. Elle reste vivante et se place à l'écart du centre, pour laisser sa place à la bulle : à gauche, ou en haut au téléphone debout.
   function posePieuvre(cam = camera) {
     const P = pieuvre.groupe.position, H = PIEUVRE_HAUT * PIEUVRE_ZOOM.echelle(disposition), c = new THREE.Vector3(P.x, P.y + H / 2, P.z), t = Math.tan(THREE.MathUtils.degToRad(34 / 2));
-    const debout = disposition === 'portrait', d = debout ? PIEUVRE_ZOOM.debout : PIEUVRE_ZOOM.distance;
+    const debout = disposition === 'portrait', large = debout && tiroir.large, d = large ? PIEUVRE_ZOOM_TASSE.debout : debout ? PIEUVRE_ZOOM.debout : PIEUVRE_ZOOM.distance;
     // La direction vient de la vue d'ensemble (base.pos, comme poseDe), jamais de la caméra de départ : depuis une fiche, celle-ci est
     // cadrée sur les dossiers, et le gros plan arrivait de biais, la pieuvre derrière les livres ou hors de l'image (bogue du 15/11).
     const vers = new THREE.Vector3().subVectors(base.pos, c).setY(0).normalize().setY(PIEUVRE_ZOOM.hausse).normalize();
     const droite = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), vers).normalize(), cible = c.clone();
     if (debout) cible.y -= 2 * d * t * PIEUVRE_ZOOM.vers_le_haut; else cible.addScaledVector(droite, 2 * d * t * cam.aspect * PIEUVRE_ZOOM.vers_la_gauche);
+    if (large) cible.addScaledVector(droite, 2 * d * t * cam.aspect * PIEUVRE_ZOOM_TASSE.vers_la_gauche);
     return { pos: c.clone().addScaledVector(vers, d), cible, fov: 34, haut: new THREE.Vector3(0, 1, 0), quaternion: new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().lookAt(c.clone().addScaledVector(vers, d), cible, new THREE.Vector3(0, 1, 0))) };
   }
   const enZoomPieuvre = () => tiroir.pieuvre && tiroir.phase !== 'repos';
-  function entrerPieuvre() {
+  // large : le cadrage du pourboire, où elle tend sa tasse (seul le téléphone debout en change).
+  function entrerPieuvre({ large = false } = {}) {
     if (occupe() || !pose.actuelle || !pieuvre || !pieuvre.groupe.visible) return Promise.resolve();
+    tiroir.large = large;
     const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
     tiroir.fisheye = true; tiroir.pieuvre = true; tiroir.poseur = posePieuvre; tiroir.direct = reglages.mouvementReduit;
     tiroir.depart = { pos: camera.position.clone(), quaternion: camera.quaternion.clone(), fov: camera.fov,
@@ -983,20 +989,21 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
 
   // --- Boucle ---
   const horloge = new THREE.Clock();
-  let enPause = false, boucle = null, temps = 0, dernierCurseur = -1, perdu = false;
+  let enPause = false, boucle = null, temps = 0, dernierCurseur = -1, perdu = false, entree = true, preparee = false;
   const tmp = new THREE.Vector3();
   let images = 0;
   const dernieresDurees = [];
   function image() {
     boucle = null;
     if (enPause || perdu) return;
+    if (!pose.vers) throw new Error('Pose de caméra absente : le cadrage doit précéder le rendu');
     images++;
     const brut = horloge.getDelta();
     dernieresDurees.push(brut * 1000); if (dernieresDurees.length > 120) dernieresDurees.shift();
     const vraiDt = Math.min(brut, .5);
     const dt = Math.min(brut, 0.05);
     surveillerQualite(brut);
-    const anime = !reglages.mouvementReduit;
+    const anime = !reglages.mouvementReduit && !entree;
     if (anime) temps += dt;
     // La transition suit l'horloge réelle (et non dt plafonné) : sa durée reste bornée même si les images ralentissent.
     if (pose.t < 1) pose.t = Math.min(1, (performance.now() - pose.debut) / (pose.duree * 1000));
@@ -1127,7 +1134,11 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
         rotationRegard.setFromQuaternion(camera.quaternion, 'YXZ');
         rotationRegard.y += regard.lacet; rotationRegard.x += regard.tangage; rotationRegard.z = 0;
         // Respiration de la tête, à peine perceptible : un plan fixe qui reste vivant.
-        if (anime) { rotationRegard.y += Math.sin(temps * .23 + 1) * .0024; rotationRegard.x += Math.sin(temps * .31) * .0018; }
+        if (anime) {
+          // La respiration naît du plan photographié : sa phase initiale ne doit pas déplacer la tête d'un coup.
+          const entreeDouce = Math.min(1, temps / .5);
+          rotationRegard.y += Math.sin(temps * .23 + 1) * .0024 * entreeDouce; rotationRegard.x += Math.sin(temps * .31) * .0018 * entreeDouce;
+        }
         camera.quaternion.setFromEuler(rotationRegard);
       }
       camera.fov = pose.actuelle.fov;
@@ -1297,7 +1308,9 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
     redimensionner();
     conteneur.dataset.qualite = n;
   }
-  function demarrer() { if (!boucle && !enPause && !perdu) { boucle = requestAnimationFrame(image); } }
+  // Le ciel et les redimensionnements demandent déjà des images pendant le décodage des tableaux.
+  // La boucle attend que le cadrage et la préparation GPU aient établi la première vue.
+  function demarrer() { if (preparee && !boucle && !enPause && !perdu) { boucle = requestAnimationFrame(image); } }
 
   // Perte de contexte : on prévient l'application, qui bascule sur le repli sans perdre la navigation.
   let perteExt = null;
@@ -1361,6 +1374,9 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   }
   if (cielInitial) appliquerCiel(cielInitial);
 
+  // La photo contient les tableaux : les retirer pendant le relais créerait un flash blanc sur les murs.
+  await cadres.pretes;
+
   redimensionner();
   if (niveau !== 'haute') appliquerQualite(niveau);
   conteneur.dataset.qualite = niveau;
@@ -1370,6 +1386,7 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   // première image : rien ne se compile au moment du clic sur la tasse.
   cafe.capturer(); renderer.compile(scene, camera);
   // Première image synchrone : la scène apparaît d'un coup, sans écran de chargement.
+  preparee = true;
   horloge.getDelta(); image();
   // Sa place se lit dans la pièce, jamais à la main : sur le casier, juste à gauche de l'appareil photo. S'ils bougent, elle
   // suit. Sa hauteur est celle du dessus du casier, sous son centre.
@@ -1394,6 +1411,19 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
 
   const ndcCafe = new THREE.Vector2();
   return {
+    // L'entrée ne commence pas par le trajet du centre vers l'espace laissé par l'invitation.
+    poserAccueil() { if (boucle) cancelAnimationFrame(boucle); pose.t = 1; pose.decalageDepuis.copy(pose.decalageVers); image(); },
+    libererEntree() { entree = false; horloge.getDelta(); demarrer(); },
+    // L'outil photographie un champ plus large ; le navigateur le découpe selon la même projection.
+    preparerAffiche({ pose: nom, facteur }) {
+      if (boucle) cancelAnimationFrame(boucle);
+      entree = true; temps = 0; reglages = { mouvementReduit: true, effets: false };
+      dernierCurseur = 0; materiauEcran.uniforms.tEcran.value = ecransRepos[0];
+      // La vignette appartient à l'écran, pas au champ élargi : le repli la repose après le découpage.
+      finition.uniforms.uPhoto.value = 1;
+      disposer(nom); base.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(DISPOSITIONS[nom].fov / 2)) * facteur));
+      cadrer(null); pose.t = 1; pose.decalageDepuis.set(0, 0); pose.decalageVers.set(0, 0); image();
+    },
     observerRadio(etat) { radioTakosound?.observer(etat); demarrer(); },
     etatRadio() { return radioTakosound?.etat() ?? null; },
     cadrer,
