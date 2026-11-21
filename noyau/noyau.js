@@ -186,6 +186,7 @@
       const panneauTouches = document.querySelector('[data-touches] details');
       if (panneauTouches && bascule) panneauTouches.append(bascule);
       partie = window.DoontPartie.monter({
+        focusJeu: () => ecran.querySelector('canvas').focus({preventScroll:true}),
         parent: document.getElementById('jeu'),
         tactile: () => window.DoontMobile.tactileSeul(matchMedia),
         relacher: () => { clavierJeu?.clavier.relacher(); mobileJeu?.relacher(); souris.boutons=[false,false,false];instance.bus.send('mouse-click',souris.boutons); },

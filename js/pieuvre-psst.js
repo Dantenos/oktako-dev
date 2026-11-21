@@ -34,7 +34,10 @@ export function creerPsst({ bouton, rect, ouvrir, gens }) {
       coin = meilleur.f; ici = [r.gauche, r.haut];
     }
     const [x, y] = coin(r, l, h);
-    bouton.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+    // La propriété `translate`, pas `transform` : l'apparition anime `scale`, et la matrice CSS s'ordonne translate·rotate·scale·transform —
+    // posé par transform, il était multiplié par le scale et VOLAIT depuis le coin jusqu'à elle (0,7 × sa place au départ ; vu sous GPU le 20/11,
+    // invisible sous rendu logiciel où l'animation tient en une image). Par `translate`, le scale se fait sur place.
+    bouton.style.translate = `${Math.round(x)}px ${Math.round(y)}px`;
     // Relu à chaque image qu'il est là, huit secondes au plus : une étiquette peut venir sous lui après coup, celle du tiroir glisse pour s'écarter de la pieuvre.
     const sous = gens({ gauche: x, haut: y, droite: x + l, bas: y + h });
     for (const e of couverts) if (!sous.includes(e)) delete e.dataset.psst;

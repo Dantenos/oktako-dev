@@ -61,6 +61,13 @@ const BORD_APPEL = 0.84;
 const hautMax = (x) => REGARD.haut + (REGARD.hautCentre - REGARD.haut) * (1 - Math.min(1, Math.abs(x) / REGARD.lacet));
 // Sans geste pendant RETOUR ms, la vue revient doucement au bureau (d'un coup en mouvement réduit).
 const RETOUR = 4500;
+// Le retour lui-même : une courbe en S (ease) sur RETOUR_DUREE ms de temps de scène. Jusqu'au 19/11, une décroissance
+// exponentielle partait à pleine vitesse (1,8·x₀, soit 1,1 rad/s depuis la borne) : mesurée pixel par pixel sur GPU à 60 i/s
+// (RunPod, mesure-wcag-84557f4b), elle faisait 4 flashs par seconde, WCAG 2.3.1 en tolère 3. La courbe en S sur 2,4 s divisait la
+// vitesse de pointe par trois : remesurée le 20/11 sur f83cf195, 3 flashs par seconde, conforme sans marge. Un essai à 3,2 s (le 20/11
+// au soir) a fait rougir la rencontre de la pieuvre une fois sur deux : on reste à 2,4 s, la marge sera un lot à part, éprouvé.
+// Rien d'autre ne change ; en mouvement réduit, toujours d'un coup.
+const RETOUR_DUREE = 2400;
 // La mini-pieuvre se charge passé ce délai après la première image (ms), une fois l'entrée jouée.
 const DELAI_PIEUVRE = 4000;
 // Ce qu'il faut garder libre autour de son centre (mètres) : ses bras posés, et son bras tendu quand elle montre la lettre.
@@ -185,6 +192,55 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   materiauEcran.uniforms.uLueur.value = 0.72;
   const dalleEcran = surface(D.vivants.dalle_ecran, materiauEcran, groupes.ecran);
   dalleEcran.userData.objet = 'ecran';
+  // La dalle garde sa géométrie bombée et ses UV 4:3. Une matière standard assure
+  // la même conversion sRGB pour l'affiche et la vidéo, sans brûler les visages.
+  const matPresentation = new THREE.MeshBasicMaterial({ toneMapped: false });
+  // La présentation a DEUX programmes : l'affiche (image sRGB) et la boucle (VideoTexture sRGB, que three.js décode dans le fragment :
+  // DECODE_VIDEO_TEXTURE). Compilés à la préchauffe avec les autres, et non à la première image de la boucle — elle tombait pendant la
+  // visite de la tasse sous rendu logiciel (OVH 21/11, « programme compilé pendant la visite », 69 → 70). Un pixel aux réglages des vraies
+  // textures (sRGB, linéaire, sans mipmaps), et un <video> sans source : le programme se compile sans donnée, rien n'est téléversé.
+  const reglerTexture = (t) => { t.colorSpace = THREE.SRGBColorSpace; t.minFilter = THREE.LinearFilter; t.generateMipmaps = false; return t; };
+  const chauffeImage = reglerTexture(new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1)); chauffeImage.needsUpdate = true;
+  const chauffeVideo = reglerTexture(new THREE.VideoTexture(document.createElement('video')));
+  let texturePresentation = chauffeVideo, sourcePresentation = null;
+  matPresentation.map = chauffeVideo;
+  // Chaque variante existe DEUX fois : pour l'écran (sortie sRGB) et pour une cible hors écran (sortie linéaire : la capture du reflet du
+  // café rend la pièce, dalle comprise). Sans la seconde, le programme tombait à la recapture du reflet pendant la visite de la tasse
+  // (OVH 21/11 : même matériau, `LinearTransferOETF` au lieu de `sRGBTransferOETF`). Seule la DALLE est parcourue (premier argument ; les
+  // lumières viennent de la scène) : chauffer toute la scène ici préchaufferait aussi ce que les contre-épreuves des essais laissent froid
+  // à dessein (goutte, perles). Appelée à l'initialisation, avant la vraie capture, dalle rendue ensuite au natif.
+  function chaufferPresentation() {
+    const cibleChauffe = new THREE.WebGLRenderTarget(2, 2);
+    dalleEcran.material = matPresentation;
+    for (const tex of [chauffeImage, chauffeVideo]) {
+      matPresentation.map = tex; matPresentation.needsUpdate = true;
+      renderer.compile(dalleEcran, camera, scene);
+      renderer.setRenderTarget(cibleChauffe); renderer.compile(dalleEcran, camera, scene); renderer.setRenderTarget(null);
+    }
+    dalleEcran.material = materiauEcran; chauffeImage.dispose(); cibleChauffe.dispose();
+  }
+  function presentationEcran(source) {
+    if (source === sourcePresentation) return;
+    sourcePresentation = source; texturePresentation?.dispose();
+    texturePresentation = source ? (source.tagName === 'VIDEO' ? new THREE.VideoTexture(source) : new THREE.Texture(source)) : null;
+    if (texturePresentation) {
+      texturePresentation.colorSpace = THREE.SRGBColorSpace;
+      texturePresentation.minFilter = THREE.LinearFilter;
+      texturePresentation.generateMipmaps = false; texturePresentation.needsUpdate = true;
+    }
+    matPresentation.map = texturePresentation; matPresentation.needsUpdate = true;
+    dalleEcran.material = source ? matPresentation : materiauEcran;
+    demarrer();
+  }
+  function rectangleEcran() {
+    const r = canvas.getBoundingClientRect(), d = D.vivants.dalle_ecran;
+    const coins = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([x, y]) =>
+      dalleEcran.localToWorld(new THREE.Vector3(x * d.largeur / 2, y * d.hauteur / 2, 0)).project(camera));
+    const visible = coins.every(p => p.z > -1 && p.z < 1 && Math.abs(p.x) < 1 && Math.abs(p.y) < 1);
+    const pixels = coins.map(p => [r.left + (p.x + 1) * r.width / 2, r.top + (1 - p.y) * r.height / 2]);
+    return { visible, gauche: Math.min(...pixels.map(p => p[0])), droite: Math.max(...pixels.map(p => p[0])),
+      haut: Math.min(...pixels.map(p => p[1])), bas: Math.max(...pixels.map(p => p[1])), coins: pixels };
+  }
   const texTerminal = T.terminal();
   const dalleTerminal = surface(D.vivants.dalle_terminal, O.materiauTube(texTerminal), groupes.terminal);
   dalleTerminal.userData.objet = 'terminal';
@@ -471,6 +527,9 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   let vueCaisson = false;
   function poserVueCaisson(oui) { if (oui !== vueCaisson) { vueCaisson = oui; rappels.vueCaisson?.(oui); } }
   const occupe = () => plongee.phase !== 'repos' || tasse.phase !== 'repos' || tiroir.phase !== 'repos';
+  // Devant elle (la rencontre, js/pieuvre-bulle.js) : la vue est au tiroir, donc « occupée », mais la page promet « Touchez-la : elle
+  // vous salue ». Elle seule se touche alors ; l'appui-glisser et les autres objets restent fermés (20/11 : aucun toucher n'arrivait).
+  const devantElle = () => tiroir.pieuvre && tiroir.phase === 'arrivee';
   const regard = { lacet: 0, tangage: 0, x: 0, y: 0, vx: 0, vy: 0, dernier: 0, glisse: false };
   const touches = new Set();
   const rotationRegard = new THREE.Euler(0, 0, 0, 'YXZ');
@@ -592,13 +651,14 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   }
   const cibles = INTERACTIFS.map((id) => objets[id].groupe);
   function toucher() {
-    if (occupe() || glissement) return null;
+    if ((occupe() && !devantElle()) || glissement) return null;
     rayon.setFromCamera(ndc, camera);
     // Le décor fixe peut cacher un objet (la lampe devant le carnet) : on lance contre tout, et le premier
     // obstacle décide.
     const hits = rayon.intersectObjects([statiques, ...Object.values(groupes), ...(sucre.phase === 'pose' ? [sucre.maillage] : []), ...(pieuvre ? [pieuvre.zone] : [])], true);
     const id = hits.length ? hits[0].object.userData.objet || null : null;
     // Devant le caisson, le bord du bureau reste dans l'image : seuls les tiroirs s'y cliquent, comme seuls ils y ont un point.
+    if (devantElle()) return id === 'pieuvre' ? id : null;
     return vueCaisson && id && !/^tiroir:|^fisheye$/.test(id) ? null : id;
   }
   // Les boutons projetés partagent le geste avec le canevas : glisser SUR un objet n'ouvre rien.
@@ -613,7 +673,7 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   surface_.addEventListener('pointerup', relacher); surface_.addEventListener('pointercancel', () => { glissement = true; relacher(); });
   surface_.addEventListener('click', (e) => { if (glissement) { e.preventDefault(); e.stopImmediatePropagation(); glissement = false; } }, true);
   canvas.addEventListener('pointerleave', () => { ndc.set(9, 9); pointeur.set(0, 0); pointeurBouge = true; });
-  canvas.addEventListener('click', (e) => { if (occupe()) return; surMouvement(e); const id = toucher(); if (id === 'pieuvre') pieuvre.clic(); else if (id) rappels.choix(id); });
+  canvas.addEventListener('click', (e) => { if (occupe() && !devantElle()) return; surMouvement(e); const id = toucher(); if (id === 'pieuvre') pieuvre.clic(); else if (id) rappels.choix(id); });
   // Double-clic sur la pièce : la vue revient au bureau.
   surface_.addEventListener('dblclick', (e) => { if (e.target.closest('.point, button, a, .intro') || panneauOuvert || occupe()) return; e.preventDefault(); if (recentrer()) rappels.recentre?.(); });
   document.addEventListener('keydown', (e) => {
@@ -1123,8 +1183,20 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
       if (actif && !regard.glisse && !regard.fige && survolClavier !== 'console' && survolClavier !== 'radio' && (regard.x || regard.y)) {
         if (maintenant - regard.dernier > RETOUR) {
           if (reglages.mouvementReduit) regard.x = regard.y = 0;
-          else { regard.x *= Math.exp(-vraiDt * 1.8); regard.y *= Math.exp(-vraiDt * 1.8); if (Math.hypot(regard.x, regard.y) < 1e-3) regard.x = regard.y = 0; }
-        } else if (reglages.mouvementReduit && !reveilRegard) reveilRegard = setTimeout(() => { reveilRegard = null; demarrer(); }, RETOUR - (maintenant - regard.dernier) + 50);
+          else {
+            // Le point de départ est figé au premier pas ; l'avancement suit le temps de scène écoulé (pas l'horloge murale :
+            // une pause de la boucle ne fait pas sauter la vue), et il ne décroît jamais : l'écart au bureau non plus.
+            if (!regard.retour) regard.retour = { x: regard.x, y: regard.y, u: 0 };
+            regard.retour.u = Math.min(1, regard.retour.u + vraiDt * 1000 / RETOUR_DUREE);
+            const reste = 1 - ease(regard.retour.u);
+            regard.x = regard.retour.x * reste; regard.y = regard.retour.y * reste;
+            if (regard.retour.u >= 1) { regard.x = regard.y = 0; regard.retour = null; }
+          }
+        } else {
+          // Un geste est revenu avant l'échéance : le prochain retour repartira d'où il sera, à vitesse nulle.
+          regard.retour = null;
+          if (reglages.mouvementReduit && !reveilRegard) reveilRegard = setTimeout(() => { reveilRegard = null; demarrer(); }, RETOUR - (maintenant - regard.dernier) + 50);
+        }
       }
       borner(regard);
       const lissage = reglages.mouvementReduit ? 1 : 1 - Math.exp(-vraiDt * 12);
@@ -1384,6 +1456,9 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   pose.t = 1;
   // Le reflet du café est capturé maintenant, et tous les programmes (café, goutte, mousse) sont compilés avant la
   // première image : rien ne se compile au moment du clic sur la tasse.
+  // La présentation de l'écran se chauffe avant la capture du reflet (chaufferPresentation, près de son matériau) : sinon son programme
+  // tombait à la recapture pendant la visite de la tasse (OVH 21/11). La ligne d'origine reste unique : des essais la mutent par son texte.
+  chaufferPresentation();
   cafe.capturer(); renderer.compile(scene, camera);
   // Première image synchrone : la scène apparaît d'un coup, sans écran de chargement.
   preparee = true;
@@ -1411,6 +1486,9 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
 
   const ndcCafe = new THREE.Vector2();
   return {
+    presentationEcran, rectangleEcran,
+    etatPresentationEcran() { return { source: sourcePresentation?.tagName || null, texture: dalleEcran.material.map?.image === sourcePresentation,
+      temps: sourcePresentation?.currentTime || 0, largeur: sourcePresentation?.videoWidth || sourcePresentation?.naturalWidth || 0 }; },
     // L'entrée ne commence pas par le trajet du centre vers l'espace laissé par l'invitation.
     poserAccueil() { if (boucle) cancelAnimationFrame(boucle); pose.t = 1; pose.decalageDepuis.copy(pose.decalageVers); image(); },
     libererEntree() { entree = false; horloge.getDelta(); demarrer(); },
@@ -1611,7 +1689,7 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
     rafraichir() { if (perdu) return; const p = enPause; enPause = false; if (boucle) { cancelAnimationFrame(boucle); boucle = null; } image(); enPause = p; if (p && boucle) { cancelAnimationFrame(boucle); boucle = null; } },
     // Compteur ?ips : durées réelles entre images rendues, gardées seulement en mémoire de la page.
     mesureIps() { return { durees: [...dernieresDurees], niveau, dpr: renderer.getPixelRatio(), pause: enPause }; },
-    etatRegard() { return { lacet: regard.lacet, tangage: regard.tangage, x: regard.x, y: regard.y, positionFixe: !focus && !occupe(), limites: { ...REGARD }, retour: RETOUR }; },
+    etatRegard() { return { lacet: regard.lacet, tangage: regard.tangage, x: regard.x, y: regard.y, positionFixe: !focus && !occupe(), limites: { ...REGARD }, retour: RETOUR, retourDuree: RETOUR_DUREE, retourU: regard.retour ? regard.retour.u : null, retourDepart: regard.retour ? [regard.retour.x, regard.retour.y] : null }; },
     recentrer,
     // Pour les essais : le long des bornes du regard (coins, haut de l'ellipse, centre), la part de l'image occupée par le bureau.
     verifierRegard() {

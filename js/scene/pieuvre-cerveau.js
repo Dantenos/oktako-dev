@@ -111,8 +111,12 @@ export function creerCerveau({ catalogue, jouer, hasard = Math.random }) {
       if (libre()) declencher(ev); else e.attente = ev;
     },
     // La rencontre : le visiteur la sollicite, elle lâche son occupation (comme pour un événement) et revient au repos, où son
-    // regard est libre. Une réaction ou une séquence à accessoire, elles, vont à leur fin.
-    calmer() { if (e.phase === 'geste') { e.sansGeste = 0; auRepos(); } },
+    // regard est libre. Une réaction ou une séquence à accessoire, elles, vont à leur fin — sauf le salut d'arrivée quand le bond
+    // le remplace (salut) : lui compte en temps de scène (borné à 20 images/s), l'approche de la caméra en temps mural ; sous charge,
+    // il partait entre le clic et le bond et finissait après la fenêtre du regard (2,5 s) : elle ne regardait jamais (20/11, 1 fois sur 2).
+    calmer({ salut = false } = {}) {
+      if (e.phase === 'geste' || (salut && e.phase === 'reaction' && e.action === REACTIONS.arrivee)) { e.sansGeste = 0; auRepos(); }
+    },
     // Le visiteur est là (pointeur, clavier) : il compte pour le sommeil, sans rien déclencher.
     activite() { e.sansGeste = 0; },
     ambiance(a) { e.ambiance = a; },

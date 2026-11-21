@@ -601,13 +601,13 @@ export async function creerPieuvre({ scene, renderer, camera, base, place, email
     // mouvement réduit, où seul le regard est permis : il ne bouge rien que ses yeux, et la pose fixe les tient).
     sautiller() {
       if (masquee || entree || fige) return false;
-      // Le bond prend la place du salut d'arrivée encore en attente : un geste à la réception, le regard ne serait plus libre.
-      salut = 0; cerveau.calmer();
+      // Le bond prend la place du salut d'arrivée, encore en attente ou déjà parti : un geste à la réception, le regard ne serait plus libre.
+      salut = 0; cerveau.calmer({ salut: true });
       const ici = { x: groupe.position.x, y: groupe.position.y, z: groupe.position.z };
       entree = { phase: 'bond', t: 0, bond: creerSaut(ici, ici, { bond: BOND_SUR_PLACE }) };
       demarrer(); return true;
     },
-    regarderVisiteur() { if (masquee || entree || fige) return false; cerveau.calmer(); regarderVisiteur(); demarrer(); return true; },
+    regarderVisiteur() { if (masquee || entree || fige) return false; cerveau.calmer({ salut: true }); regarderVisiteur(); demarrer(); return true; },
     // Pendant son entrée, elle ne réagit à rien : le salut vient à la réception, et elle n'a pas à ouvrir un parapluie derrière le casier.
     evenement(ev) { if (masquee || entree) return; cerveau.evenement(ev); demarrer(); },
     // Hors de la pièce, pour un temps (le film du café) : ni corps, ni ombre, ni zone de clic, ni cerveau. La couche

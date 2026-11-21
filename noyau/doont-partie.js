@@ -10,7 +10,7 @@
     return {sante,munitions,arme:ARMES[arme],etat,victoire:etat===2,
       objectif: cles ? 'Vaincs le gardien, puis rejoins la sortie' : 'Trouve la clé de l’entrepôt'};
   }
-  function monter({parent,suspendre,reprendre,relacher,retour,tactile}) {
+  function monter({parent,suspendre,reprendre,relacher,retour,tactile,focusJeu=()=>{}}) {
     const doc=parent.ownerDocument, win=doc.defaultView;
     const root=doc.createElement('section');root.className='doont-partie';root.hidden=true;parent.append(root);
     const creer=(tag,classe,texte,cible=root)=>{const e=doc.createElement(tag);e.className=classe;e.textContent=texte;cible.append(e);return e;};
@@ -31,7 +31,8 @@
     }
     function jouer() {
       if(detruit || mode==='victoire')return;
-      mode='jeu';voile.hidden=true;pause.disabled=false;reprendre();
+      // Un titre masqué gardait le focus et avalait les touches natives de v86 après l’aide.
+      mode='jeu';voile.hidden=true;pause.disabled=false;focusJeu();reprendre();
     }
     function pauser() { if(mode==='jeu')montrer('pause','Pause','Prends ton temps.'); }
     // Le focus reste dans l'écran d'aide ou de pause ; aucune commande ne traverse le voile.

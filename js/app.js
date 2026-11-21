@@ -31,6 +31,26 @@ const etat = {
   scene: 'absente', // absente | chargement | prete | panne
 };
 let scene = null;
+let presentationVideo = null, chargementPresentation = null;
+function actualiserPresentation() {
+  if (!presentationVideo) return;
+  const r = scene?.rectangleEcran(), x = r && (r.gauche + r.droite) / 2, y = r && (r.haut + r.bas) / 2;
+  presentationVideo.actualiser({ prete: etat.scene === 'prete', mouvementReduit: etat.mouvementReduit,
+    economiser: navigator.connection?.saveData === true,
+    visible: !!r?.visible && x >= 0 && x < innerWidth && y >= 0 && y < innerHeight && !sousAccueil(x, y)
+      && etat.vue !== 'panneau' && !plongee.active && !tasse.active && !tiroir.active && !grandAngle.active && !consolePoche.active });
+}
+function preparerPresentation() {
+  if (etat.scene !== 'prete') return Promise.resolve(null);
+  return chargementPresentation ??= import('../presentation/lecteur.js').then(({ creerPresentation }) => {
+    presentationVideo = creerPresentation({ afficher: source => scene?.presentationEcran(source), annoncer: annonce, sons: sonsFilm });
+    actualiserPresentation(); return presentationVideo;
+  }).catch(() => { chargementPresentation = null; annonce('La vidéo est indisponible pour le moment.'); return null; });
+}
+document.addEventListener('visibilitychange', actualiserPresentation);
+addEventListener('scroll', actualiserPresentation, { passive: true });
+addEventListener('resize', actualiserPresentation);
+navigator.connection?.addEventListener('change', actualiserPresentation);
 let retourFocus = null;
 let historiqueInterne = 0; // nombre d'entrées poussées par nous : Échap peut alors revenir en arrière.
 
@@ -134,6 +154,10 @@ function clin(texte) {
 }
 let radioOccupee = false;
 const ACTIONS = {
+  presentation: () => {
+    if (presentationVideo) presentationVideo.ouvrir(points.ecran);
+    else preparerPresentation().then(p => p?.ouvrir(points.ecran));
+  },
   // La radio est une PLAYLIST (lo-fi d'atelier puis sa bascule sur boss 1, piano 1, piano 2, boss 1, boss 2, retour au début) : les morceaux
   // s'enchaînent à leur fin, sans boucle ; un clic passe au suivant. Son coupé : ce premier clic l'active (geste du visiteur) et annonce la musique
   // de départ. Le silence est le bouton Son, pas une station. La station est annoncée (clin et lecteur d'écran).
@@ -210,6 +234,7 @@ function appliquer() {
   $$('.reglage[data-reglage]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.reglage === 'mouvement' ? !etat.mouvementReduit : b.dataset.reglage === 'son' ? etat.son : etat.effets)));
   html.classList.toggle('mouvement-reduit', etat.mouvementReduit);
   html.classList.toggle('panneau-ouvert', etat.vue === 'panneau');
+  actualiserPresentation();
   if (vuePrecedente !== etat.vue && etat.vue !== 'panneau' && vuePrecedente !== 'panneau') cadrerScene();
 }
 
@@ -388,7 +413,7 @@ document.addEventListener('keydown', (e) => {
   tete.addEventListener('pointerup', fin); tete.addEventListener('pointercancel', fin);
 }
 document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape' || e.defaultPrevented || plongee.active || tasse.active || tiroir.active || grandAngle.active || consolePoche.active) return;
+  if (e.key !== 'Escape' || e.defaultPrevented || presentationVideo?.active || plongee.active || tasse.active || tiroir.active || grandAngle.active || consolePoche.active) return;
   if (etat.vue === 'panneau') { e.preventDefault(); revenir(); }
   else if (etat.vue === 'exploration') {
     // Une vue tournée revient d'abord au bureau ; Échap sur une vue déjà au bureau rend l'accueil.
@@ -480,6 +505,7 @@ function sousAccueil(x, y) {
   return x + 22 > r.left - MARGE_INTRO && x - 22 < r.right + MARGE_INTRO && y + 22 > r.top - MARGE_INTRO && y - 22 < r.bottom + MARGE_INTRO;
 }
 function placerPoints(liste) {
+  actualiserPresentation();
   for (const { id, x, y, visible: vu } of liste) {
     const p = points[id]; if (!p) continue;
     const couvert = sousAccueil(x, y), visible = vu && !couvert;
@@ -614,7 +640,7 @@ async function demarrerScene() {
         imagePieuvre: () => { psst.placer(); placerCible(); },
         recentre,
         panne: (raison) => panne(raison),
-        retabli: () => { html.classList.remove('sans-scene'); html.classList.add('scene-prete'); etat.scene = 'prete'; window.__atelier = { etat, scene, plongee, tasse, ambiance }; cadrerScene(); },
+        retabli: () => { html.classList.remove('sans-scene'); html.classList.add('scene-prete'); etat.scene = 'prete'; cadrerScene(); actualiserPresentation(); },
       },
     });
     publierRadio();
@@ -628,9 +654,10 @@ async function demarrerScene() {
     scene.poserAccueil();
     await new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(ok)));
     html.classList.add('scene-prete');
+    preparerPresentation();
     setTimeout(() => scene.libererEntree(), etat.mouvementReduit ? 0 : 320);
     setTimeout(vague, 400);
-    window.__atelier = { etat, scene, plongee, tasse, tiroir, grandAngle, consolePoche, ambiance, journalVague, bulle, filmCafe }; // point d'accès pour les essais automatisés
+    window.__atelier = { etat, scene, plongee, tasse, tiroir, grandAngle, consolePoche, ambiance, journalVague, bulle, filmCafe, get presentationVideo() { return presentationVideo; } }; // point d'accès pour les essais automatisés
     // Le tonnerre suit l'éclair, seulement si le son est activé.
     scene.surTonnerre(() => { if (etat.son) son?.tonnerre(); });
     ambiance.brancher(scene);
@@ -663,6 +690,7 @@ function monterCompteur() {
 }
 function panne(raison) {
   etat.scene = 'panne';
+  actualiserPresentation();
   if(plongee.active)plongee.revenir({sansTravelling:true});
   if (tasse.active) tasse.revenir({ sansTravelling: true });
   if (tiroir.active) tiroir.revenir({ sansTravelling: true });

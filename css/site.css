@@ -1002,3 +1002,10 @@ html:not(.sans-js) .intro__rencontre-lien { display: none; }
 .bulle__question { min-height: var(--tako-cible); padding: 4px 0; border: 0; background: transparent; color: var(--tako-lien); font: var(--tako-texte-xs)/1.3 var(--mt-police-ui); text-decoration: underline; cursor: pointer; }
 .bulle__accueil { flex: 1 0 auto; justify-content: center; }
 .bulle__action:focus-visible, .bulle__reaction:focus-visible, .bulle__question:focus-visible, .bulle__accueil:focus-visible { outline: 2px solid var(--tako-lien); outline-offset: 1px; }
+/* Le dialogue natif garde les commandes et les sous-titres dans la fenêtre, même au téléphone. */
+.presentation-video { width: min(100% - 2rem, 72rem); max-height: calc(100dvh - 2rem); padding: 1rem; border: 1px solid var(--mt-bord-doux); border-radius: .6rem; background: var(--mt-scene-nuit); color: var(--mt-scene-papier); overflow: auto; }
+.presentation-video::backdrop { background: color-mix(in srgb, var(--mt-scene-nuit) 85%, transparent); }
+.presentation-video h2 { margin: 0 0 .6rem; font-size: 1.1rem; }
+.presentation-video video { display: block; width: 100%; max-height: calc(100dvh - 11rem); background: var(--mt-scene-nuit); }
+.presentation-video__fermer { display: block; margin: .75rem 0 0 auto; min-height: 48px; min-width: 48px; padding: .5rem 1rem; background: var(--mt-scene-papier); color: var(--mt-scene-nuit); border: 0; border-radius: .3rem; cursor: pointer; }
+.presentation-video__fermer:focus-visible { outline: 3px solid var(--mt-focus-scene); outline-offset: 3px; }
