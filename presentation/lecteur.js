@@ -74,9 +74,9 @@ export function creerPresentation({ document: doc = document, afficher, sons = {
     complet.poster = fichier('affiche-video-16x9.webp');
     for (const [langue, nom] of [['fr', 'Français'], ['en', 'English']]) {
       const piste = doc.createElement('track'); piste.kind = 'subtitles'; piste.srclang = langue; piste.label = nom; piste.default = langue === 'fr';
-      piste.src = fichier(`oktako-v6.4.${langue}.vtt`); complet.append(piste);
+      piste.src = fichier(`majortakito-v6.5.${langue}.vtt`); complet.append(piste);
     }
-    complet.src = fichier('oktako-v6.4-web.mp4');
+    complet.src = fichier('majortakito-v6.5-web.mp4');
     dialogue.showModal(); actualiser(); sons.couper?.();
     dialogue.lastElementChild?.focus({ preventScroll: true });
     // Appelé directement depuis le clic : le son bénéficie de l'activation du visiteur.

@@ -68,6 +68,13 @@ const RETOUR = 4500;
 // au soir) a fait rougir la rencontre de la pieuvre une fois sur deux : on reste à 2,4 s, la marge sera un lot à part, éprouvé.
 // Rien d'autre ne change ; en mouvement réduit, toujours d'un coup.
 const RETOUR_DUREE = 2400;
+// Flou de bougé du retour : l'image se déplace de 12 px par image au pic (720 px/s), et le décor qui défile sur un pixel y fait 10 à 11
+// changements de luminance par seconde, soit 5 flashs au sens de WCAG 2.3.1 (3 au plus), à 2,4 s comme à 4 s : mesuré le 26/11 sur
+// SwiftShader, identique à la mesure GPU du 21/11 (1280×900, plein jour). La vitesse n'y change presque rien (4 s : 9 changements) ; ce
+// qui compte, c'est la longueur de décor qu'un pixel voit défiler entre deux images. Un flou sur une exposition de 1/12 s (5 images à
+// 60 i/s) la fait tomber à 5 changements (2 flashs) ; 1 image : 9, 2 : 7 (limite), 3 et 4 : 6. Exprimé en secondes, il ne s'allonge pas
+// sur une machine lente.
+const FLOU_EXPO = 0.0833;
 // La mini-pieuvre se charge passé ce délai après la première image (ms), une fois l'entrée jouée.
 const DELAI_PIEUVRE = 4000;
 // Ce qu'il faut garder libre autour de son centre (mètres) : ses bras posés, et son bras tendu quand elle montre la lettre.
@@ -387,13 +394,23 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   composer.addPass(new OutputPass());
   const finition = new ShaderPass({
     uniforms: { tDiffuse: { value: null }, uTemps: { value: 0 }, uGrain: { value: GRAIN }, uVignette: { value: 0.8 }, tProfondeur: { value: null }, uFocus: { value: 1.6 }, uOuverture: { value: 0.0018 }, uImmersion: { value: 0 }, uAspect: { value: 1 },
-      uVoile: { value: 0.13 }, uVoileCouleur: { value: couleur('--mt-scene-voile') }, uEclair: { value: 0 }, uFilm: { value: 0 }, uPhoto: { value: 0 } },
+      uVoile: { value: 0.13 }, uVoileCouleur: { value: couleur('--mt-scene-voile') }, uEclair: { value: 0 }, uFilm: { value: 0 }, uPhoto: { value: 0 }, uFlou: { value: new THREE.Vector2() } },
     vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
-    fragmentShader: `uniform sampler2D tDiffuse, tProfondeur; uniform float uTemps, uGrain, uVignette, uFocus, uOuverture, uImmersion, uAspect, uVoile, uEclair, uFilm, uPhoto; uniform vec3 uVoileCouleur; varying vec2 vUv;
+    fragmentShader: `uniform sampler2D tDiffuse, tProfondeur; uniform float uTemps, uGrain, uVignette, uFocus, uOuverture, uImmersion, uAspect, uVoile, uEclair, uFilm, uPhoto; uniform vec2 uFlou; uniform vec3 uVoileCouleur; varying vec2 vUv;
       float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
       float lin(float z){ return .01 * 60. / (60. - z * (60. - .01)); }
       void main(){ vec2 c = vUv - 0.5; vec3 col;
-        col.r = texture2D(tDiffuse, vUv + c * 0.0012).r; col.g = texture2D(tDiffuse, vUv).g; col.b = texture2D(tDiffuse, vUv - c * 0.0012).b;
+        if(dot(uFlou, uFlou) > 0.) {
+          // Retour de la caméra au bureau : l'image se déplace de plusieurs pixels par image, et chaque pixel y lit un échantillon du décor
+          // sans rapport avec le précédent (crénelage temporel : 10 changements de luminance en une seconde, 5 flashs au sens de WCAG 2.3.1,
+          // aussi bien à 2,4 s qu'à 4 s). Un flou de bougé sur FLOU_EXPO, comme l'obturateur d'une caméra, le lisse ;
+          // l'aberration chromatique (0,12 %) y est négligeable.
+          col = vec3(0.);
+          for (int i = 0; i < 16; i++) col += texture2D(tDiffuse, vUv + uFlou * (float(i) / 15. - .5)).rgb;
+          col /= 16.;
+        } else {
+          col.r = texture2D(tDiffuse, vUv + c * 0.0012).r; col.g = texture2D(tDiffuse, vUv).g; col.b = texture2D(tDiffuse, vUv - c * 0.0012).b;
+        }
         // Le film porte sa propre profondeur de champ, et la profondeur lue ici serait celle de la dernière image de la pièce.
         if(uOuverture > 0. && uFilm < .5) {
           float distance = lin(texture2D(tProfondeur, vUv).x);
@@ -533,6 +550,8 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
   const regard = { lacet: 0, tangage: 0, x: 0, y: 0, vx: 0, vy: 0, dernier: 0, glisse: false };
   const touches = new Set();
   const rotationRegard = new THREE.Euler(0, 0, 0, 'YXZ');
+  // Déplacement de la vue sur FLOU_EXPO pendant le retour doux, en fraction d'écran (flou de bougé de la finition) ; nul hors retour.
+  const flouRegard = new THREE.Vector2();
   let focus = null, panneauOuvert = false, dernierDecalage = [0, 0], reveilRegard = null;
   // Recentrer : la vue revient au bureau (en douceur ; d'un coup en mouvement réduit). Vrai si elle en était partie.
   function recentrer() {
@@ -1200,8 +1219,16 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
       }
       borner(regard);
       const lissage = reglages.mouvementReduit ? 1 : 1 - Math.exp(-vraiDt * 12);
+      const lacetAvant = regard.lacet, tangageAvant = regard.tangage;
       regard.lacet += (regard.x - regard.lacet) * lissage; regard.tangage += (regard.y - regard.tangage) * lissage;
       camera.position.copy(pose.actuelle.pos); horsDecor(camera.position); cible.copy(pose.actuelle.cible); camera.lookAt(cible);
+      // (Après le bloc que tests/regard-clavier.test.mjs évalue seul : il n'a ni caméra ni finition.)
+      // Le déplacement de la vue sur FLOU_EXPO, en fraction d'écran, seulement pendant le retour doux (voir le flou de la finition) : f = 1 / (2 tan(fov/2)).
+      if (regard.retour && !reglages.mouvementReduit) {
+        const f = 1 / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
+        flouRegard.set((regard.lacet - lacetAvant) * f / (finition.uniforms.uAspect.value || 1), (regard.tangage - tangageAvant) * f);
+        flouRegard.multiplyScalar(FLOU_EXPO / Math.max(vraiDt, 1 / 120)); if (flouRegard.length() > 0.2) flouRegard.setLength(0.2);
+      } else flouRegard.set(0, 0);
       if (actif) {
         rotationRegard.setFromQuaternion(camera.quaternion, 'YXZ');
         rotationRegard.y += regard.lacet; rotationRegard.x += regard.tangage; rotationRegard.z = 0;
@@ -1281,6 +1308,7 @@ export async function creerScene({ conteneur, contenu, rappels, ciel: cielInitia
     vitreMat.uniforms.uEclair.value = eclairCourant; finition.uniforms.uEclair.value = eclairCourant;
     for (const k of ['lampe', 'ecran', 'vapeur']) piece[k] += (piece.cible[k] - piece[k]) * (anime ? Math.min(1, vraiDt * 1.5) : 1);
     materiauEcran.uniforms.uLueur.value = 0.72 * piece.ecran;
+    finition.uniforms.uFlou.value.copy(flouRegard);
     finition.uniforms.uTemps.value = temps; finition.uniforms.uGrain.value = reglages.effets ? GRAIN : 0;
     // La lampe : un filament sur un vieux secteur, presque immobile, qui frémit parfois.
     const frisson = anime ? Math.sin(temps * 2.1) * 0.02 + Math.sin(temps * 13.7) * Math.max(0, Math.sin(temps * 0.37)) * 0.03 : 0;

@@ -1,7 +1,8 @@
 // La bulle de la mini-pieuvre : le visiteur dit qui il est, pose sa question, et elle répond avec des passages du site adaptés
 // à ce profil, chacun avec son lien (docs/PIEUVRE-REPONSES.md). Tout se passe ici, dans le navigateur : la mémoire se charge au premier clic, une fois,
 // et plus rien ne part ensuite. La voie B (une question à l'IA, docs/PIEUVRE-CONTRAT-IA.md) n'existe que si le build l'a mise dans la
-// page, et toute panne y rend la main à la voie A, sans un mot : le serveur peut tomber, rien n'en dépend.
+// page. Fermée, plafonnée ou en panne, elle le dit en une phrase (« la pieuvre se repose ») et la voie A répond : le serveur
+// peut tomber, rien n'en dépend.
 const $ = (s, r = document) => r.querySelector(s);
 const INDEX = new URL('../modele/pieuvre-index.json', import.meta.url);
 // La mémoire de l'essai ne fait pas foi (le serveur compte) : elle évite seulement de montrer un bouton qui sera refusé.
@@ -12,6 +13,8 @@ const ANCRE = /^[a-z0-9-]+$/;
 const MARGE = 8;
 
 function essaiPris() { try { return localStorage.getItem(CLE_ESSAI) === '1'; } catch { return false; } }
+// La mesure d'audience (js/mesure.js) écoute cet événement ; sans elle, il ne part nulle part. Rien de la question n'y est mis.
+const signalerQuestion = (voie) => document.dispatchEvent(new CustomEvent('mt:question', { detail: { voie } }));
 function noterEssai() { try { localStorage.setItem(CLE_ESSAI, '1'); } catch { /* le serveur compte de toute façon */ } }
 async function appeler(url, delai, options = {}) {
   const coupe = new AbortController(), t = setTimeout(() => coupe.abort(), delai);
@@ -27,7 +30,7 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
   const titre = $('#bulle-titre'), champ = $('#bulle-question'), zone = $('#bulle-reponse');
   const boiteChapeaux = $('#bulle-chapeaux'), listeChapeaux = $('#bulle-chapeaux-liste');
   const suite = $('#bulle-suite'), profils = el.querySelectorAll('[data-profil]'), groupes = el.querySelectorAll('[data-groupe]');
-  const blocIa = $('#bulle-ia-bloc'), boutonIa = $('#bulle-ia'), finIa = $('#bulle-ia-fin');
+  const blocIa = $('#bulle-ia-bloc'), boutonIa = $('#bulle-ia'), finIa = $('#bulle-ia-fin'), reposIa = $('#bulle-ia-repos');
   const passerelle = el.dataset.passerelle;
   // Le lien de la bulle vers la rencontre n'est pas un déclencheur : il est DANS la bulle, et ne l'ouvre ni ne la ferme.
   const declencheurs = () => document.querySelectorAll('[data-pieuvre-question], [data-rencontre]:not(.bulle__rencontrer)');
@@ -101,18 +104,23 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
   }
 
   // --- La voie B : présente seulement si le build l'a écrite dans la page. ---
-  function fermerIa(utilisee) {
+  // Trois fins pour le bouton : l'essai de CE visiteur est utilisé (« fini »), la pieuvre se repose pour tous (« repos » :
+  // fermée, plafonnée, en panne, injoignable), ou rien à dire (réponse sans source montrable : la voie A répond seule).
+  function fermerIa(fin) {
     if (blocIa) blocIa.hidden = true;
-    if (finIa) finIa.hidden = !utilisee;
+    if (finIa) finIa.hidden = fin !== 'fini';
+    if (reposIa) reposIa.hidden = fin !== 'repos';
   }
   async function sonderIa() {
     if (!passerelle || iaSondee) return;
     iaSondee = true;
-    if (essaiPris()) { fermerIa(true); return; }
+    if (essaiPris()) { fermerIa('fini'); return; }
     try {
       const r = await appeler(`${passerelle}/etat`, DELAI_ETAT), j = await r.json();
-      if (r.ok && j.version === 1 && j.ouvert === true) blocIa.hidden = false;
-    } catch { /* passerelle absente : le bouton reste caché */ }
+      if (r.ok && j.version === 1 && j.ouvert === true) { blocIa.hidden = false; return; }
+      if (j?.version === 1 && j.raison === 'deja-pose') { noterEssai(); fermerIa('fini'); return; }
+    } catch { /* passerelle injoignable : elle se repose aussi */ }
+    fermerIa('repos');
   }
   // Une source vaut si elle mène quelque part ici : l'adresse vient d'un serveur, la page ne lui fait pas confiance.
   const sourcesValides = (l) => (Array.isArray(l) ? l : []).filter((s) => typeof s?.titre === 'string' && s.titre && typeof s.ancre === 'string' && ANCRE.test(s.ancre)
@@ -129,6 +137,7 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
   async function consulter() {
     const question = champ.value.trim().slice(0, QUESTION_MAX);
     if (!question) { champ.focus(); return repondre(''); }
+    signalerQuestion('ia');
     boutonIa.disabled = true; occupe(true); ++demande;
     zone.replaceChildren(texte('p', 'bulle__ton', zone.dataset.cherche));
     let r = null, j = null;
@@ -141,9 +150,11 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
     const reponse = typeof j?.reponse === 'string' ? j.reponse.trim().slice(0, REPONSE_MAX) : '';
     // Le 200 consomme l'essai, avec ou sans réponse montrable : le serveur l'a compté.
     if (r?.ok && j?.version === 1) noterEssai();
-    if (r?.status === 429 && j?.raison === 'deja-pose') noterEssai();
-    if (reponse && sources.length) { fermerIa(true); occupe(false); montrerIa(reponse, sources); champ.value = ''; return undefined; }
-    fermerIa(false);
+    const dejaPose = r?.status === 429 && j?.raison === 'deja-pose';
+    if (dejaPose) noterEssai();
+    if (reponse && sources.length) { fermerIa('fini'); occupe(false); montrerIa(reponse, sources); champ.value = ''; return undefined; }
+    // 200 sans réponse montrable : l'essai est pris, la voie A répond. Refus du serveur ou panne : la pieuvre se repose.
+    fermerIa(dejaPose ? 'fini' : r?.ok ? null : 'repos');
     return repondre(question);
   }
 
@@ -269,7 +280,7 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
   });
   $('#bulle-fermer').addEventListener('click', () => fermer({ accueil: enRencontre }));
   $('#bulle-accueil').addEventListener('click', () => fermer({ accueil: true }));
-  $('#bulle-form').addEventListener('submit', (e) => { e.preventDefault(); repondre(champ.value); });
+  $('#bulle-form').addEventListener('submit', (e) => { e.preventDefault(); if (champ.value.trim()) signalerQuestion('locale'); repondre(champ.value); });
   el.addEventListener('click', (e) => {
     const action = e.target.closest('[data-rencontre-action]'), reaction = e.target.closest('[data-reaction]');
     if (action?.dataset.rencontreAction === 'essayer') { deplier(action, reactions); return; }
@@ -282,7 +293,7 @@ export function creerBulle({ annoncer, surLien, vue, approcher, eloigner, rencon
     if (e.target.closest('.bulle__autres')) { el.classList.remove('bulle--repondue'); e.target.remove(); el.querySelector('.bulle__suggestion')?.focus(); return; }
     const p = e.target.closest('[data-profil]'), s = e.target.closest('[data-bulle-question]');
     if (p) { choisirProfil(p.dataset.profil); return; }
-    if (s) { champ.value = s.dataset.bulleQuestion; repondre(champ.value); return; }
+    if (s) { champ.value = s.dataset.bulleQuestion; signalerQuestion('locale'); repondre(champ.value); return; }
     // Le lien ouvre sa rubrique par le routeur de la page, qui passe après ce clic : la bulle s'efface, et le retour du
     // panneau vise ce qui l'avait ouverte, pas un lien devenu invisible.
     if (e.target.closest('.bulle__reponse a')) { const d = retour; fermer({ focus: false }); setTimeout(() => surLien(d), 0); }
